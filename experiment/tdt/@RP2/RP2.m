@@ -1,0 +1,28 @@
+function [module, err, errstr] = RP2(number,circuit)
+% [MODULE,ERR, ERRSTR] = RP2(NUMBER,CIRCUIT)
+%
+% Initialize RP2 (constructor of class RP2)
+%
+% NUMBER	= number of RP2 as defined by zBusMon
+% CIRCUIT	= RPvsdEx circuit filename
+% MODULE	= Object
+% ERR		= any potential errors
+% ERRSTR    = Description of errors
+
+err     = 0;
+module  = actxcontrol('RPco.x',[1 1 1 1]); % prog_id, fighandle
+connect = module.ConnectRP2('GB',number); % connect the module
+if connect
+    module.reset;
+    load = module.LoadCOF(circuit); % Load the circuit into module
+    if (load)
+        module.Run(); % Run the circuit on module
+    else
+        err = -2; % Fail to load circuit
+        errstr =   {'Failed to connect RP2'};
+
+    end
+else
+    err     = -1; % Fail to connect RP2
+    errstr = {'Failure to load ' circuit};
+end

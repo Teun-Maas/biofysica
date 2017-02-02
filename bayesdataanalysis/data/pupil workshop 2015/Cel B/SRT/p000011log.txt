@@ -1,0 +1,29 @@
+05-08-2015,15:00:13,START,0,0,0,0.00,0.000,0,
+05-08-2015,15:00:31,INCORRECT,1,0,-15,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:00:49,INCORRECT,1,0,-11,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:01:13,CORRECT,1,0,-7,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:01:25,CORRECT,2,0,-9,0.00,0.000,2,the wife helped her husband
+05-08-2015,15:01:37,INCORRECT,3,0,-11,0.00,0.000,3,big dogs can be dangerous
+05-08-2015,15:01:50,CORRECT,4,0,-9,0.00,0.000,4,her shoes were very dirty
+05-08-2015,15:02:02,CORRECT,5,0,-11,0.00,0.000,5,the player lost a shoe
+05-08-2015,15:02:13,INCORRECT,6,0,-13,0.00,0.000,6,somebody stole the money
+05-08-2015,15:02:37,CORRECT,7,0,-11,-12.00,1.414,7,the fire is very hot
+05-08-2015,15:02:53,INCORRECT,8,0,-13,-11.67,1.155,8,she’s drinking from her own cup
+05-08-2015,15:03:06,CORRECT,9,0,-11,-12.00,1.155,9,the picture came from a book
+05-08-2015,15:03:21,INCORRECT,10,0,-13,-11.80,1.095,10,the car is going too fast
+05-08-2015,15:03:34,CORRECT,11,0,-11,-12.00,1.095,11,a boy ran down the path
+05-08-2015,15:03:46,CORRECT,12,0,-13,-11.86,1.069,12,flowers grow in the garden
+05-08-2015,15:03:58,CORRECT,13,0,-15,-12.00,1.069,13,strawberry jam is sweet
+05-08-2015,15:04:09,INCORRECT,14,0,-17,-12.33,1.414,14,the shop closes for lunch
+05-08-2015,15:04:22,INCORRECT,15,0,-15,-12.80,1.989,15,the police helped the driver
+05-08-2015,15:04:35,INCORRECT,16,0,-13,-13.00,2.000,16,she looked in her mirror
+05-08-2015,15:04:49,CORRECT,17,0,-11,-13.00,1.907,17,the match fell on the floor
+05-08-2015,15:05:02,CORRECT,18,0,-13,-12.85,1.908,18,the fruit came in a box
+05-08-2015,15:05:15,CORRECT,19,0,-15,-12.86,1.834,19,he really scared his sister
+05-08-2015,15:05:29,INCORRECT,20,0,-17,-13.00,1.852,20,the tub faucet is leaking
+05-08-2015,15:05:41,CORRECT,21,0,-15,-13.25,2.049,21,they heard a funny noise
+05-08-2015,15:05:56,INCORRECT,22,0,-17,-13.35,2.029,22,he found his brother hiding
+05-08-2015,15:06:07,CORRECT,23,0,-15,-13.56,2.148,23,the dog played with a stick
+05-08-2015,15:06:20,INCORRECT,24,0,-17,-13.63,2.114,24,the book tells a story
+05-08-2015,15:06:33,CORRECT,25,0,-15,-13.80,2.191,25,the matches are on the shelf
+05-08-2015,15:06:34,DONE,25,0,-15,-13.86,2.151,25,the matches are on the shelf

@@ -1,0 +1,204 @@
+classdef pa_leds < handle
+    % PA_LEDS is a class to program the led array on Panasonic PLCs using modbus
+    % methods
+    %
+    % See also PA_LEDS, DELETE, TRIGGER_ENABLE, TRIGGERED, GATE_ENABLE, INTENSITY,
+    % SET, CLEAR, CLEAR_ALL, FLUSH, DUMP_REGISTERS
+    
+    % Written by Günter Windau
+    % 2014-04-22 version 1.0
+    % 2014-04-22 version 1.1 optimized some parts manipulating individual bits
+    properties %% (SetAccess = private)
+        hostname  = 'fp-web2';
+        baseaddr  = 55000;
+        ctlbits   = 55000;
+        basered   = 55100;
+        basegrn   = 55108;
+        pwm0dc    = 55022; % red, duty cycle, 32 bits, range 0..100
+        pwm1dc    = 55026; % green
+        pwm2dc    = 55030; % red
+        pwm3dc    = 55034; % green
+        ctlbits_trigger_enable = 9;
+        ctlbits_gate_enable = 8;
+        ctlbits_triggered = 7;
+        
+        hmodbus;
+        cache_ctlbits;
+        intensity_grn = uint16([0 50]);
+        intensity_red = uint16([0 50]);
+        leds_grn = zeros(128, 1);
+        leds_red = zeros(128, 1);
+    end
+    
+    methods
+        function obj = pa_leds(hostname)
+            % PA_LEDS(hostname)
+            % Setup a connection to the PLC at internet address or
+            % hostname specified
+            if nargin > 0
+                obj.hostname = hostname;
+            end
+            ip = obj.resolveip(obj.hostname);
+            obj.hmodbus = modbus_new_tcp(ip, 502);
+            modbus_connect(obj.hmodbus);
+            
+            % Enable the PWM (bits 3-0), trigger and gate are disabled
+            obj.cache_ctlbits = uint16(15);
+            modbus_write_registers(obj.hmodbus, obj.ctlbits, obj.cache_ctlbits);
+
+            obj.clear_all;
+            obj.intensity('red', 50);
+            obj.intensity('green', 50);
+        end
+        
+        function delete(obj)
+            % DELETE
+            % Delete the PA_LEDS object
+            modbus_close(obj.hmodbus);
+            modbus_free(obj.hmodbus);
+        end
+        
+        function trigger_enable(self, value)
+            % TRIGGER_ENABLE(value)
+            % Set or clear the trigger enable bit in the control register.
+            % If the bit is set, the PLC program will flush the buffer to
+            % the outputs when a rising edge trigger is detected on the TTL
+            % trigger input
+            self.cache_ctlbits = bitset(self.cache_ctlbits, self.ctlbits_trigger_enable, value);
+            modbus_write_registers(self.hmodbus, self.ctlbits, self.cache_ctlbits);
+        end
+        
+        function trigger_wait(self)
+            % TRIGGER_WAIT
+            while ~self.triggered
+                % not cpu friendly, but for now loop around
+            end
+        end
+        
+        function result = triggered(self)
+            % TRIGGERED
+            % Return true if a rising edge was detected on the external
+            % trigger input.
+            reg = modbus_read_registers(self.hmodbus, self.ctlbits, 1);
+            trigbit = bitget(reg, self.ctlbits_triggered);
+            if trigbit > 0
+                reg = uint16(bitset(reg, self.ctlbits_triggered, 0)); % clear triggered bit
+                modbus_write_registers(self.hmodbus, self.ctlbits, reg);
+                result = true;
+            else
+                result = false;
+            end
+        end
+        
+        function gate_enable(self, value)
+            % GATE_ENABLE(value)
+            % set or clear the gate enable bit in the control register.
+            % If the bit is set, the PLC program will flush the buffer to
+            % the outputs immediately when the TTL gate input is at TTL
+            % high level.
+            % set/reset bit nr. 7
+            self.cache_ctlbits = uint16(bitset(self.cache_ctlbits, self.ctlbits_gate_enable, value));
+            modbus_write_registers(self.hmodbus, self.ctlbits, self.cache_ctlbits);
+        end
+        
+        function intensity(self, color, value)
+            % INTENSITY(color, value)
+            % Set the intensity of the red or green leds
+            % if color starts with 'r' the intensity of the red leds is set
+            % by manpulating the PWM output duty cycle. Otherwise the green
+            % intensity is set.
+            % The value should be in the range 1..50
+            if color(1) == 'r'
+                self.intensity_red(1) = uint16(value);
+                self.intensity_red(2) = uint16(0);
+                modbus_write_registers(self.hmodbus, self.pwm0dc, uint16(value));
+                modbus_write_registers(self.hmodbus, self.pwm2dc, uint16(value));
+            else
+                self.intensity_grn(1) = uint16(value);
+                self.intensity_grn(2) = uint16(0);
+                modbus_write_registers(self.hmodbus, self.pwm1dc, uint16(value));
+                modbus_write_registers(self.hmodbus, self.pwm3dc, uint16(value));
+            end
+        end
+        
+        function set(self, lednr, color, value)
+            % SET(lednr, color, value)
+            % Turn the led with color on output lednr on or off, depending
+            % on the value paramater. 0 is off, otherwise on.
+            % Note that the changes are not written to the PLC until FLUSH is
+            % called.
+            if color(1) == 'r'
+                self.leds_red(lednr) = (value ~= 0);
+            else
+                self.leds_grn(lednr) = (value ~= 0);
+            end
+        end
+        
+        function clear(self, lednr, color)
+            % CLEAR(lednr, color)
+            % Shorthand for SET(lednr, color, 0);
+            % Note that the changes are not written to the PLC until FLUSH is
+            % called.
+            self.set(lednr, color, 0);
+        end
+        
+        function clear_all(self)
+            % CLEAR_ALL
+            % Turn all leds off. This function is optimized, and changes
+            % are written to the PCL immediately, but still depending on
+            % trigger and gate signals.
+            bits = zeros(8, 1, 'uint16');
+            modbus_write_registers(self.hmodbus, self.basered, bits);
+            modbus_write_registers(self.hmodbus, self.basegrn, bits);
+        end
+        
+        function flush(self)
+            % FLUSH
+            % write LED changes to the PLC. 
+            % The outputs may not change immediately depending on the
+            % settings of the trigger and gate inputs.
+            
+            % pack all boolean values into 16 bit words
+            T = 2.^[0:15]';  % bit transformation matrix
+            red = reshape(self.leds_red, 16, 8)';
+            grn = reshape(self.leds_grn, 16, 8)';
+            
+            red_bits = uint16(red*T);
+            grn_bits = uint16(grn*T);
+            
+            %modbus_write_registers(self.hmodbus, self.basered, red_bits);
+            %modbus_write_registers(self.hmodbus, self.basegrn, grn_bits);
+            % the above two lines optimized into one modbus write operation
+            all_bits = [ red_bits; grn_bits ];
+            modbus_write_registers(self.hmodbus, self.basered, all_bits);
+        end
+        
+        function dump_registers(self)
+            % DUMP_REGISTERS
+            % Write a dump of all PLC registers to stdout. This function
+            % may be useful for debugging.
+            nregs = 35;
+            regs = modbus_read_registers(self.hmodbus, self.baseaddr, nregs);
+            addr = self.baseaddr;
+            disp('::dump_registers: dump of PLC registers follows:');
+            for i=1:nregs
+                disp([' ' num2str(addr) ' (0x' dec2hex(addr) '): ' dec2bin(regs(i), 16)]);
+                addr = addr+1;
+            end
+            disp('end.');
+        end
+    end
+    
+    methods(Static)
+        function ipaddress=resolveip(input)
+            try
+                address = java.net.InetAddress.getByName(input);
+                ipaddress = char(address.getHostAddress);
+                %  hostname = char(address.getHostName);
+            catch
+                error('Unknown host %s.', input);
+            end
+        end
+        
+    end
+end

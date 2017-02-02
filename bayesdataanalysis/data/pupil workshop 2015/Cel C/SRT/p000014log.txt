@@ -1,0 +1,30 @@
+05-08-2015,15:48:58,START,0,0,0,0.00,0.000,0,
+05-08-2015,15:49:11,FOUT,1,0,-15,0.00,0.000,30,the team is playing well
+05-08-2015,15:49:24,FOUT,1,0,-11,0.00,0.000,30,the team is playing well
+05-08-2015,15:49:37,FOUT,1,0,-7,0.00,0.000,30,the team is playing well
+05-08-2015,15:49:50,GOED,1,0,-3,0.00,0.000,30,the team is playing well
+05-08-2015,15:50:04,GOED,2,0,-5,0.00,0.000,31,the little boy left home
+05-08-2015,15:50:16,FOUT,3,0,-7,0.00,0.000,32,they’re going out tonight
+05-08-2015,15:50:29,GOED,4,0,-5,0.00,0.000,33,a cat jumped over the fence
+05-08-2015,15:50:41,GOED,5,0,-7,0.00,0.000,34,he wore his yellow shirt
+05-08-2015,15:50:54,GOED,6,0,-9,0.00,0.000,35,the lady sits in her chair
+05-08-2015,15:51:05,GOED,7,0,-11,-8.00,1.414,36,he needs his vacation
+05-08-2015,15:51:21,FOUT,8,0,-13,-9.00,2.000,37,she’s washing her new silk dress
+05-08-2015,15:51:35,FOUT,9,0,-11,-10.00,2.582,38,the cat drank from the saucer
+05-08-2015,15:51:47,FOUT,10,0,-9,-10.20,2.280,39,mother opened the drawer
+05-08-2015,15:51:59,GOED,11,0,-7,-10.00,2.098,40,the lady packed her bag
+05-08-2015,15:52:11,GOED,12,0,-9,-9.57,2.225,41,the boy did a handstand
+05-08-2015,15:52:23,GOED,13,0,-11,-9.50,2.070,42,they took some food outside
+05-08-2015,15:52:35,GOED,14,0,-13,-9.67,2.000,43,the young people are dancing
+05-08-2015,15:52:46,GOED,15,0,-15,-10.00,2.160,44,they waited for an hour
+05-08-2015,15:52:58,GOED,16,0,-17,-10.45,2.544,45,the shirts are in the closet
+05-08-2015,15:53:10,GOED,17,0,-19,-11.00,3.075,46,they watched a scary movie
+05-08-2015,15:53:22,FOUT,18,0,-21,-11.62,3.686,47,the milk is in the pitcher
+05-08-2015,15:53:34,FOUT,19,0,-19,-12.29,4.340,48,the truck drove up the road
+05-08-2015,15:53:47,GOED,20,0,-17,-12.73,4.527,49,the tall man tied his shoes
+05-08-2015,15:53:59,FOUT,21,0,-19,-13.00,4.502,50,a letter fell on the floor
+05-08-2015,15:54:12,FOUT,22,0,-17,-13.35,4.595,51,the silly boy is hiding
+05-08-2015,15:54:25,FOUT,23,0,-15,-13.56,4.540,52,the dog growled at the neighbors
+05-08-2015,15:54:38,GOED,24,0,-13,-13.63,4.425,53,a tree fell on the house
+05-08-2015,15:54:51,FOUT,25,0,-15,-13.60,4.309,54,her husband brought some flowers
+05-08-2015,15:54:51,DONE,25,0,-15,-13.67,4.211,54,her husband brought some flowers

@@ -1,0 +1,31 @@
+05-08-2015,15:23:38,START,0,0,0,0.00,0.000,0,
+05-08-2015,15:23:48,FOUT,1,0,-15,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:24:03,FOUT,1,0,-11,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:24:15,FOUT,1,0,-7,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:24:27,FOUT,1,0,-3,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:24:42,GOED,1,0,1,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:24:55,GOED,2,0,-1,0.00,0.000,2,the wife helped her husband
+05-08-2015,15:25:07,FOUT,3,0,-3,0.00,0.000,3,big dogs can be dangerous
+05-08-2015,15:25:19,GOED,4,0,-1,0.00,0.000,4,her shoes were very dirty
+05-08-2015,15:25:32,GOED,5,0,-3,0.00,0.000,5,the player lost a shoe
+05-08-2015,15:25:45,GOED,6,0,-5,0.00,0.000,6,somebody stole the money
+05-08-2015,15:25:57,GOED,7,0,-7,-4.00,1.414,7,the fire is very hot
+05-08-2015,15:26:09,GOED,8,0,-9,-5.00,2.000,8,she’s drinking from her own cup
+05-08-2015,15:26:23,GOED,9,0,-11,-6.00,2.582,9,the picture came from a book
+05-08-2015,15:26:35,GOED,10,0,-13,-7.00,3.162,10,the car is going too fast
+05-08-2015,15:26:49,FOUT,11,0,-15,-8.00,3.742,11,a boy ran down the path
+05-08-2015,15:27:00,GOED,12,0,-13,-9.00,4.320,12,flowers grow in the garden
+05-08-2015,15:27:12,GOED,13,0,-15,-9.50,4.243,13,strawberry jam is sweet
+05-08-2015,15:27:24,GOED,14,0,-17,-10.11,4.372,14,the shop closes for lunch
+05-08-2015,15:27:35,FOUT,15,0,-19,-10.80,4.662,15,the police helped the driver
+05-08-2015,15:27:47,FOUT,16,0,-17,-11.55,5.067,16,she looked in her mirror
+05-08-2015,15:27:58,FOUT,17,0,-15,-12.00,5.081,17,the match fell on the floor
+05-08-2015,15:28:09,FOUT,18,0,-13,-12.23,4.935,18,the fruit came in a box
+05-08-2015,15:28:21,GOED,19,0,-11,-12.29,4.746,19,he really scared his sister
+05-08-2015,15:28:30,FOUT,20,0,-13,-12.20,4.586,20,the tub faucet is leaking
+05-08-2015,15:28:40,GOED,21,0,-11,-12.25,4.435,21,they heard a funny noise
+05-08-2015,15:28:52,FOUT,22,0,-13,-12.18,4.305,22,he found his brother hiding
+05-08-2015,15:29:03,GOED,23,0,-11,-12.22,4.181,23,the dog played with a stick
+05-08-2015,15:29:14,GOED,24,0,-13,-12.16,4.072,24,the book tells a story
+05-08-2015,15:29:26,GOED,25,0,-15,-12.20,3.968,25,the matches are on the shelf
+05-08-2015,15:29:26,DONE,25,0,-15,-12.33,3.916,25,the matches are on the shelf

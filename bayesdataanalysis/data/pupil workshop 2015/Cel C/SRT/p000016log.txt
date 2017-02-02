@@ -1,0 +1,29 @@
+05-08-2015,16:09:47,START,0,0,0,0.00,0.000,0,
+05-08-2015,16:10:00,FOUT,1,0,-15,0.00,0.000,30,the team is playing well
+05-08-2015,16:10:12,FOUT,1,0,-11,0.00,0.000,30,the team is playing well
+05-08-2015,16:10:23,GOED,1,0,-7,0.00,0.000,30,the team is playing well
+05-08-2015,16:10:36,FOUT,2,0,-9,0.00,0.000,31,the little boy left home
+05-08-2015,16:10:48,GOED,3,0,-7,0.00,0.000,32,they’re going out tonight
+05-08-2015,16:10:59,GOED,4,0,-9,0.00,0.000,33,a cat jumped over the fence
+05-08-2015,16:11:11,GOED,5,0,-11,0.00,0.000,34,he wore his yellow shirt
+05-08-2015,16:11:23,FOUT,6,0,-13,0.00,0.000,35,the lady sits in her chair
+05-08-2015,16:11:34,FOUT,7,0,-11,-12.00,1.414,36,he needs his vacation
+05-08-2015,16:11:47,GOED,8,0,-9,-11.67,1.155,37,she’s washing her new silk dress
+05-08-2015,16:12:03,GOED,9,0,-11,-11.00,1.633,38,the cat drank from the saucer
+05-08-2015,16:12:14,FOUT,10,0,-13,-11.00,1.414,39,mother opened the drawer
+05-08-2015,16:12:26,GOED,11,0,-11,-11.33,1.506,40,the lady packed her bag
+05-08-2015,16:12:37,GOED,12,0,-13,-11.29,1.380,41,the boy did a handstand
+05-08-2015,16:12:48,FOUT,13,0,-15,-11.50,1.414,42,they took some food outside
+05-08-2015,16:13:01,GOED,14,0,-13,-11.89,1.764,43,the young people are dancing
+05-08-2015,16:13:12,FOUT,15,0,-15,-12.00,1.700,44,they waited for an hour
+05-08-2015,16:13:30,GOED,16,0,-13,-12.27,1.849,45,the shirts are in the closet
+05-08-2015,16:13:42,GOED,17,0,-15,-12.33,1.775,46,they watched a scary movie
+05-08-2015,16:13:54,FOUT,18,0,-17,-12.54,1.854,47,the milk is in the pitcher
+05-08-2015,16:14:05,FOUT,19,0,-15,-12.86,2.143,48,the truck drove up the road
+05-08-2015,16:14:18,GOED,20,0,-13,-13.00,2.138,49,the tall man tied his shoes
+05-08-2015,16:14:29,FOUT,21,0,-15,-13.00,2.066,50,a letter fell on the floor
+05-08-2015,16:14:40,GOED,22,0,-13,-13.12,2.058,51,the silly boy is hiding
+05-08-2015,16:14:52,FOUT,23,0,-15,-13.11,1.997,52,the dog growled at the neighbors
+05-08-2015,16:15:03,GOED,24,0,-13,-13.21,1.988,53,a tree fell on the house
+05-08-2015,16:15:14,GOED,25,0,-15,-13.20,1.936,54,her husband brought some flowers
+05-08-2015,16:15:15,DONE,25,0,-15,-13.29,1.927,54,her husband brought some flowers

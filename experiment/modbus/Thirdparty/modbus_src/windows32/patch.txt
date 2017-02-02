@@ -1,0 +1,16 @@
+the "undefined reference" errors for "getaddrinfo" and "freeaddrinfo"
+can be repaired by the following changes.
+"libmodbus-5.dll" is then successfully created by make.
+
+i suggest in src/modbus-tcp.c to replace lines 32-35 with
+
+ * MinGW header ws2tcpip.h checks _WIN32_WINNT before allowing the use of these */
+# if !defined( _WIN32_WINNT ) || ( _WIN32_WINNT < 0x0501 )
+#  undef  _WIN32_WINNT
+#  define _WIN32_WINNT 0x0501
+# endif
+# if !defined( WINVER ) || ( WINVER < 0x0501 )
+#  undef  WINVER
+#  define WINVER 0x0501
+# endif
+

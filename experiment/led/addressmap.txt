@@ -1,0 +1,49 @@
+ 
+WR0 (#16) is een 16 bits variabele met offset 55000.
+WR1 (#16) is een 16 bits variabele met offset 55001…etc.
+ 
+Vooralsnog zijn alleen LEDS 0..31 in gebruik.
+ 
+Enable_PWM0                        == R0 (WR0.0) (#1) == WR0 least significant bit
+Enable_PWM1                        == R1 (WR0.1) (#1)
+Enable_PWM2                        == R2 (WR0.2) (#1)
+Enable_PWM3                        == R3 (WR0.3) (#1)
+Change_DC                          == R4 (WR0.4) (#1)
+Change_Freq                        == R5 (WR0.5) (#1)
+Triggered                          == R6 (WR0.6) (#1)
+Gate_Enable                        == R7 (WR0.7) (#1)
+Trigger_Enable                     == R8 (WR0.8) (#1)
+ 
+LEDS_RED[0..15]                 == WR1 (#16)
+LEDS_RED[16..31]               == WR2 (#16)
+LEDS_RED[32..47]               == WR3 (#16)
+LEDS_RED[48..63]               == WR4 (#16)
+LEDS_RED[64..79]               == WR5 (#16)
+LEDS_RED[80..95]               == WR6 (#16)
+LEDS_RED[96..111]             == WR7 (#16)
+LEDS_RED[112..127]           == WR8 (#16)
+ 
+LEDS_GREEN[0..15]            == WR9 (#16)
+LEDS_GREEN[16..31]          == WR10 (#16)
+LEDS_GREEN[32..47]          == WR11 (#16)
+LEDS_GREEN[48..63]          == WR12 (#16)
+LEDS_GREEN[64..79]          == WR13 (#16)
+LEDS_GREEN[80..95]          == WR14 (#16)
+LEDS_GREEN[96..111]        == WR15 (#16)
+LEDS_GREEN[112..127]      == WR16 (#16)
+ 
+SV_Settings_PWM0to3         == WR18 (#32) hier hoef je niks mee.*
+SV_Frequency_PWM0           == WR20 (#32) rood
+SV_DutyCycle_PWM0          == WR22 (#32)  0..50
+SV_Frequency_PWM1           == WR24 (#32) groen 
+SV_DutyCycle_PWM1           == WR26 (#32)  0..50
+SV_Frequency_PWM2           == WR28 (#32) rood
+SV_DutyCycle_PWM2          == WR30 (#32)  0..50
+SV_Frequency_PWM3           == WR32 (#32) groen
+SV_DutyCycle_PWM3           == WR34 (#32)  0..50
+ 
+*SV_Settings_PWM0to3 is ervoor bedoeld wanneer je de PWM uitgangen voor andersoortige signalen wil gebruiken.
+ 
+Range voor de frequentie: 0..30000
+Range voor de dutycycle: 0..100
+ 

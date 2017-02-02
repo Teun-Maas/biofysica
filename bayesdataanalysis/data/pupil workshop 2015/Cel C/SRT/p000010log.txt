@@ -1,0 +1,30 @@
+05-08-2015,15:39:45,START,0,0,0,0.00,0.000,0,
+05-08-2015,15:39:57,FOUT,1,0,-15,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:40:10,FOUT,1,0,-11,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:40:25,FOUT,1,0,-7,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:40:38,GOED,1,0,-3,0.00,0.000,1,a boy fell from the window
+05-08-2015,15:40:53,FOUT,2,0,-5,0.00,0.000,2,the wife helped her husband
+05-08-2015,15:41:06,FOUT,3,0,-3,0.00,0.000,3,big dogs can be dangerous
+05-08-2015,15:41:20,GOED,4,0,-1,0.00,0.000,4,her shoes were very dirty
+05-08-2015,15:41:32,FOUT,5,0,-3,0.00,0.000,5,the player lost a shoe
+05-08-2015,15:41:44,GOED,6,0,-1,0.00,0.000,6,somebody stole the money
+05-08-2015,15:41:56,GOED,7,0,-3,-2.00,1.414,7,the fire is very hot
+05-08-2015,15:42:11,FOUT,8,0,-5,-2.33,1.155,8,she’s drinking from her own cup
+05-08-2015,15:42:25,FOUT,9,0,-3,-3.00,1.633,9,the picture came from a book
+05-08-2015,15:42:37,GOED,10,0,-1,-3.00,1.414,10,the car is going too fast
+05-08-2015,15:42:51,FOUT,11,0,-3,-2.67,1.506,11,a boy ran down the path
+05-08-2015,15:43:03,GOED,12,0,-1,-2.71,1.380,12,flowers grow in the garden
+05-08-2015,15:43:14,GOED,13,0,-3,-2.50,1.414,13,strawberry jam is sweet
+05-08-2015,15:43:26,GOED,14,0,-5,-2.56,1.333,14,the shop closes for lunch
+05-08-2015,15:43:38,GOED,15,0,-7,-2.80,1.476,15,the police helped the driver
+05-08-2015,15:43:50,FOUT,16,0,-9,-3.18,1.888,16,she looked in her mirror
+05-08-2015,15:44:02,FOUT,17,0,-7,-3.67,2.462,17,the match fell on the floor
+05-08-2015,15:44:15,FOUT,18,0,-5,-3.92,2.532,18,the fruit came in a box
+05-08-2015,15:44:27,GOED,19,0,-3,-4.00,2.449,19,he really scared his sister
+05-08-2015,15:44:40,FOUT,20,0,-5,-3.93,2.374,20,the tub faucet is leaking
+05-08-2015,15:44:52,FOUT,21,0,-3,-4.00,2.309,21,they heard a funny noise
+05-08-2015,15:45:05,FOUT,22,0,-1,-3.94,2.249,22,he found his brother hiding
+05-08-2015,15:45:16,GOED,23,0,1,-3.78,2.290,23,the dog played with a stick
+05-08-2015,15:45:29,FOUT,24,0,-1,-3.53,2.480,24,the book tells a story
+05-08-2015,15:45:41,GOED,25,0,1,-3.40,2.479,25,the matches are on the shelf
+05-08-2015,15:45:41,DONE,25,0,1,-3.19,2.600,25,the matches are on the shelf

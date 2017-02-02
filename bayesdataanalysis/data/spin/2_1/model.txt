@@ -1,0 +1,25 @@
+# Specify the model for standardized data:
+model {
+	for ( i in 1:Ntotal ) {
+		# Bernouilli distributed trials
+		 y[i] ~ dbern(mu[i])
+		 mu[i]	<-  (1-lambda) * ((1-gamma) * (icloglog( ( (2*omega[s[i]]*theta[s[i]])/log(2) * (log(x[i])-log(theta[s[i]])) + log(log(2)) ) )) + gamma ) + (gamma*lambda)
+	}
+	for ( j in 1:Nsubj ) {
+		# Priors vague on standardized scale:
+		 omega[j]	~ dgamma(somega,romega)  
+		 theta[j]	~ dnorm(mutheta,sigmatheta)
+	}
+	# constant/default width at F-1(ALPHA) and F-1(1-ALPHA) 
+	 alpha			<- 0.1 
+	 gamma			<- 0.5  
+	 lambda			<- 0  
+	# threshold/theta hyperprior 
+	 mutheta			~ dnorm(0,1/(10)^2)
+	 sigmatheta		~ dunif(1.0E-3,1000)
+	# width/omega hyperprior 
+	 somega			<- pow(muomega,2)/pow(sigmaomega,2) # shape 
+	 romega			<- muomega/pow(sigmaomega,2) # rate 
+	 muomega				~ dgamma(1,0.25)
+	 sigmaomega				~ dgamma(1,0.5) 
+}

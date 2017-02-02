@@ -1,0 +1,31 @@
+05-08-2015,15:14:09,START,0,0,0,0.00,0.000,0,
+05-08-2015,15:14:22,INCORRECT,1,0,-15,0.00,0.000,50,a letter fell on the floor
+05-08-2015,15:15:05,INCORRECT,1,0,-11,0.00,0.000,50,a letter fell on the floor
+05-08-2015,15:15:24,INCORRECT,1,0,-7,0.00,0.000,50,a letter fell on the floor
+05-08-2015,15:15:45,INCORRECT,1,0,-3,0.00,0.000,50,a letter fell on the floor
+05-08-2015,15:16:00,CORRECT,1,0,1,0.00,0.000,50,a letter fell on the floor
+05-08-2015,15:16:15,INCORRECT,2,0,-1,0.00,0.000,51,the silly boy is hiding
+05-08-2015,15:16:31,INCORRECT,3,0,1,0.00,0.000,52,the dog growled at the neighbors
+05-08-2015,15:16:45,CORRECT,4,0,3,0.00,0.000,53,a tree fell on the house
+05-08-2015,15:16:59,CORRECT,5,0,1,0.00,0.000,54,her husband brought some flowers
+05-08-2015,15:17:14,INCORRECT,6,0,-1,0.00,0.000,55,the children washed the plates
+05-08-2015,15:17:27,CORRECT,7,0,1,0.00,1.414,56,they went on vacation
+05-08-2015,15:17:42,INCORRECT,8,0,-1,0.33,1.155,57,mother tied the string too tight
+05-08-2015,15:17:54,CORRECT,9,0,1,0.00,1.155,58,the mailman shut the gate
+05-08-2015,15:18:07,INCORRECT,10,0,-1,0.20,1.095,59,a grocer sells butter
+05-08-2015,15:18:20,CORRECT,11,0,1,0.00,1.095,60,the baby broke his cup
+05-08-2015,15:18:35,INCORRECT,12,0,-1,0.14,1.069,61,the cows are in the pasture
+05-08-2015,15:18:48,CORRECT,13,0,1,0.00,1.069,62,the dishcloth is soaking wet
+05-08-2015,15:19:00,CORRECT,14,0,-1,0.11,1.054,63,they had some chocolate pudding
+05-08-2015,15:19:12,CORRECT,15,0,-3,0.00,1.054,64,she spoke to her eldest son
+05-08-2015,15:19:27,INCORRECT,16,0,-5,-0.27,1.348,65,the oven door was open
+05-08-2015,15:19:38,CORRECT,17,0,-3,-0.67,1.875,66,she’s paying for her bread
+05-08-2015,15:19:51,CORRECT,18,0,-5,-0.85,1.908,67,my mother stirred her tea
+05-08-2015,15:20:03,CORRECT,19,0,-7,-1.14,2.143,68,he broke his leg again
+05-08-2015,15:20:14,CORRECT,20,0,-9,-1.53,2.560,69,the lady wore a coat
+05-08-2015,15:20:26,CORRECT,21,0,-11,-2.00,3.098,70,the cups are on the table
+05-08-2015,15:20:41,INCORRECT,22,0,-13,-2.53,3.710,71,the ball bounced very high
+05-08-2015,15:20:56,INCORRECT,23,0,-11,-3.11,4.364,72,mother cut the birthday cake
+05-08-2015,15:21:12,INCORRECT,24,0,-9,-3.53,4.611,73,the football game is over
+05-08-2015,15:21:24,CORRECT,25,0,-7,-3.80,4.652,74,she stood near the window
+05-08-2015,15:21:25,DONE,25,0,-7,-3.95,4.588,74,she stood near the window
