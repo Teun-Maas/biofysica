@@ -950,7 +950,7 @@ function trialClean(stim,cfg)
 %% Remove ledhandle if it exists
 nstim = numel(stim);
 for stmIdx = 1:nstim
-	if isfield(stim(stmIdx),'ledhandle');
+	if isfield(stim(stmIdx),'ledhandle')
 		if ~isempty(stim(stmIdx).ledhandle)
 			stim(stmIdx).ledhandle.delete; 	% delete(leds)/switch off light;
 		end
