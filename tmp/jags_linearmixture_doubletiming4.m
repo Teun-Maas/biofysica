@@ -191,7 +191,7 @@ if strcmp(runjagsMethod,'parallel');
 else
 	doparallel		= 0; % do not use parallelization
 end
-modelname	= which('linearmixmodel4.txt');
+modelname	= which('linearmixmodel4.txt')
 nChains		= 3;
 burnInSteps = 1000;
 nIter		= 1000;

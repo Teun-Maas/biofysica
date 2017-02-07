@@ -5,12 +5,12 @@ close all
 
 %% The data specification:
 delay	= [0 5 10 20 40 80 120 160 320]';
+delay2plot = [1 6 9];
 ndelays = numel(delay);
 subjects = 1:9;
-nsubj = numel(subjects);
-G = NaN(nsubj,ndelays);
-
-SD = G;
+nsubj		= numel(subjects);
+G			= NaN(nsubj,ndelays);
+SD			= G;
 for jj = 1:nsubj
 	for ii = 1:ndelays
 		dT		= delay(ii);
@@ -29,46 +29,79 @@ for jj = 1:nsubj
 		% r-p2 = a*(p1-p2)+b
 		% r-g*x2 = a*g*(x1-x2)+b
 		% 'y = a*x+b'
-		
 		p1 = b1.beta(1)+b1.beta(2)*x(:,1);
 		p2 = b1.beta(1)+b1.beta(2)*x(:,2);
-		
-		
 		
 		y = r-p2;
 		x = p1-p2;
 		b = regstats(y,x,'linear',{'beta','tstat','r'});
-		G(jj,ii) = b.beta(2);
-		Gse(jj,ii) = b.tstat.se(2);
-		SD(jj,ii) = std(b.r);
+		G(jj,ii)	= b.beta(2);
+		% 		Gse(jj,ii)	= b.tstat.se(2);
+		SD(jj,ii)	= std(b.r);
 		
+		y			= r;
+		ypred		= G(jj,ii).*p1+(1-G(jj,ii)).*p2;
+		res			= ypred-y;
+		SD(jj,ii)	= std(res);
+		
+		if ismember(ii,delay2plot)
+			idx = find(ii==delay2plot);
+			figure(jj)
+			subplot(3,3,(idx-1)*3+1)
+			x = p1;
+			s = std(x-y);
+			plot(x,y,'.')
+			axis square
+			axis([-60 60 -60 60]);
+			box off;
+				title(s)
+		
+					subplot(3,3,(idx-1)*3+2)
+			x = p2;
+			s = std(x-y);
+			plot(x,y,'.')
+			axis square
+			axis([-60 60 -60 60]);
+						box off;
+			title(s)
+
+					subplot(3,3,(idx-1)*3+3)
+			x = ypred;
+			s = std(x-y);
+			plot(x,y,'.')
+			axis square
+			axis([-60 60 -60 60]);
+			box off;
+			title(s)
+		end
 		
 	end
 	
-	G1(jj) = b1.beta(2);
+	% 	G1(jj) = b1.beta(2);
+	%
+	% 	figure(100)
+	% 	subplot(3,3,jj)
+	% 	mu		= G(jj,:);
+	% 	sd		= Gse(jj,:);
+	% 	x		= 1:ndelays;
+	% 	hold on
+	% 	errorpatch(x,mu,sd)
+	% 	plot(x,mu,'ko','MarkerFaceColor','w');
+	% 	axis square;
+	% 	xlim([0 10]);
+	% 	ylim([-0.1 1.1]);
+	% 	horline([0 0.5 1]);
+	% 	horline(G1(jj),'r-');
+	% 	box off;
+	% 	set(gca,'TickDir','out','XTick',x,'XTickLabel',delay);
+	% 	xlabel('Delay (ms)');
+	% 	ylabel('Weight');
 	
-	figure(1)
-	subplot(3,3,jj)
-	mu		= G(jj,:);
-	sd		= Gse(jj,:);
-	x		= 1:ndelays;
-	hold on
-	errorpatch(x,mu,sd)
-	plot(x,mu,'ko','MarkerFaceColor','w');
-	axis square;
-	xlim([0 10]);
-	ylim([-0.1 1.1]);
-	horline([0 0.5 1]);
-	horline(G1(jj),'r-');
-	box off;
-	set(gca,'TickDir','out','XTick',x,'XTickLabel',delay);
-	xlabel('Delay (ms)');
-	ylabel('Weight');
-	
-	% 	savegraph([mfilename num2str(jj)],'eps');
 end
 savegraph([mfilename '1']);
 
+
+return
 %%
 
 
@@ -129,7 +162,7 @@ savegraph(mfilename);
 
 
 function [y,x,y1,x1] = getdata(subject,dT)
-load('/Users/marcw/Dropbox/Work/manuscripts/Rachel PhD/Papers/Paper 2 A9 Double Sounds/Data/A9DataMatrix.mat');
+load('/Users/marcw/Dropbox/Work/manuscripts/Rachel PhD/Papers/Paper 2 A9 Double Sounds/Other/Data/A9DataMatrix.mat');
 
 
 % 1) Trialnumber
