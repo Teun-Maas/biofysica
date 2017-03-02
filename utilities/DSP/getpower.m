@@ -85,13 +85,13 @@ if disp
 		% 		xax = ax([1 2]);
 		%
 		
-		xlim([100 20000]);
+% 		xlim([100 20000]);
 		set(gca,'XTick',[0.05 0.5 1 2 3 4 6 8 10 14]*1000,...
 			'XTickLabel',[0.05 0.5 1 2 3 4 6 8 10 14]);
 		title('Power Spectrum');
 		xlabel('Frequency (kHz)');
 		ylabel('Power (dB)');
-	elseif strcmpi(orient,'y');
+	elseif strcmpi(orient,'y')
 		h = semilogy(mx,f);
 		set(h,'Color',col);
 		% 		set(gca,'YTick',[0.05 1 2 3 4 6 8 10 14]*Fs);

@@ -1,4 +1,4 @@
-function rt_plotreciprobit(fname,varargin)
+function hrt = rt_plotreciprobit(fname,varargin)
 % RT_PLOTRECIPROBIT
 
 % 2015 Marc van Wanrooij
@@ -38,7 +38,7 @@ x = -1./sort((RT)); % multiply by -1 to mirror abscissa
 n = numel(RT); % number of data points
 y = probit((1:n)./n); % cumulative probability for every data point converted to prbt scale
 y(isinf(y)) = probit(0.99);
-plot(x,y,'o','Color','k','MarkerFaceColor',col);
+hrt = plot(x,y,'o','Color','k','MarkerFaceColor',col);
 hold on
 
 % quantiles
@@ -47,18 +47,18 @@ prbt	= probit(p);
 hold on
 
 if isempty(xt)
-xtick	= sort(-1./(150+[0 oct2bw(50,-1:5)])); % some arbitrary xticks
+	xtick	= sort(-1./(150+[0 oct2bw(50,-1:5)])); % some arbitrary xticks
 else
 	xtick = xt;
 end
 set(gca,'XTick',xtick,'XTickLabel',-1./xtick);
 
 if isempty(xl)
-xlim([min(xtick) max(xtick)]);
+	xlim([min(xtick) max(xtick)]);
 else
 	xl = [-1/xl(1) -1./xl(2)];
-xlim(xl);
-end	
+	xlim(xl);
+end
 set(gca,'YTick',prbt,'YTickLabel',p*100);
 ylim([probit(0.1/100) probit(99.9/100)]);
 axis square;
@@ -73,7 +73,7 @@ sel = isfinite(y);
 % b = b.beta;
 % h = regline(b,'k-');
 % set(h,'Color',col,'LineWidth',1);
-% 
+%
 b = robustfit(x(sel),y(sel));
 h = regline(b,'k--');
 set(h,'Color',col,'LineWidth',1);

@@ -24,21 +24,21 @@ if strcmp(ext,'.HUM'), Nbyte             = 2;  end;
 if strcmp(ext,'.AAP'), Nbyte             = 2;  end;
 if strcmp(ext,'.HV'),  Nbyte             = 4;  end;
 if strcmp(ext,'.HVN'), Nbyte             = 4;  end;
-if Nbyte==0,
+if Nbyte==0
     disp(['invalid fname extension ',ext]);
     return;
 end;
 
 %% read file
 fid                                     = fopen(fname,'r','l');
-if fid==-1,
+if fid==-1
     disp(['   Error opening ' fname ]);
     return;
 end;
-if Nbyte==2,
+if Nbyte==2
     mtx                                 = fread(fid,[nchan*nsample,inf],'ushort');
 end;
-if Nbyte==4,
+if Nbyte==4
     mtx                                 = fread(fid,[nchan*nsample,inf],'float');
 end;
 fclose(fid);

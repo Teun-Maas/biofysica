@@ -1,4 +1,4 @@
-function [hpatch,hline] = pa_stairspatch(X,Y,varargin)
+function [hpatch,hline] = stairspatch(X,Y,varargin)
 % PA_STAIRSPATCH(X,Y)
 %
 % plots the graph of vector X vs. vector Y with error patch specified by 
@@ -32,11 +32,11 @@ if length(Y)~=length(X)
 	error('Y and X should be the same size');
 end
 
-clr        = pa_keyval('Color',varargin);
+clr        = keyval('Color',varargin);
 if isempty(clr)
 	clr			= 'k';
 end
-alfa        = pa_keyval('alpha',varargin);
+alfa        = keyval('alpha',varargin);
 if isempty(alfa)
 	alfa		= .4;
 end

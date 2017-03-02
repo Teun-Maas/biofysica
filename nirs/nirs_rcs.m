@@ -80,7 +80,7 @@ for dpIdx	= 1:ndeep
 	l				= deeplabel{dpIdx}(end-5:end);
 	sell			= vectorstrfind(shallowlabel,l,'logic',true);
 	
-	if strcmpi(method,'closest');
+	if strcmpi(method,'closest')
 		p				= deeppos(dpIdx,:); % current deep position
 		d				= sqrt( (p(1)-shallowpos(:,1)).^2+(p(2)-shallowpos(:,2)).^2 ); % current distance from shallow channels
 		mnd				= min(d); % find closest shallow/reference channels

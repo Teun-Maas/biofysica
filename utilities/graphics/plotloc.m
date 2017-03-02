@@ -24,7 +24,7 @@ diagFlag	= keyval('diag',varargin,false);
 
 beta		= keyval('beta',varargin);
 if isempty(beta)
-	if exist('matjags.m','file');
+	if exist('matjags.m','file')
 		beta = regjags(y,x,'diag',diagFlag);
 	end
 end
@@ -78,4 +78,4 @@ end
 str = {['\' greek '_R = ' num2str(mubeta(2),'%.1f')  '\' greek '_T ' sgn{s} ' ' num2str(abs(mubeta(1)),'%.0f')],...
 	['R^2=' num2str(mur.^2,'%.2f')]};
 
-h = text(xl(2)*0.95,yl(1)*0.8,str,'HorizontalAlignment','right','FontSize',12,'FontWeight','bold','Color','r');
+text(xl(2)*0.95,yl(1)*0.8,str,'HorizontalAlignment','right','FontSize',12,'FontWeight','bold','Color','r');

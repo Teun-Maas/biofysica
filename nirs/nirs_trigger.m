@@ -34,14 +34,16 @@ nchan		= numel(chan);
 fs			= data.fsample;
 
 %%
-if strcmpi(meth,'kennan');
+if strcmpi(meth,'kennan')
 trigger = cell(nchan,1); % samples
 	
 	for chnIdx = 1:nchan
 		AD		= data.trial{1}(chan(chnIdx),:);
 		trigger(chnIdx) = {gettrig(AD,trgdur,fs)};
+		triggeroff(chnIdx) = {gettrig(AD,trgdur,fs)+0.1*fs};
+		synch = {};
 	end
-elseif strcmpi(meth,'ciav');
+elseif strcmpi(meth,'ciav')
 	AD				= data.trial{1}(chan,:);
 	[onset,offset,sync]	= gettrig_ciav(AD);
 	trigger(1)		= {onset};
@@ -52,8 +54,8 @@ end
 %% offset and "downsample"
 nchan		= numel(trigger);
 for ii = 1:nchan
-    trigger{ii}				= round(trigger{ii}/data.fsample*fsdown);
-    triggeroff{ii}				= round(triggeroff{ii}/data.fsample*fsdown);
+    trigger{ii}				= trigger{ii}/fs*fsdown;
+    triggeroff{ii}				= triggeroff{ii}/fs*fsdown;
 end
 
 
@@ -72,9 +74,9 @@ data.triggerofftime = data.triggerofftime';
 
 function trigger = gettrig(AD,trgdur,fs)
 % trigger for 'Kennan' experiment
-sel			= AD>2.5;
-v			= [0 diff(sel)];
-trigger		= find(v>0);
+% sel			= AD>2.5;
+v			= [0 diff(AD)];
+trigger		= find(v>0.0001);
 dtrigger	= [max(trigger) diff(trigger)];
 sel			= dtrigger<trgdur/1000*fs;
 while sum(sel)
@@ -82,6 +84,8 @@ while sum(sel)
 	trigger		= trigger(~sel);
 	sel			= dtrigger<trgdur/1000*fs;
 end
+
+% trigger = trigger-0.03*fs;
 
 function [onset,offset,sync] = gettrig_ciav(sync)
 
