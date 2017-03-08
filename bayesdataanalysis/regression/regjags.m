@@ -106,11 +106,11 @@ dic			= keyval('dic',varargin);
 
 % modelname = which('regress.txt');
 % if ~exist(modelname,'file')
-if strcmpi(type,'simple');
+if strcmpi(type,'simple')
 	writesimplemodel;
 	modelname = fullfile(pwd, 'model.txt');
 	parameters		= {'beta0','beta1','sigma'};		% The parameter(s) to be monitored.
-elseif strcmpi(type,'robust');
+elseif strcmpi(type,'robust')
 	writerobustmodel;
 	modelname = fullfile(pwd, 'model.txt');
 	parameters		= {'beta0','beta1','sigma','nu'};		% The parameter(s) to be monitored.
@@ -142,13 +142,12 @@ end
 %% RUN THE CHAINS
 % adaptSteps		= 500;			% Number of steps to 'tune' the samplers.
 nIter			= ceil((numSavedSteps*thinSteps )/nChains); % Steps per chain.
-if strcmp(runjagsMethod,'parallel');
+if strcmp(runjagsMethod,'parallel')
 	doparallel		= 1; % do use parallelization
 	
 else
 	doparallel		= 0; % do not use parallelization
 end
-
 fprintf( 'Running JAGS...\n' );
 % [samples, stats, structArray] = matjags( ...
 [samples, stats] = matjags( ...

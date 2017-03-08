@@ -142,7 +142,7 @@ for ii = 1:length(id)
 	
 	drawnow
 	% 	return
-	pause
+% 	pause
 	
 	M = [M;[earsize1 earsize2 F(indx1) F(indx2) F(indx3) F(indx4)]];
 end
