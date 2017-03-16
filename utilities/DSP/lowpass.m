@@ -15,7 +15,7 @@ function xfilt = lowpass(x,varargin)
 %% Initialization
 Fc = keyval('Fc',varargin);
 if isempty(Fc)
-	    Fc      = 1500; % Cut-off frequency (Hz)
+	    Fc      = 500; % Cut-off frequency (Hz)
 end
 Fs = keyval('Fs',varargin);
 if isempty(Fs)

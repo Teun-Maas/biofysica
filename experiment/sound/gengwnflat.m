@@ -24,7 +24,7 @@ if nargin<3
 	Fc			= min([Fc Fn]);
 end
 if nargin<2
-	order       = 500; % samples
+	order       = 100; % samples
 end
 if nargin<1
 	N           = 0.15*Fn*2; % samples
@@ -66,6 +66,7 @@ if dspFlag
 	subplot(212)
 	getpower(snd,Fn*2,'display',1);
 	xlim([50 22000])
+	verline([Fc Fh]);
 end
 
 %% Play
