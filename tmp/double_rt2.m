@@ -5,52 +5,118 @@ close all
 
 delay	= [0 5 10 20 40 80 120 160 320]';
 ndelays = numel(delay);
-Y = [];
-
+Z = [];
+RT = [];
+T = []
+figure(1)
+clf
+hold on
+col = statcolor(ndelays,[],[],[],'def',6);
+col = lines(ndelays);
 for ii = 1:ndelays
 	dT		= delay(ii);
-	[y,x,RT] = getdata(1:9,dT);
+	[y,x,rt] = getdata(1,dT);
 			z		= (y-x(:,2))./(x(:,1)-x(:,2));
-			RT
-% 	a = (x(:,1)+x(:,2))/2;
-% 	b  = (x(:,1)-x(:,2))/2;
-% 	z		= ( y - a) ./ b ;
-
-% 	RT = round(RT/25)*25;
-% 	[uRT,~,sub] = unique(RT);
+			z = z+1;
+			z = z/2;
+			z = 1-z;
+			rt = rt-delay(ii);
+			
+			
+% 
+% 	b = regstats(z,RT,'linear',{'beta','rsquare'});
+% 	figure(1)
+% 	subplot(3,3,ii)
+% % 	plot(RT,z,'ko','MarkerFaceColor','w');
+% 	hold on
+% % 	plot(uRT,mu)
+% 	bubbleplot(RT,z);
+% 	hold on
+% 	x = [min(RT) max(RT)];
+% 	y = b.beta(1)+x*b.beta(2);
+% 	h = plot(x,y,'k-');
 % 	
-% 	mu = accumarray(sub,z,[],@mean);
-% 	mu
-	b = regstats(z,RT,'linear',{'beta','rsquare'});
-	% 		figure(jj)
-	figure(1)
-	subplot(3,3,ii)
-% 	plot(RT,z,'ko','MarkerFaceColor','w');
-	hold on
-% 	plot(uRT,mu)
-	bubbleplot(RT,z);
-	hold on
-	x = [min(RT) max(RT)];
-	y = b.beta(1)+x*b.beta(2);
-	h = plot(x,y,'k-');
-	
-	set(h,'LineWidth',2);
-	axis square;
-	% 		ylim([-0.2 1.2]);
-	xlim([300 800])
-	horline([0 0.5 1],'k:');
-	verline([0 delay(ii)]);
-	text(700,0.9,num2str(b.rsquare,'%.2f'));
-	ylim([-1 2]);
-	
-		x = 100:800;
-	y = b.beta(1)+x*b.beta(2);
+% 	set(h,'LineWidth',2);
+% 	axis square;
+% 	% 		ylim([-0.2 1.2]);
+% 	xlim([300 800])
+% 	horline([0 0.5 1],'k:');
+% 	verline([0 delay(ii)]);
+% 	text(700,0.9,num2str(b.rsquare,'%.2f'));
+% 	ylim([-1 2]);
+% 	
+% 		x = 100:800;
+% 	y = b.beta(1)+x*b.beta(2);
 
-	Y = [Y;y];
-	
-
+	Z = [Z;z];
+	RT = [RT;rt];
+	T = [T;repmat(dT,size(rt))];
+figure(1)
+plot(rt,z,'ko','MarkerFaceColor',col(ii,:),'MarkerSize',8);
 end
-savegraph('rt_delays','png');
+% savegraph('rt_delays','png');
+%%
+
+
+
+% 	[~,h] = bubbleplot(RT,Z);	set(h,'MarkerEdgeColor','none');
+
+	hold on
+% 	plot(RT,Z,'k+');
+axis square
+box off
+ylim([-0.5 1.5]);
+xlim([-150 1000]);
+set(gca,'TickDir','out');
+
+[x,idx] = sort(RT);
+data = Z(idx);
+% [avg,xavg] = movavg(data,80,x);
+% sel = xavg>100 & xavg<700;
+% plot(xavg(sel),avg(sel),'k-','LineWidth',2);
+xlabel('time between second step and saccade onset (ms)');
+ylabel('Weight [saccade amplitude]');
+plot([-1000 0],[0 0],'k-');
+plot([0 0],[0 1],'k-');
+plot([0 2000],[1 1],'k-');
+
+
+
+b = regstats(Z,[RT T]/1000,'linear','beta');
+% title(b.beta)
+str = ['\omega = ' num2str(b.beta(2),'%0.1f') '(RT-delay) + '  num2str(b.beta(3),'%0.1f') 'delay'];
+title(str)
+
+% savegraph('ottesexample','png');
+
+return
+% plot(RT,Z);
+figure(1)
+clf
+	[~,h] = bubbleplot(RT,Z);
+	hold on
+	set(h,'MarkerEdgeColor','none');
+axis square
+box off
+ylim([-0.5 1.5]);
+horline([0 0.5 1],'k-');
+set(gca,'TickDir','out');
+
+[x,idx] = sort(RT);
+data = Z(idx);
+[avg,xavg] = movavg(data,80,x);
+sel = xavg>100 & xavg<700;
+plot(xavg(sel),avg(sel),'k-','LineWidth',2);
+xlabel('Reaction time - delay (ms)');
+ylabel('Weight');
+
+savegraph('wvsrt2','eps');
+savegraph('wvsrt2','png');
+
+
+	%%
+keyboard
+return
 
 % 	savegraph([mfilename num2str(jj)],'eps');
 %%
@@ -178,7 +244,6 @@ x			= x(sel,:);
 y			= y(sel);
 RT			= RT(sel);
 
-isnan(RT)
 hdi			= hdimcmc(RT);
 % hdi = [200 700]
 sel			= RT>hdi(1) & RT<hdi(2);

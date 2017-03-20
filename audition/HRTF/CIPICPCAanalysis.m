@@ -1,4 +1,4 @@
-8clear all
+clear all
 close all
 clc
 
@@ -10,7 +10,7 @@ clc
 % Flow5 = dtfanalysis('MA-OT-2010-08-04-0004.hrtf'); age5 = 73;
 
 %% Anthropometry
-c = '/Users/marcw/MATLAB/Third Party/CIPIC/anthropometry';
+c = '/Users/marcw/Gitlab/thirdparty/CIPIC/anthropometry';
 cd(c)
 load anthro
 whos
@@ -52,11 +52,11 @@ for ii = 1:length(id)
 	%% Data
 	
 	if sub<10
-		c = ['/Users/marcw/MATLAB/Third Party/CIPIC/standard_hrir_database/subject_00' num2str(sub)];
+		c = ['/Users/marcw/Gitlab/thirdparty/CIPIC/standard_hrir_database/subject_00' num2str(sub)];
 	elseif sub<100
-		c = ['/Users/marcw/MATLAB/Third Party/CIPIC/standard_hrir_database/subject_0' num2str(sub)];
+		c = ['/Users/marcw/Gitlab/thirdparty/CIPIC/standard_hrir_database/subject_0' num2str(sub)];
 	elseif sub<1000
-		c = ['/Users/marcw/MATLAB/Third Party/CIPIC/standard_hrir_database/subject_' num2str(sub)];
+		c = ['/Users/marcw/Gitlab/thirdparty/CIPIC/standard_hrir_database/subject_' num2str(sub)];
 	end
 	cd(c);
 	load hrir_final

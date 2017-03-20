@@ -1,4 +1,4 @@
-function TOT = bubbleplot(X,Y,varargin)
+function [TOT,h] = bubbleplot(X,Y,varargin)
 % BUBBLEPLOT(X,Y)
 %
 % Make a bubbleplot of Y vs X
@@ -61,7 +61,7 @@ SZ			= ceil(100*M);
 col = statcolor(max(idx),[],[],[],'def',6);
 % col			= parula(max(idx));
 C			= col(idx,:);
-h = scatter(x,y,SZ,C,'filled')
+h = scatter(x,y,SZ,C,'filled');
 
 set(h,'MarkerEdgeColor','k');
 

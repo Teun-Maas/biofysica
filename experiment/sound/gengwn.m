@@ -27,7 +27,7 @@ function [snd,Fs] = gengwn(Dur, order, Fc, Fs, Fh, varargin)
 
 %% Initialization
 if nargin<5
-    Fh          = 500;
+    Fh          = 3000;
 end
 if nargin<4
     Fs          = 48828.125; % TDT Nyquist sampling frequency (Hz)
@@ -35,8 +35,8 @@ end
 if nargin<3
     Fc          = 20000; % Hz
 end    
-if nargin<2; 
-    order       = 500; % samples
+if nargin<2
+    order       = 100; % samples
 end
 if nargin<1
 	Dur = 0.15;
@@ -49,7 +49,7 @@ end
 %% Optional arguments
 dspFlag       = keyval('display',varargin);
 if isempty(dspFlag)
-	dspFlag	= 0;
+	dspFlag	= 1;
 end
 plee       = keyval('play',varargin);
 if isempty(plee)
@@ -74,12 +74,12 @@ if dspFlag
     ylabel('Amplitude (a.u.)');
     
     subplot(212);
-    getpower(snd,Fn*2,'display',1);
+    getpower(snd,Fs,'display',1);
 	xlim([50 22000])
 end
 
 %% Play
-if strcmpi(plee,'y');
+if strcmpi(plee,'y')
 	sndplay = envelope(snd',round(10*Fs/1000));
 	p		= audioplayer(sndplay,Fs);
 	playblocking(p);

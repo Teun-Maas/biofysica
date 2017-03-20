@@ -9,8 +9,8 @@ X = -90:90;
 %%
 col		= lines(4);
 ntar	= 15;
-G		= [1 1.1 0.2 10];
-STD		= [6 35 35 6];
+G		= [1 0.8 0.5 10];
+STD		= [6 25 25 6];
 ncond	= numel(G);
 str = {'Normal-Hearing','Noisy','Noisy & Low Gain','Bilateral'};
 xi = 0:100;
@@ -24,7 +24,7 @@ for Idx = 1:ncond
 				
 				
 			case 2
-				r = 2;
+				r = 3;
 			case 3
 				r = 5;
 				

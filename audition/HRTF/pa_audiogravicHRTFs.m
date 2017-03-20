@@ -33,7 +33,7 @@ for ii = 1:2
 	
 	%% Microphone & Room Acoustics
 
-	cd('/Users/marcw/matlab/PandA/Audition/HRTF/Knowles');
+	cd('/Users/marcw/Gitlab/panda/Audition/HRTF/Knowles');
 	wavfile			= 'snd399.wav';
 	wav				= audioread(wavfile);
 	
@@ -45,7 +45,7 @@ for ii = 1:2
 
 	
 	%% Spectrum
-	cd(['/Users/marcw/DATA/Head Related Transfer Functions\' fname(1:5) '\' fname(1:16)]);
+	cd(['/Users/marcw/DATA/Head Related Transfer Functions/' fname(1:5) '/' fname(1:16)]);
 	hrtf			= pa_readhrtf(fname);
 	
 	csvfile			= pa_fcheckext(fname,'csv');
