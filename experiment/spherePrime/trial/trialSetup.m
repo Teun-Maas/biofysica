@@ -35,7 +35,7 @@ if any(selled)
 		cfg.RA16_1.SetTagVal(str2,led(ledIdx).offdelay+1);
 		
 		% PLC
-		if isfield(led,'colour');
+		if isfield(led,'colour')
 			col = led(ledIdx).colour;
 		else
 			col = 1;

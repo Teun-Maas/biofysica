@@ -26,6 +26,7 @@ if nargin<4
 end
 if nargin<5
     sfreq       = 1000;
+	sfreq		= 6103;
 end
 if nargin<2
     Sac     = [];
@@ -51,7 +52,8 @@ Sac = Sac(sel,:);
 
 %% Correct Saccade Latency
 if ~isempty(sfreq)
-    Sac(:,5)    = 1000*Sac(:,3)/sfreq-Sac(:,27);
+%     Sac(:,5)    = 1000*Sac(:,3)/sfreq-Sac(:,27);
+    Sac(:,5)    = 1000*Sac(:,3)/sfreq-Sac(:,27)/sfreq;
 end
 
 %% And call it SupSac

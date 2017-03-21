@@ -57,21 +57,21 @@ cfg.comment		= comment;
 cfg			= getheader(fid,cfg);
 % warnings
 if isfield(cfg,'Lab')
-	if isfield(cfg,'ITI');
+	if isfield(cfg,'ITI')
 		if any(cfg.ITI~=0)
 			message = 'Do you really want to include ''ITI'' ?';
 			warning(message);
 		end
 	end
-	if isfield(cfg,'Repeats');
+	if isfield(cfg,'Repeats')
 		message = 'Variable ''Repeats'' is not used';
 		warning(message);
 	end
-	if isfield(cfg,'Random');
+	if isfield(cfg,'Random')
 		message = 'Variable ''Random'' is not used';
 		warning(message);
 	end
-	if isfield(cfg,'Motor');
+	if isfield(cfg,'Motor')
 		message = 'Variable ''Motor'' is not used in SPHERE lab';
 		warning(message);
 	end
