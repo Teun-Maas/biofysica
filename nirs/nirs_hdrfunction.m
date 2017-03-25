@@ -11,7 +11,7 @@ function [Y,X,t] = nirs_hdrfunction(X,varargin)
 % http://doi.org/10.1016/j.neuroimage.2008.10.065  
 
 %% Initialization
-Fs = keyval('Fs',varargin,120); % sample frequency (Hz)/(samples/s)
+Fs = keyval('Fs',varargin,250); % sample frequency (Hz)/(samples/s)
 if nargin<1
 	X		= zeros(20*Fs,1);
 	X(round(3*Fs):round(8*Fs)) = 1;
@@ -24,7 +24,7 @@ dispFlag    = keyval('disp',varargin,false); % duration (s)
 
 
 N       = length(X); % samples
-t		= 0:dursamples-1; % ssamples
+t		= 0:dursamples-1; % the single hemodynamic response time (samples)
 t		= t/Fs; % s
 a1		= 6; % peak time 4.5 s after stim, shape
 a2		= 16; % peak time 4.5 s after stim, shape
@@ -36,9 +36,10 @@ y2		= c*gampdf(t,a2,b2);
 y		= y1-y2;
 Y       = conv(X,y);
 Y       = Y(1:N);
-Y       = Y/max(Y); % Amplitude
-t		= t(1:N);
+% Y       = Y/max(Y); % Amplitude
 
+t = 0:N-1; % time (for entire trace)
+t = t/Fs;
 if dispFlag
 	figure(42)
 	clf

@@ -16,6 +16,7 @@ function [TOT,h] = bubbleplot(X,Y,varargin)
 Xwidth = keyval('Xwidth',varargin,Xwidth);
 Ywidth = keyval('Ywidth',varargin,Ywidth);
 
+def = keyval('col',varargin,6);
 
 %% Histogram
 X			= round(X/Xwidth)*Xwidth;
@@ -57,13 +58,10 @@ y	= y(sel);
 
 SZ			= ceil(100*M);
 [~,~,idx]	= unique(M);
-% col			= flipud(gray(max(idx)));
-col = statcolor(max(idx),[],[],[],'def',6);
-% col			= parula(max(idx));
+col			= statcolor(max(idx),[],[],[],'def',def);
 C			= col(idx,:);
-h = scatter(x,y,SZ,C,'filled');
-
-set(h,'MarkerEdgeColor','k');
+h			= scatter(x,y,SZ,C,'filled');
+set(h,'MarkerEdgeColor','none');
 
 
 
