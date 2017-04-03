@@ -29,31 +29,31 @@ function [betai,sei,XI] = weightedregress(X,Y,Z,sigma,XI,varargin)
 
 %% Check input
 if size(X,2)>1
-    X=X';
-    if size(X,2)>1
-        error('X should be a vector');
-    end
+	X=X';
+	if size(X,2)>1
+		error('X should be a vector');
+	end
 end
 mx = size(X,1);
 [m,n] = size(Y); % n = number of indepedent variables
 if m~=mx
-    Y = Y';
-    [m,n] = size(Y); %#ok<ASGLU> % n = number of indepedent variables
+	Y = Y';
+	[m,n] = size(Y); %#ok<ASGLU> % n = number of indepedent variables
 end
 if size(Z,2)>1
-    Z   = Z';
-    if size(Z,2)>1
-        error('Z should be a vector');
-    end
+	Z   = Z';
+	if size(Z,2)>1
+		error('Z should be a vector');
+	end
 end
 if nargin<5 % Set a default
-    XI = linspace(min(X),max(X),20);
+	XI = linspace(min(X),max(X),20);
 end
 if size(XI,2)>1
-    XI=XI';
-    if size(XI,2)>1
-        error('X should be a vector');
-    end
+	XI=XI';
+	if size(XI,2)>1
+		error('X should be a vector');
+	end
 end
 %% Optional, undocumented type of fit:
 % simple regression (default) or a robust fitting procedure
@@ -64,12 +64,12 @@ etyp		= keyval('etyp',varargin,'analytic');
 
 
 switch wfun
-    case 'gaussian'
-        nreg	= n; % number of regression parameters. Bias is obsolete for gaussian weighting
-        regindx = 2:(nreg+1);
-    otherwise
-        nreg	= n+1; % number of regression parameters.
-        regindx = 1:nreg;
+	case 'gaussian'
+		nreg	= n; % number of regression parameters. Bias is obsolete for gaussian weighting
+		regindx = 2:(nreg+1);
+	otherwise
+		nreg	= n+1; % number of regression parameters.
+		regindx = 1:nreg;
 end
 
 %% Weighted regress
@@ -78,48 +78,48 @@ beta	= NaN(length(XI),nreg); % regression coefficients
 se		= beta; % standard error
 xi		= NaN(size(XI)); % wfuned average x-parameter
 for ii   = 1:length(XI)
-    switch wfun
-        case 'gaussian'
-            w1		= normpdf(X,XI(ii),sigma); % Gaussian wfuning for one column
-            sw		= nansum(w1); % normalization factor
-            w		= repmat(w1,1,n); % wfuning for number of independent measures
-            xi(ii)	= dot(w1,X)./sw; % nansum(w1.*X)
-            x		= w.*Y./sw;
-            y		= w1.*Z./sw;
-            sel		= X>=xi(ii)-2*sigma  & X<=xi(ii)+2*sigma;
-        case 'boxcar'
-            sel		= X>=XI(ii)-sigma  & X<=XI(ii)+sigma;
-            xi(ii)	= nanmean(X(sel));
-            x		= Y(sel,:);
-            y		= Z(sel);
+	switch wfun
+		case 'gaussian'
+			w1		= normpdf(X,XI(ii),sigma); % Gaussian wfuning for one column
+			sw		= nansum(w1); % normalization factor
+			w		= repmat(w1,1,n); % wfuning for number of independent measures
+			xi(ii)	= dot(w1,X)./sw; % nansum(w1.*X)
+			x		= w.*Y./sw;
+			y		= w1.*Z./sw;
+			sel		= X>=xi(ii)-2*sigma  & X<=xi(ii)+2*sigma;
+		case 'boxcar'
+			sel		= X>=XI(ii)-sigma  & X<=XI(ii)+sigma;
+			xi(ii)	= nanmean(X(sel));
+			x		= Y(sel,:);
+			y		= Z(sel);
 	end
-    if nansum(sel)>nbin && nansum(sel)>n
-        switch fittype
-            case 'regstats'
-                b	= regstats(y,x,'linear',{'beta';'tstat'});
-                beta(ii,:)			= b.beta(regindx);
-                
-                switch etyp
-                    case 'boot'
-                        s = bootstrp(50, @regstats ,y,x); % bootstrap to obtain sd of sd of residuals
-                        s = [s.beta];
-                        s = std(s,[],2);
-                        se(ii,:) = s(regindx);
-                    otherwise
-                        se(ii,:)			= b.tstat.se(regindx);
-                end
-            case 'robustfit'
-                [b,stats]	= robustfit(x,y);
-                beta(ii,:)			= b(regindx);
-                switch etyp
-                    case 'boot'
-                        s = std(bootstrp(50, @robustfit ,x,y)); % bootstrap to obtain sd of sd of residuals
-                        se(ii,:) = s(regindx);
-                    otherwise
-                        se(ii,:)			= stats.se(regindx);
-                end
-        end
-    end
+	if nansum(sel)>nbin && nansum(sel)>n
+		switch fittype
+			case 'regstats'
+				b	= regstats(y,x,'linear',{'beta';'tstat'});
+				beta(ii,:)			= b.beta(regindx);
+				
+				switch etyp
+					case 'boot'
+						s = bootstrp(50, @regstats ,y,x); % bootstrap to obtain sd of sd of residuals
+						s = [s.beta];
+						s = std(s,[],2);
+						se(ii,:) = s(regindx);
+					otherwise
+						se(ii,:)			= b.tstat.se(regindx);
+				end
+			case 'robustfit'
+				[b,stats]	= robustfit(x,y);
+				beta(ii,:)			= b(regindx);
+				switch etyp
+					case 'boot'
+						s = std(bootstrp(50, @robustfit ,x,y)); % bootstrap to obtain sd of sd of residuals
+						se(ii,:) = s(regindx);
+					otherwise
+						se(ii,:)			= stats.se(regindx);
+				end
+		end
+	end
 end
 
 %% remove nans
@@ -139,15 +139,15 @@ se		= se(indx,:);
 %% interpolate at XI
 
 if numel(xi)>1 % to interpolate you should have at least 2 data points
-    betai	= NaN(length(XI),size(beta,2));
-    sei		= betai;
-    for ii	= 1:size(beta,2)
-        betai(:,ii) = interp1(xi,beta(:,ii),XI,'spline');
-        sei(:,ii)	= interp1(xi,se(:,ii),XI,'spline');
-    end
+	betai	= NaN(length(XI),size(beta,2));
+	sei		= betai;
+	for ii	= 1:size(beta,2)
+		betai(:,ii) = interp1(xi,beta(:,ii),XI,'linear','extrap');
+		sei(:,ii)	= interp1(xi,se(:,ii),XI,'linear','extrap');
+	end
 else % Create some NaNs
-    betai	= zeros(length(XI),size(beta,2));
-    sei		= betai;   
+	betai	= zeros(length(XI),size(beta,2));
+	sei		= betai;
 end
 
 

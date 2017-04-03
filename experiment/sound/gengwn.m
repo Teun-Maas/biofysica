@@ -49,7 +49,7 @@ end
 %% Optional arguments
 dspFlag       = keyval('display',varargin);
 if isempty(dspFlag)
-	dspFlag	= 1;
+	dspFlag	= 0;
 end
 plee       = keyval('play',varargin);
 if isempty(plee)

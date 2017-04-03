@@ -1,4 +1,4 @@
-function [MSDF,sdf] = pa_spk_sdf(spike,varargin)
+function [MSDF,sdf] = spk_sdf(spike,varargin)
 % [MSDF,SDF] = PA_SPK_SDF(SPIKE)
 %
 % Obtain (mean) spike-density function (M)SDF by convolving trains of action
@@ -42,7 +42,7 @@ function [MSDF,sdf] = pa_spk_sdf(spike,varargin)
 
 %% Initialization
 if isstruct(spike) % if we have a structure containing spike timings
-	spike = pa_spk_timing_struct2mat(spike);
+	spike = spk_timing_struct2mat(spike);
 end
 
 if issparse(spike) % if we have a sparse matrix
@@ -50,23 +50,23 @@ if issparse(spike) % if we have a sparse matrix
 end
 
 %% Optional input
-sigma         = pa_keyval('sigma',varargin);
+sigma         = keyval('sigma',varargin);
 if isempty(sigma)
 	sigma			= 5;
 end
-Te         = pa_keyval('Te',varargin);
+Te         = keyval('Te',varargin);
 if isempty(Te)
 	Te			= 1;
 end
-Td         = pa_keyval('Td',varargin);
+Td         = keyval('Td',varargin);
 if isempty(Td)
 	Td			= 20;
 end
-kernel         = pa_keyval('kernel',varargin);
+kernel         = keyval('kernel',varargin);
 if isempty(kernel)
 	kernel			= 'gaussian';
 end
-Fs         = pa_keyval('Fs',varargin);
+Fs         = keyval('Fs',varargin);
 
 [ntrials,nsamples]		= size(spike);
 % if ntrials>nsamples
@@ -90,7 +90,7 @@ switch kernel
 		window		= window./sum(window);
 	case 'pulse'
 		winsize		= [1 nsamples];
-		window = pa_spk_spikewave(1);
+		window = spk_spikewave(1);
 	case 'boxcar'
 		winsize		= sigma;
 		t			= -winsize:winsize;

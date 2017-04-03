@@ -1,4 +1,4 @@
-function h = pa_spk_rasterplot(T,varargin)
+function h = spk_rasterplot(T,varargin)
 % PA_SPK_RASTERPLOT(T)
 %
 % Display raster plot of spikes in structure T. T should contain spike
@@ -24,8 +24,8 @@ function h = pa_spk_rasterplot(T,varargin)
 %		Ntrials = 50;
 %		Ltrial  = 1000;
 %		nspikes = 1000;
-%		T       = pa_spk_genspiketimes(nspikes,Ntrials*Ltrial);
-%       h       = pa_spk_rasterplot(T,'Ntrials',Ntrials,'Ltrial',Ltrial);
+%		T       = spk_genspiketimes(nspikes,Ntrials*Ltrial);
+%       h       = spk_rasterplot(T,'Ntrials',Ntrials,'Ltrial',Ltrial);
 %
 % More information: 
 %		"Spikes - exploring the neural code", Rieke et al. 1999, figure	2.1
@@ -35,21 +35,21 @@ function h = pa_spk_rasterplot(T,varargin)
 % E-mail: marcvanwanrooij@neural-code.com
 
 %% Initialization
-Ntrials         = pa_keyval('Ntrials',varargin);
+Ntrials         = keyval('Ntrials',varargin);
 if isempty(Ntrials)
 	Ntrials		= 1;
 end
-Ltrial         = pa_keyval('Ltrial',varargin);
+Ltrial         = keyval('Ltrial',varargin);
 if isempty(Ltrial)
 	Ltrial		= round(length(T)/Ntrials);
 end
-Fs         = pa_keyval('Fs',varargin);
+Fs         = keyval('Fs',varargin);
 if isempty(Fs)
 	Fs			= 1000; % (Hz)
 end
 
 %% Plot variables
-col         = pa_keyval('color',varargin);
+col         = keyval('color',varargin);
 if isempty(col)
 	col			= 'k';
 end

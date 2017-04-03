@@ -4,7 +4,7 @@ close all;
 warning off;
 %% Initialization
 gr = 'CI';
-d				= keyval('dir',varargin,['/Users/marcw/DATA/Roos Cartignij/NIRS sessie' filesep gr]);
+d				= keyval('dir',varargin,['/Volumes/mbauditi/Student/Roos/NIRS sessie' ]);
 cd(d);
 
 %% Do stuff
