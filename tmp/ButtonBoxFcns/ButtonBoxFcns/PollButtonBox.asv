@@ -1,0 +1,38 @@
+function [ButtonVec,ET,AllButtons] = PollButtonBox(Device, MaxWait, MultiWait)
+% PollButtonBox -- Poll the response box until one or more buttons is
+%   pressed. Device is the Sys3 device name (typically RX6). MaxWait
+%   is the maximum time in millisec to wait for the first press. 
+%   Set to 0 or Inf to wait forever. MultiWait is the time after the 
+%   first press to wait for additional presses. (Optional) MultiWait=0 means
+%   only wait for one button. ButtonVec is a 4-element vector with the
+%   status of buttons 1 through 4. ET is the elapsed time in millisec
+%   to the first press. Return ET= 0 if no press within MaxWait.
+%   AllButtons is the decimal equivalent of ButtonVec.
+
+KILLTIME = 25;       %    // 25 ms wait while polling
+
+t0 = clock; % starting time
+
+if MaxWait <= 0,
+   MaxWait = Inf;
+end
+
+if nargin<3,
+    MultiWait= 0;
+end
+
+ET= 0;
+ButtonVec= zeo
+% wait for button press
+while ~any(ReadButtonBox(Device)) && ET<MaxWait,
+    MSDelay(KILLTIME);
+    ET= etime(clock,t0);
+end
+
+if ~AllButtons, % no activity -- timed out
+    ET= 0;
+    return
+end
+
+MSDelay(MultiWait); % wait for more button activity
+

@@ -1,0 +1,13 @@
+function ClearButtonBox(device)
+% ClearButtonBox -- Clear any spurious button presses and wait until all buttons released
+
+KILLTIME = 25;       %    // 25 ms wait while polling
+
+AllButtons= 1;
+while AllButtons ~= 0
+[ButtonVec,AllButtons]= ReadButtonBox(device);
+    mydelay(KILLTIME);
+    invoke(device, 'SoftTrg', 2); % relatch the inputs
+    keys = Sys3_bitread(device);
+    drawnow; %flush the event cue, i.e. check for GUI button-presses etc
+end

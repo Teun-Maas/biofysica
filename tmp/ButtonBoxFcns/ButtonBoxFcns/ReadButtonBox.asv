@@ -1,0 +1,24 @@
+function [Vec,Dec] = ReadButtonBox(Device)
+% ReadButtonBox -- Read the buttons on the response box. Device is the
+%   Sys3 device (normally RX6). Vec is a 4-element vector with 0 or 
+%   1 for buttons 1 through 4. Dec is the decimal equivalent of Vec.
+%
+% USAGE: [Vec,Dec]= ReadButtonBox(Device)
+
+for i=1:4,
+    Vec(i)= Device.GetTagVal(['Button',num2str(i)]);
+end
+
+Vec= (Vec~-0);  % convert values of the tag to logicals
+
+Dec= 0;
+Dec= sum(bitset(Dec,find(Vec))); % convert the vector of logicals to an integer
+
+binstr = '';
+for i = 1:2
+    TagName = ['BitIn' num2str(i)];
+    vec(i) =  (invoke (device, 'GetTagVal', TagName)) > 0;
+    binstr = [num2str(double(vec(i))) binstr]; 
+end
+
+dec = bin2dec(binstr);
