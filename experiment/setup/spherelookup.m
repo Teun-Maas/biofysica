@@ -84,7 +84,7 @@ TannoyIDs					= [26:30 58:63  124:126];
 cfg.TannoyIDs				= TannoyIDs;
 
 cfg.lookup(TannoyIDs+1,5)	= TannoyLocations; % azimuth
-cfg.lookup(TannoyIDs+1,6)	= +7.5; % elevation
+cfg.lookup(TannoyIDs+1,6)	= -7.5; % elevation
 
 
 %% Interpolant
