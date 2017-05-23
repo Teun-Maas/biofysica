@@ -31,11 +31,18 @@ else
 end
 
 %% 
-cfg.(RP2str).SetTagVal('delaySND1',snd.ondelay);  %
-cfg.(RP2str).SetTagVal('delaySND2',snd.ondelay);  %
-cfg.(RP2str).SetTagVal('soundDur1',dur);  % default?
-cfg.(RP2str).SetTagVal('soundDur2',dur);  % default?
+% cfg.(RP2str).SetTagVal('delaySND1',snd.ondelay);  %
+% cfg.(RP2str).SetTagVal('delaySND2',snd.ondelay);  %
+% cfg.(RP2str).SetTagVal('soundDur1',dur);  % default?
+% cfg.(RP2str).SetTagVal('soundDur2',dur);  % default?
 
+if ismember(sndsetup(2),[1 2])
+	cfg.(RP2str).SetTagVal('delaySND1',snd.ondelay);
+	cfg.(RP2str).SetTagVal('soundDur1',dur);  %
+elseif ismember(sndsetup(2),[3 4])
+	cfg.(RP2str).SetTagVal('delaySND2',snd.ondelay);  %
+	cfg.(RP2str).SetTagVal('soundDur2',dur);  %
+end
 
 RP2out = cfg.mux2rp2(sndsetup(2));
 if strcmp(RP2str,'RP2_1')
