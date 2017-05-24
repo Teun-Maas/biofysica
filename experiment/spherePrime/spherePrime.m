@@ -84,8 +84,6 @@ function varargout = spherePrime_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-
-
 % --- Executes on button press in checkbox_RA16connect.
 function checkbox_RA16connect_Callback(hObject, eventdata, handles) %#ok<*INUSD,*DEFNU>
 % hObject    handle to checkbox_RA16connect (see GCBO)

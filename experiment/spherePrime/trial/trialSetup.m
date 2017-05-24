@@ -1,4 +1,4 @@
-function stim = trialSetup(cfg,stim)
+function [stim,cfg] = trialSetup(cfg,stim)
 % HLED = RUNTRIAL(RA16)
 %
 % Set up experimental parameters
@@ -84,12 +84,15 @@ end
 if ~exist('maxSamples','var')
 	maxSamples = 0;
 end
+cfg.maxSamples = maxSamples;
 
-%% Acquisition
-if any(selsndacq)
-	sndacq	= stim(selsndacq);
-	cfg.RP2_1.SetTagVal('recBufSize',maxSamples+1000); % amount of DA samples
-end
+%% Sound Acquisition
+% if any(selsndacq)
+% 	sndacq	= stim(selsndacq);
+% 	cfg.RP2_1.SetTagVal('eventAcq',sndacq.onevent+1);
+% 	cfg.RP2_1.SetTagVal('delayAcq',sndacq.ondelay);
+% 	cfg.RP2_1.SetTagVal('acqSamples',cfg.nsamples); % amount of DA samples
+% end
 
 %% Wait for?
 % This needs some tweaking

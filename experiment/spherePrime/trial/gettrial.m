@@ -12,8 +12,8 @@ cfg						= fexistdlg(handles.cfg); % check datafile name
 % %% Exp-file
 % % Dialog to choose the exp-file and load experimental parameters
 [trial,cfg]				= readexp(cfg); % load experimental trial parameters and configuration
-%
-% %% CFG file
+
+%% CFG file
 cfg						= readcfg(cfg); % read cfg cfile
 cfg.acqdur				= cfg.humanv1.ADC(1).samples / cfg.humanv1.ADC(1).rate * 1000; % TODO: HumanV1/duration of data acquisition (ms)
 cfg.nsamples			= round(cfg.acqdur/1000*cfg.medusaFs); % length data acquisition (samples)

@@ -26,7 +26,7 @@ for trlIdx	= 1:handles.cfg.ntrials
 	stim			= handles.trial(trlIdx).stim;
 	trialClean(stim,handles.cfg);
 	
-	stim			= trialSetup(handles.cfg,stim);
+	[stim,handles.cfg]	= trialSetup(handles.cfg,stim);
 	trialRun(handles.cfg,stim);
 	handles.data		= trialSave(handles.cfg,handles.trial,handles.data);
 	handles				= trialShow(handles);
@@ -43,8 +43,6 @@ for trlIdx	= 1:handles.cfg.ntrials
 
 	toc(t)
 end
-
-
 handles.cfg.duration	= duration(0,0,toc(tstart)); % add duration of experiment
 
 %% Finish
