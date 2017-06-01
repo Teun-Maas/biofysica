@@ -565,7 +565,6 @@ function button = trialSave(cfg,trial)
 %% Read RA16 Event buffer
 button					= cfg.RZ6_1.GetTagVal('ButtonPress');
 
-
 % 
 % %% Save trial data
 % % Because an experiment might be stopped at any time, we need to record
