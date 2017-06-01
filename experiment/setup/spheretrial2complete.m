@@ -35,12 +35,13 @@ for blockIdx = 1:nblocks
 		load(d(fIdx).name,'-mat');
 		D	= [D data]; %#ok<AGROW>
 		
+		if exist('dur','var')
 		trialsingle.duration = dur;
+		end
 		T	= [T trialsingle]; %#ok<AGROW>
 	end
 	data	= D;
 	trial	= T; %#ok<NASGU>
-% 	cfg		= rmfield(cfg,{'hcurtar','hcurdat'}); % remove figure handles from cfg file
 
 	fname = fcheckext(fname,'sphere');
 	fname = fullfile(dname,fname);

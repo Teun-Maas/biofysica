@@ -45,7 +45,7 @@ Fchan                       = 3;
 S                           = load(CalFile,'-mat');
 
 %% Calibrate all DATfiles
-for i                       = 1:size(DatFiles,1),
+for i                       = 1:size(DatFiles,1)
     % Loading file
     fname                   = fcheckext(DatFiles(i,:),'.dat');
     fname                   = fcheckexist(fname,'*.dat');

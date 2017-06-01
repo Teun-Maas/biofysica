@@ -31,7 +31,7 @@ for dIdx = 1:ndir
 			disp(fname)
 			cfg = rmfield(cfg,'hcurdat');
 		end
-		save(fname,'data','cfg','-mat');
+		save(fname,'data','trialsingle','cfg','-mat');
 		% 	whos
 	end
 	
