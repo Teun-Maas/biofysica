@@ -176,8 +176,6 @@ attB = -snd.ild/2+50;
 cfg.RZ6_1.SetTagVal('attA',attA);
 cfg.RZ6_1.SetTagVal('attB',attB);
 
-
-
 function endBlock(cfg)
 
 
