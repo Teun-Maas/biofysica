@@ -124,7 +124,7 @@ for trlIdx	= 1:handles.cfg.ntrials
 	% save timing
 	dur		= toc(t);
 	[~,fname,~]		= fileparts(handles.cfg.fname); % remove extension
-	fname			= [fname '-' num2str(handles.cfg.trial,'%04u')]; %#ok<*AGROW>
+	fname			= [fname '-' num2str(handles.cfg.trial,'%04u')];
 	fname			= fcheckext(fname,'sphere');
 	fname			= fullfile([handles.cfg.dname filesep 'trial' filesep],fname);
 % 	save(fname,'dur','-append');
@@ -155,7 +155,7 @@ str = char(str);
 disp(str);
 cd(handles.cfg.dname)
 
-% endBlock(handles.cfg);
+endBlock(handles.cfg);
 
 function trialSetup(cfg,stim)
 
@@ -172,6 +172,7 @@ cfg.RZ6_1.SetTagVal('FC2',snd.freq_right);
 attA = snd.ild/2+50;
 attB = -snd.ild/2+50;
 
+[snd.freq_left/1000 snd.freq_right/1000 attA attB snd.ild]
 cfg.RZ6_1.SetTagVal('attA',attA);
 cfg.RZ6_1.SetTagVal('attB',attB);
 
@@ -198,18 +199,18 @@ snd.ledhandle	= [];
 % load handel;
 % y = resample(y,48828,Fs);
 % snd = 
-% fname		= fullfile(cfg.snddir,snd.matfile);
-% if ~exist(fname,'file')
-% 	disp('You do not have Handel installed.');
-% 	disp('1000 monkeys are doing your work for you, and are now writing Handel.');
-% 	load handel;
-% 	snd = resample(y,48828,Fs);
-% 	save(fname,'snd');
-% end
-% % setSound(snd,cfg,'RP2_1');
-% stim = trialSetup(cfg,snd);
-% 
-% trialRun(cfg,snd);
+fname		= fullfile(cfg.snddir,snd.matfile);
+if ~exist(fname,'file')
+	disp('You do not have Handel installed.');
+	disp('1000 monkeys are doing your work for you, and are now writing Handel.');
+	load handel;
+	snd = resample(y,48828,Fs);
+	save(fname,'snd');
+end
+% setSound(snd,cfg,'RP2_1');
+stim = trialSetup(cfg,snd);
+
+trialRun(cfg,snd);
 
 function sethandles(handles)
 set(handles.popupmenu_expinitials,'String',handles.cfg.expinitials);
@@ -564,18 +565,19 @@ function button = trialSave(cfg,trial)
 %% Read RA16 Event buffer
 button				= cfg.RZ6_1.GetTagVal('ButtonPress');
 reactiontime		= cfg.RZ6_1.GetTagVal('ReactionTime'); % samples
-SF					= cfg.RZ6_1.GetSFreq; % Hz
-RT					= reactiontime/SF; % seconds
+SF                  = cfg.RZ6_1.GetSFreq; % Hz
+RT  = reactiontime/SF; % seconds
 
-
+% 
 % %% Save trial data
 % % Because an experiment might be stopped at any time, we need to record
 % % data trial by trial in order to prevent data loss.
-[~,fname,~]		= fileparts(cfg.fname); % remove extension
-fname			= [fname '-' num2str(cfg.trial,'%04u')];
+% trialsingle		= trial(cfg.trial);
+% [~,fname,~]		= fileparts(cfg.fname); % remove extension
+% fname			= [fname '-' num2str(cfg.trial,'%04u')];
 % % sndname = fname;
-fname			= fcheckext(fname,'ild');
-fname			= fullfile([cfg.dname filesep 'trial' filesep],fname);
+% fname			= fcheckext(fname,'sphere');
+% fname			= fullfile([cfg.dname filesep 'trial' filesep],fname);
 % 
 % %% remove graphics
 % if isfield(cfg,'hcurtar') 
@@ -586,14 +588,11 @@ fname			= fullfile([cfg.dname filesep 'trial' filesep],fname);
 % 	warning('No graphic handles present to be removed');
 % end
 % 
-stim.ild			= trial.ild(cfg.trial);
-stim.freq_left		= trial.ild(cfg.trial);
-stim.freq_right	= trial.ild(cfg.trial); %#ok<*STRNU>
-
-save(fname,'stim','cfg','button','RT');
+% save(fname,'data','cfg','trialsingle');
 
 
 function trialClean(stim,cfg)
+
 % %% Remove ledhandle if it exists
 % nstim = numel(stim);
 % for stmIdx = 1:nstim
