@@ -587,8 +587,8 @@ fname			= fullfile([cfg.dname filesep 'trial' filesep],fname);
 % end
 % 
 stim.ild			= trial.ild(cfg.trial);
-stim.freq_left		= trial.ild(cfg.trial);
-stim.freq_right	= trial.ild(cfg.trial); %#ok<*STRNU>
+stim.freq_left		= trial.freq_left(cfg.trial);
+stim.freq_right	= trial.freq_right(cfg.trial); %#ok<*STRNU>
 
 save(fname,'stim','cfg','button','RT');
 
