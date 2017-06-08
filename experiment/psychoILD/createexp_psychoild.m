@@ -7,7 +7,7 @@ function createexp_psychoild(varargin)
 %% Initialization
 x = 0:0.1:1;
 x(x<0.001) = 0.001;
-x(x>0.99) = 0.99;
+x(x>0.99) = 0.999;
 niceild = probit(x);
 niceild = niceild./max(abs(niceild));
 ild		= keyval('ild',varargin,niceild); % ILDs
@@ -64,13 +64,13 @@ shft        = log2(freq_right./freq_left);
 i1 = 2*freq_left/1000;
 i2 = 2*freq_right/1000;
 mx = max([i1 i2],[],2);
-ild = ild.*mx;
+ild = ild.*10;
 
 
 %%
 n           = numel(ild);
 
-cd('C:\DATA\SS\EXP');
+% cd('C:\DATA\SS\EXP');
 save('psychoild1.exp','ild','freq_left','freq_right');
 
 %% Display
