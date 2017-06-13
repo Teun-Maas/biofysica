@@ -7,6 +7,8 @@ classdef pupil_remote_control < handle
     %
     % pupil_remote_control uses JeroMQ, a pure java implementation of
     % libzmq. https://github.com/zeromq/jeromq
+
+    % Version 1.0 GW/20170623-1
     
     properties (Access=protected)
         default_port = 50020;

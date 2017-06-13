@@ -21,7 +21,7 @@ rc = pupil_remote_control('pupil-desktop.local');
 
 r=rc.time_sync(0.0);
 
-ntimes=10000;
+ntimes=1000;
 rt=zeros(1,ntimes);
 for i=1:ntimes
     tstart=tic;
