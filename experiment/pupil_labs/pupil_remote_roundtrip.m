@@ -8,7 +8,7 @@
 %         't' get pupil timestamp
 
 % tested with jeromq and java 1.8
-% GW/20170613
+% GW/20170613-1
 
 % do this before calling this script:
 % MacOS
