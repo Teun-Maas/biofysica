@@ -49,7 +49,7 @@ function samples = psifit(x,y,s,varargin)
 
 %% Initialization
 if isempty(s)
-	s = ones(size(y));
+	s = ones(1,size(y,2));
 end
 % check for input orientation
 % Y needs to be either:
@@ -104,7 +104,6 @@ diagFlag		= keyval('showDiag',varargin,false); % show MCMC diagnostics
 postFlag		= keyval('showPost',varargin,false); % show posterior estimate distribution
 predFlag		= keyval('showPred',varargin,true); % show posterior predictive
 centroidFlag	= keyval('showCentroid',varargin,'mean'); % mode, median, mean
-
 
 %% Actual regression
 samples				= genMCMC(x,y,s,...
@@ -218,7 +217,7 @@ elseif isnumeric(gamma) && ~isnumeric(lambda) && ngroups==1
 	parameters		= {'theta','omega','lambda'};
 elseif ~isnumeric(gamma) && isnumeric(lambda) && ngroups>1
 	parameters		= {'theta','omega','gamma','mugamma','mutheta','muomega'};
-elseif ~isnumeric(gamma) && isnumeric(lambda) && ngroupd==1
+elseif ~isnumeric(gamma) && isnumeric(lambda) && ngroups==1
 	parameters		= {'theta','omega','gamma'};
 elseif ~isnumeric(gamma) && ~isnumeric(lambda) && ngroups>1
 	parameters		= {'theta','omega','gamma','lambda','mutheta','muomega','mugamma','mulambda'};
@@ -363,7 +362,8 @@ sbcnt	= 0;
 cnt		= false;
 
 
-for ii = 1:ns % for every subject/group
+for ii = 1:ns
+	% for every subject/group
 	sbcnt		= sbcnt+1; % new subplot count
 	if cnt
 		sbcnt	= 1;

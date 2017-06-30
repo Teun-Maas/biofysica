@@ -114,7 +114,8 @@ for trlIdx	= 1:handles.cfg.ntrials
 	stim.freq_right		= handles.trial.freq_right(trlIdx);
 	trialClean(stim,handles.cfg);
 	
-    trialSetup(handles.cfg,stim);
+    rnd = trialSetup(handles.cfg,stim);
+	handles.trial.roving(trlIdx) = rnd;
     trialRun(handles.cfg,stim);
 	trialSave(handles.cfg,handles.trial);
 % 	handles				= trialShow(handles);
@@ -157,11 +158,11 @@ cd(handles.cfg.dname)
 
 % endBlock(handles.cfg);
 
-function trialSetup(cfg,stim)
+function rnd = trialSetup(cfg,stim)
 
-setSound(stim,cfg)
+rnd = setSound(stim,cfg);
 
-function setSound(snd,cfg)
+function rnd = setSound(snd,cfg)
 % SETSOUND(SND,CFG,RP2STR)
 %
 % Set all parameters for sound presentation
@@ -169,8 +170,10 @@ function setSound(snd,cfg)
 cfg.RZ6_1.SetTagVal('FC1',snd.freq_left);
 cfg.RZ6_1.SetTagVal('FC2',snd.freq_right);
 
-attA = snd.ild/2+50;
-attB = -snd.ild/2+50;
+rnd = randval(-5,5,1);
+
+attA = snd.ild/2+50+rnd;
+attB = -snd.ild/2+50+rnd;
 
 cfg.RZ6_1.SetTagVal('attA',attA);
 cfg.RZ6_1.SetTagVal('attB',attB);
