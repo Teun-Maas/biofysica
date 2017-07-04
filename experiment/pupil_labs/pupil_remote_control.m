@@ -64,7 +64,7 @@ classdef pupil_remote_control < handle
             if nargin > 1
                 msg = sprintf('R %s', session_name);
             else
-                msg = session_name;
+                msg = 'R';
             end
             result = this.send(msg);
         end
