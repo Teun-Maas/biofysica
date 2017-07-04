@@ -51,23 +51,20 @@ X = X(sel);
 
 %% Optional, undocumented type of fit:
 % simple regression (default) or a robust fitting procedure
-wfun         = pa_keyval('wfun',varargin);
+wfun         = keyval('wfun',varargin);
 if isempty(wfun)
 	wfun = 'gaussian';
 end
-nbin        = pa_keyval('nbin',varargin);
+nbin        = keyval('nbin',varargin);
 if isempty(nbin)
 	nbin = 0;
 end
-nboot         = pa_keyval('nboot',varargin);
-if isempty(nboot)
-	nboot = 100;
-end
+nboot         = keyval('nboot',varargin);
+
 %% Weighted regress
 switch wfun
 	case 'gaussian'
 		[mu,se,xi] = getmean(X,Y,XI,sigma,nbin,n);
-		whos Y X xi
 		% 		se		= getsd(Y,X,xi,sigma);
 		%         CI		=  NaN(length(XI),2);
 		%         for ii   = 1:length(XI)
@@ -103,7 +100,7 @@ end
 % interpolation dis not possible if there are multiple equivalent x-values
 % solution: throw away equivalent x-values with corresponding y-values,
 % keeping only the first value
-[xi,indx] = unique(xi);
+[~,indx] = unique(xi);
 mui      = mu(indx,:);
 sei		= se(indx,:);
 XI = XI(indx);
@@ -154,5 +151,4 @@ for k	= 1:length(Y)
 	V	= V+w(k)*(Y(k))^2;
 end
 n = sqrt(sum(numel(X).*w))/1.96;
-whos n 
 S		= sqrt(V/sw)./n;

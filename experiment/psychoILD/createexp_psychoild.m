@@ -15,7 +15,7 @@ ild		= keyval('ild',varargin,niceild); % ILDs
 % Check this
 nreps	= keyval('nreps',varargin,1); % number of repeats. NOTE: 1 = 0 repeats
 bfreq	= keyval('bfreq',varargin,[750 2000 4000 6000]); % base frequency
-shft	= keyval('shift',varargin, [-1 -1/3 -1/6 0 1/6 1/3 2/3 1]);
+shft	= keyval('shift',varargin, [-1 -1/3 -2/3 -1/6 0 1/6 1/3 2/3 1]);
 dispFlag	= keyval('display',varargin, true);
 
 
@@ -82,7 +82,7 @@ if dispFlag
     %     set(gca,'XScale','log','YScale','log');
     set(gca,'XTick',unique(round(freq_left)),...
         'YTick',unique(round(freq_right)));
-    axis([100 8000 100 8000]);
+%     axis([100 8000 100 8000]);
     axis square
     box off
     set(gca,'TickDir','out');

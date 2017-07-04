@@ -1,5 +1,5 @@
-function [W,A] = pa_aweight(F)
-% [W,A] = PA_AWEIGHT(F)
+function [W,A] = aweight(F)
+% [W,A] = AWEIGHT(F)
 %
 % A-weighting function for sound levels at frequency F
 %
