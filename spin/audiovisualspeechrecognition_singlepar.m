@@ -41,7 +41,7 @@ close all
 
 loadFlag		= keyval('load',varargin,false);
 sampleFlag		= keyval('sample',varargin,true);
-datadir			= '/Volumes/mbaudit4/Marc van Wanrooij/data/words';
+datadir			= '/Volumes/mbaudit4/Marc van Wanrooij/data1/words';
 cd(datadir);
 roi = 4; % 1 = word, 2 = sentence, 3 = list, 4 = subject
 

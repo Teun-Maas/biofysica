@@ -42,15 +42,15 @@ roi = 1; % 1 = word, 2 = sentence, 3 = list, 4 = subject
 
 loadFlag		= keyval('load',varargin,false);
 sampleFlag		= keyval('sample',varargin,true);
-datadir			= '/Volumes/mbaudit4/Marc van Wanrooij/data/words';
+datadir			= '/Volumes/mbaudit4/Marc van Wanrooij/data1/words';
 cd(datadir);
 
 if ~loadFlag
 	load('spin');
 	[uwords,~,words]	= unique(T);
 	[~,~,subjects]		= unique(S);
-	[ulist,~,list]	= unique(L);
-	[usent,~,sent]	= unique(Z);
+	[ulist,~,list]		= unique(L);
+	[usent,~,sent]		= unique(Z);
 	
 	sel			= M==1; % modality 1 = A, 2 = V, 3 = AV
 	y			= C(sel);
@@ -60,15 +60,14 @@ if ~loadFlag
 	
 	switch roi
 		case 4
-		s			= subjects(sel);
+			s			= subjects(sel);
 		case 1
-	s			= words(sel);
+			s			= words(sel);
 		case 3
-		s			= list(sel);
+			s			= list(sel);
 		case 2
-		s			= sent(sel);
+			s			= sent(sel);
 	end
-	subjects = subjects(sel);
 	
 	us			= unique(s);
 	ns			= numel(us);
@@ -102,37 +101,37 @@ if ~loadFlag
 	
 	
 	
-% %%
-% 	usubjects			= unique(subjects);
-% 	nsubjects			= numel(usubjects);
-% 	Q = NaN(nsubjects,ns,nsnr);
-% 
-% 	for kk = 1:nsubjects
-% 		for ii = 1:ns % for every subject
-% 		for jj = 1:nsnr % for every signal-to-noise ratio
-% 			sels		= subjects==usubjects(kk);
-% 			selsub		= s==us(ii);
-% 			selsnr		= snr==usnr(jj);
-% 			whos sels selsub selsnr
-% 			sel			= selsub & selsnr' & sels;
-% 			
-% 			Q(kk,ii,jj)	= sum(sel);
-% 
-% 		end
-% 		end
-% 	end
-% 	%%
-% 			figure(1)
-% clf
-% cnt = 0;
-% 	for ii = 1:nsubjects
-% 		cnt = cnt+1;
-% 		a = (squeeze(Q(ii,:,:)))==0;
-% 		subplot(4,5,cnt)
-% 		imagesc(a)
-% 		caxis([0 1])
-% 		horline(34,'w-')
-% 	end
+	% %%
+	% 	usubjects			= unique(subjects);
+	% 	nsubjects			= numel(usubjects);
+	% 	Q = NaN(nsubjects,ns,nsnr);
+	%
+	% 	for kk = 1:nsubjects
+	% 		for ii = 1:ns % for every subject
+	% 		for jj = 1:nsnr % for every signal-to-noise ratio
+	% 			sels		= subjects==usubjects(kk);
+	% 			selsub		= s==us(ii);
+	% 			selsnr		= snr==usnr(jj);
+	% 			whos sels selsub selsnr
+	% 			sel			= selsub & selsnr' & sels;
+	%
+	% 			Q(kk,ii,jj)	= sum(sel);
+	%
+	% 		end
+	% 		end
+	% 	end
+	% 	%%
+	% 			figure(1)
+	% clf
+	% cnt = 0;
+	% 	for ii = 1:nsubjects
+	% 		cnt = cnt+1;
+	% 		a = (squeeze(Q(ii,:,:)))==0;
+	% 		subplot(4,5,cnt)
+	% 		imagesc(a)
+	% 		caxis([0 1])
+	% 		horline(34,'w-')
+	% 	end
 	
 	%%
 	%% Plot raw data

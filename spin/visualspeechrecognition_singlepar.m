@@ -37,7 +37,7 @@ function visualspeechrecognition_singlepar(varargin)
 
 %% Initialization
 close all
-datadir			= '/Volumes/mbaudit4/Marc van Wanrooij/data/words';
+datadir			= '/Users/marcw/DATA/Luuk van de Rijt/words';
 cd(datadir);
 load('spin');
 % spin T C SNR L S

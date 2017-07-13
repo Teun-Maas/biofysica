@@ -3,7 +3,7 @@ function spindata_LR2016
 
 %% Luuk van de Rijt's MATRIX Speech-In-Noise test Binomial
 % cd('D:\SPIN-project\results_perSubjList\');
-datadir = '/Volumes/mbaudit4/Marc van Wanrooij/data/words';
+datadir = '/Volumes/mbaudit4/Marc van Wanrooij/data1/words';
 cd(datadir);
 
 

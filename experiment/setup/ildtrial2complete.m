@@ -30,17 +30,23 @@ for blockIdx = 1:nblocks
 	S = [];
 	R = [];
 	B = [];
+	L = [];
+% 	numel(d)
 	for fIdx = 1:numel(d)
-		disp(['Loading ' d(fIdx).name])
+% 			clear stim button RT roving
+
+% 		disp(['Loading ' d(fIdx).name])
 		load(d(fIdx).name,'-mat');
 		S	= [S stim]; %#ok<AGROW>
 		R	= [R RT]; %#ok<AGROW>
 		B	= [B button]; %#ok<AGROW>
-		
 	end
-	
+	if exist('roving','var')
+	data = [[S.ild]' [S.freq_left]' [S.freq_right]' B' R' roving'];
+	else
 	data = [[S.ild]' [S.freq_left]' [S.freq_right]' B' R'];
-	fname = fcheckext(fname,'ild');
+	end
+	fname = fcheckext(fname,'mat');
 	fname = fullfile(dname,fname);
 	save(fname,'data','cfg');
 end
