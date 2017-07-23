@@ -1,38 +1,4 @@
 function audiovisualspeechrecognition_singlepar(varargin)
-% MCMC = BINORATE(Z,N,S)
-%
-% Determine binomial rate
-%
-% Z = number of successes
-% N = number of trials
-% S = subject ID (or condition)
-%
-% MCMC structure contains fields with MCMC samples:
-% - theta: rate
-%
-% MCMC = BINORATE(K,N,S,'NAME',VALUE)
-% Additional name-value pair inputs include:
-% and some JAGS sampling parameters
-% - 'burnInSteps': Total number of burn-in steps
-% - 'numSavedSteps': Total number of steps in chains to save
-% - 'thinSteps': Number of steps to thin (to prevent autocorrelation).
-% - 'saveName': save MCMCM samples in file 'saveName'
-% - 'nChains': number of chains to run
-% - 'runJagsMethod'
-%
-% You need to install JAGS and MATJAGS
-%	http://mcmc-jags.sourceforge.net/
-%	-  http://psiexp.ss.uci.edu/research/programs_data/jags/ and/or https://github.com/msteyvers/matjags
-% Original in R:	Kruschke, J. K. (2011). Doing Bayesian Data Analysis:
-%					A Tutorial with R and BUGS. Academic Press / Elsevier.
-% Modified to Matlab code: Marc M. van Wanrooij
-%
-% See also MATJAGS, PLOTPOST
-%
-% Accompanies the book:
-%   Kruschke, J. K. (2014). Doing Bayesian Data Analysis:
-%   A Tutorial with R, JAGS, and Stan. 2nd Edition. Academic Press / Elsevier.
-% source('DBDA2E-utilities.R')
 
 
 %% Initialization
@@ -41,9 +7,9 @@ close all
 
 loadFlag		= keyval('load',varargin,false);
 sampleFlag		= keyval('sample',varargin,true);
-datadir			= '/Volumes/mbaudit4/Marc van Wanrooij/data1/words';
+datadir			= '/Users/marcw/DATA/Luuk van de Rijt/words';
 cd(datadir);
-roi = 4; % 1 = word, 2 = sentence, 3 = list, 4 = subject
+roi = 1; % 1 = word, 2 = sentence, 3 = list, 4 = subject
 
 if ~loadFlag
 	load('spin');

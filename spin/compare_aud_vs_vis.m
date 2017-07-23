@@ -42,7 +42,7 @@ plot_av;
 
 function plot_av
 
-datadir			= '/Volumes/mbaudit4/Marc van Wanrooij/data1/words';
+datadir			= '/Users/marcw/DATA/Luuk van de Rijt/words';
 cd(datadir);
 load('spinauditoryMCMC4');
 samplesA = samples;

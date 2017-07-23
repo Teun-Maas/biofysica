@@ -14,7 +14,7 @@ function logit = logit(p,varargin)
 
 
 if any(~(p>0 & p<1))
-	if any(p<0 | p>1); % values outside [0,1]
+	if any(p<0 | p>1) % values outside [0,1]
 		msgid	= 'BioFysica:logit:pInvalidValue';
 		errmsg	= 'Please provide a valid p-value between 0 and 1';
 		error(msgid,errmsg);
