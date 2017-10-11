@@ -61,7 +61,7 @@ SZ			= ceil(100*M);
 col			= statcolor(max(idx),[],[],[],'def',def);
 C			= col(idx,:);
 h			= scatter(x,y,SZ,C,'filled');
-set(h,'MarkerEdgeColor','none');
+set(h,'MarkerEdgeColor','k');
 
 
 

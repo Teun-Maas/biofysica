@@ -19,9 +19,20 @@ C = L;
 for chainIdx = 1:nChain
 	s				= x(:,chainIdx);
 	s				= zscore(s);
-	[acf,lag]		= xcorr(s,maxlag,'coeff');
-	lag				= transpose(lag(maxlag+1:end));
-	acf				= acf(maxlag+1:end);
+	try % the Signal Processing Toolbox
+		[acf,lag]		= xcorr(s,maxlag,'coeff');
+		lag				= transpose(lag(maxlag+1:end));
+		acf				= acf(maxlag+1:end);
+	catch % or try another method
+		lag		= -maxlag:maxlag;
+		if ispc
+		acf		= mxcorr(s,s,lag);
+		else
+			acf = ones(size(lag));
+		end
+		lag				= transpose(lag(maxlag+1:end));
+		acf				= acf(maxlag+1:end);
+	end
 	L(:,chainIdx)	= lag;
 	C(:,chainIdx)	= acf;
 end

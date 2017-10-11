@@ -1,6 +1,9 @@
 function nicegraph(fig)
 % NICEGRAPH(FIG)
 %
+%
+%             set(get(gca,'Yaxis'),'MinorTickValues',-90:5:90);
+
 % See also SAVEGRAPH
 
 %% Initialization
