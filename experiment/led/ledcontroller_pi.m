@@ -4,6 +4,9 @@ classdef ledcontroller_pi < handle
     %
     % See also LEDCONTROLLER_PI, DELETE, TRIGGER, TRIGGER_ENABLE, TRIGGER_COUNT, TRIGGERED,
     % WRITE, WAIT
+    %
+    % We need jeromq here! Add the full path to jeromq.jar to you javaclasspath.txt
+
     
     % Written by Günter Windau
     % 2014-04-22 version 1.0
