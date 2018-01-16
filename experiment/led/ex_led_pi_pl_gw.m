@@ -7,18 +7,18 @@ n = 8;
 s = ledpattern(n);
 
 for i=1:2:n-1
-    s(i).set(0,'r');
-    s(i).set(17,'g');
-    ir=i*50.0/7;
+    s(i).set(0:2:31,'r');
+    ir=50;
+   % s(i).set(17,'g');
+   % ir=i*50.0/7;
     ig=ir;
    % ig=50-ir;
     s(i).intensity('r', ir);
     s(i).intensity('g', ig);
 end
 
-
-% leds = ledcontroller_pi('dcn-led00.local', 'dcn-led01.local');
-leds = ledcontroller_pi('dcn-led00.local');
+leds = ledcontroller_pi('dcn-led00.local', 'dcn-led01.local');
+%leds = ledcontroller_pi('dcn-led00.local');
 leds.print_version;
 leds.write(s);
 for i=1:n
