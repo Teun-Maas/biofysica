@@ -12,7 +12,7 @@ s = ledpattern(n);
 
 for i=1:2:n-1
     s(i).set(0,'r');
-    s(i).set(17,'g');
+    s(i).set(1,'g');
     ir=i*50.0/7;
     ig=ir;
     % ig=50-ir;   % this will generate warnings
@@ -23,11 +23,9 @@ end
 leds = ledcontroller_pi(host1);          %one LED box
 %leds = ledcontroller_pi(host1, host2);  %two LED boxes in parallel
 
-<<<<<<< HEAD
 % leds = ledcontroller_pi('dcn-led00.local', 'dcn-led01.local');
 leds = ledcontroller_pi('dcn-led00.local');
-=======
->>>>>>> 4a6ec848949327470da77ba57a03209541830ad6
+
 leds.print_version;
 leds.write(s);
 for i=1:n

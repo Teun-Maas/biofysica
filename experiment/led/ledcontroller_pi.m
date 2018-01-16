@@ -16,6 +16,7 @@ classdef ledcontroller_pi < handle
     % PLC program
     % 2017-10-19 version 2.0 adaptation for PI/Arduino hardware. Roughly
     % the same API as for the PLC version
+    % 2018-01-16 GW: fixed intensity problem in write() function
 
     
     properties (Access=protected)
@@ -301,7 +302,7 @@ classdef ledcontroller_pi < handle
                         warning('LED Intensity must be >= 0')
                         intens=0;
                     end
-                    all_i(ibuf) = uint16(255.0*ir/50);
+                    all_i(ibuf) = uint16(255.0*intens/50);
 
                     %Handle LED bits
                     %pack all boolean values into 16 bit words
