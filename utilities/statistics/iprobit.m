@@ -1,4 +1,4 @@
-function phi = probit(x)
+function x = iprobit(phi)
 % PHI = PROBIT(X)
 %
 % The probit function is the quantile function, i.e., the inverse
@@ -8,6 +8,5 @@ function phi = probit(x)
 % This is useful for plotting reaction times.
 %
 
-phi    = sqrt(2)*erfinv(2*x - 1);
 
-
+x = (erf(phi/sqrt(2))+1)/2;
