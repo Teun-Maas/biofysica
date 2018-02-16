@@ -14,6 +14,7 @@ classdef pupil_remote_control < handle
         default_port = 50020;
         context;
         socket;
+        hostname;
         tmax = Inf;
     end
     
@@ -31,6 +32,7 @@ classdef pupil_remote_control < handle
             if nargin < 2
                 port = this.default_port;
             end
+            this.hostname=hostname;
             this.context=ZMQ.context(1);
             this.socket=this.context.socket(ZMQ.REQ);
             uri=sprintf('tcp://%s:%d',hostname,port);
@@ -103,5 +105,28 @@ classdef pupil_remote_control < handle
             ts = str2double(r);
         end
         
+        function result = record(this)
+            import py.msgpack.loads
+            import org.zeromq.ZMQ;
+
+            sub_port=this.send('SUB_PORT');
+            sub = this.context.socket(ZMQ.SUB);
+            uri=sprintf('tcp://%s:%s', this.hostname, sub_port);
+            sub.connect(uri);
+            sub.subscribe('pupil.');
+            
+            for i=1:10
+                msg=sub.recvStr
+                data=sub.recvStr
+                c=char(data);
+                size(c)
+                loads(c)
+               % udata=msgpack('unpacker',data)
+
+            end
+            sub.close();
+            
+            result=data;
+        end
     end
 end

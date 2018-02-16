@@ -1,5 +1,9 @@
 classdef vs_servo < handle
 
+% 2018-01-02 GW: fixed maxint problem in convert_profile() function.
+%            Now converting position values to int32 instead of int16.
+% 
+
 properties
     varmap;
     plc;
@@ -108,8 +112,8 @@ methods
            data = data(1:maxlen);
         end
         npad = maxlen-len;
-        % convert to int16 data in 1/10 degrees, padded with zeros
-        data = int16(round(10*data));
+        % convert to int32 data in 1/10 degrees, padded with zeros
+        data = int32(round(10*data));
         r_pos = 10*range(data);  % r_pos in degrees
         if  nargin >=4
            if (r_pos(1) < limit_r_pos(1)) | (r_pos(2) > limit_r_pos(2))
