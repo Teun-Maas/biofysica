@@ -187,7 +187,7 @@ while ~feof(fid)
 			sn								= sn+1;
 			par			= sscanf(curLine(nchar+1:end),'%d%d%d%d%d',[5,1]);
 			trial(tn).stim(sn).modality		= 'trigger';
-			if par(1) == 1;
+			if par(1) == 1
 				trial(tn).stim(sn).detect		= 'rise';
 			elseif par==2
 				trial(tn).stim(sn).detect		= 'fall';
