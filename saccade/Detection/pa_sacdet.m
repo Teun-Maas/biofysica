@@ -251,12 +251,12 @@ for i                                           = 1:size(handles.smvtrace,2);
 
     % Check if first saccade offset is not due to slowness of subject
     if ~isempty(on) && ~isempty(off)
-        if off(1)<on(1);
+        if off(1)<on(1)
             off                         = off(2:end);
         end
         % Check ending - End of trial is detected as offset of saccade
-        if length(on)~=length(off);
-            if round(off(end)) == handles.Nsamples;
+        if length(on)~=length(off)
+            if round(off(end)) == handles.Nsamples
                 off                     = off(1:end-1);
             end
         end

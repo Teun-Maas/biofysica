@@ -1,4 +1,4 @@
-function pa_sac2mat(DatFile,LogFile,SacFile)
+function sac2mat(DatFile,LogFile,SacFile)
 % PA_SAC2MAT(HVFILE,CSVFILE,SACFILE)
 %
 % Extract saccade parameters from saccades in data file HVFILE (obtained
