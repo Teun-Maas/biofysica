@@ -176,7 +176,7 @@ if predFlag
 	% 	if any(strcmp(func2str(fun),{'weibullfun','revweibullfun'}))
 	% 		x = x-min(x)+0.001;
 	% 	end
-	posteriorprediction(x,y,s,samples,fun,centroidFlag); % Posterior predictive
+	posteriorprediction(x,y,s,samples,fun,centroidFlag,fig); % Posterior predictive
 	
 	if isnumeric(gamma),	samples		= rmfield(samples,'gamma');		end
 	if isnumeric(lambda),	samples		= rmfield(samples,'lambda');	end
@@ -310,7 +310,7 @@ if ~isempty(saveName)
 	save([saveName 'Mcmc'],'samples');
 end
 
-function posteriorprediction(x,y,s,samples,fun,centroidFlag)
+function posteriorprediction(x,y,s,samples,fun,centroidFlag,fig)
 % POSTERIORPREDICTION(X,Y,B)
 %
 %
@@ -375,7 +375,7 @@ for ii = 1:ns
 	end
 	sel			= s==us(ii);
 	
-	figure(200+figcnt);
+	figure(fig+figcnt);
 	subplot(sb,sb,sbcnt)
 	hold on
 	

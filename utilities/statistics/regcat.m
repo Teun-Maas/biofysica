@@ -14,7 +14,7 @@ function [coefCat,coefMet,coef] = regcat(y,xCat,xMet)
 %
 % See also:
 % http://blog.yhathq.com/posts/r-lm-summary.html
-% http://www.psychstat.missouristate.edu/multibook/mlt08.htm
+% http://www.psychstat.missouristate.edu/multiboo       k/mlt08.htm
 % http://www.mathworks.nl/help/stats/group-comparisons-using-categorical-arrays.html
 
 % 2013 Marc van Wanrooij
