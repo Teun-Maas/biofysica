@@ -38,7 +38,7 @@ R			= 1;
 % desired double-polar azimuth and elevation
 daz			= N(:,2);
 del			= N(:,3);
-[dX,dY,dZ]	= azel2cart(daz,del,R);
+% [dX,dY,dZ]	= azel2cart(daz,del,R);
 
 
 %% Transform to double-polar coordinate system

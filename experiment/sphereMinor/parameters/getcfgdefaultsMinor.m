@@ -30,11 +30,11 @@ cfg						= spherelookupMinor(cfg); % lookup structure
 
 %% Data filter coefficients
 % Do we use this
-cfg.Fcutoff             = 80;       % Cutoff Frequency  (Hz)
-cfg.Order                   = 50;
-
-cfg.lpFilt = designfilt('lowpassfir', 'FilterOrder', cfg.Order, 'CutoffFrequency', ...
-                    cfg.Fcutoff, 'SampleRate', cfg.RZ6Fs, 'Window', 'hamming');
+% cfg.Fcutoff             = 80;       % Cutoff Frequency  (Hz)
+% cfg.Order				= 50;
+% 
+% cfg.lpFilt = designfilt('lowpassfir', 'FilterOrder', cfg.Order, 'CutoffFrequency', ...
+%                     cfg.Fcutoff, 'SampleRate', cfg.RZ6Fs, 'Window', 'hamming');
 				% check RZ6Fs
 %% Led colours
 cfg.ledcolours = {'g','r'}; % green and red

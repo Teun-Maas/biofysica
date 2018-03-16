@@ -14,8 +14,8 @@ for trlIdx	= 1:cfg.ntrials
 		if ~isempty(X)
 			ZI										= cfg.interpolant(trial(trlIdx).stim(stmIdx).azimuth,trial(trlIdx).stim(stmIdx).elevation);
 			trial(trlIdx).stim(stmIdx).Z			= ZI;
-			trial(trlIdx).stim(stmIdx).azimuth		= cfg.lookup(ZI+1,5);
-			trial(trlIdx).stim(stmIdx).elevation	= cfg.lookup(ZI+1,6);
+			trial(trlIdx).stim(stmIdx).azimuth		= cfg.lookup(ZI+1,4);
+			trial(trlIdx).stim(stmIdx).elevation	= cfg.lookup(ZI+1,5);
 			
 		end
 	end

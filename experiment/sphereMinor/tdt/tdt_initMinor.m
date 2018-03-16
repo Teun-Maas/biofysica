@@ -9,8 +9,11 @@ function handles = tdt_initMinor(handles)
 
 %% Active X Control/Objects
 % cfg.HF				= figure('Tag','ActXWin','name','ActiveX Window for TDT','numbertitle','off','menubar','none'); % Figure for ActiveX components
-[zBus, err(1)]		= ZBUS(1); % zBus, number of racks
-[RZ6_1, err(2)]	= RZ6(1,handles.cfg.RZ6_1circuit); % Real-time acquisition
+zBus		= ZBUS(1); % zBus, number of racks
+RZ6_1		= RZ6(1,handles.cfg.RZ6_1circuit); % Real-time acquisition
+
+Fs					= RZ6_1.GetSFreq;
+handles.cfg.RZ6Fs	= Fs;
 for muxIdx = 1:2
 	MUX(RZ6_1,muxIdx);
 end

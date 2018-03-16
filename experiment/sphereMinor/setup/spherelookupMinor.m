@@ -1,4 +1,4 @@
-function cfg = spherelookup(cfg)
+function cfg = spherelookupMinor(cfg)
 % CFG = SPHERELOOKUP
 %
 % Get lookup table for LEDs and speakers in the Sphere setup
@@ -46,32 +46,37 @@ cfg.lookup			= sortrows(cfg.lookup,[3 1 2]); % sort lookup-table by channel numb
 % LookUp(97:112.3) = MUXind(3);
 % LookUp(113:128.3) = MUXind(4);
 % LookUp(:.4) = [MUXbit MUXbit MUXbit MUXbit MUXbit MUXbit MUXbit MUXbit]';
-cfg.nRP2			= 2; % 2 RP2s
-cfg.nMUX			= 4; % 4 multiplexers
+
+% This is still written to RP2 setup
+% cfg.nRP2			= 2; % 2 RP2s
+% cfg.nMUX			= 4; % 4 multiplexers
+% cfg.nMUXbit			= 16; % 16 bits per MUX
+% cfg.RP2ind			= 1:cfg.nRP2;
+% cfg.MUXind			= 1:cfg.nMUX;
+% cfg.MUXbit			= 1:cfg.nMUXbit;
+
+cfg.nMUX			= 2; % 2 multiplexers
 cfg.nMUXbit			= 16; % 16 bits per MUX
-cfg.RP2ind			= 1:cfg.nRP2;
 cfg.MUXind			= 1:cfg.nMUX;
 cfg.MUXbit			= 1:cfg.nMUXbit;
-LookUp(:,1)			= cfg.stimchan; %
-for ii				= 1:cfg.nRP2
-	idx				= (1:cfg.nMUX*cfg.nMUXbit)+(ii-1)*cfg.nMUX*cfg.nMUXbit;
-	LookUp(idx,2)	= cfg.RP2ind(ii);
-	for jj			= 1:cfg.nMUX
-		idx				= (1:cfg.nMUXbit)+(jj-1)*cfg.nMUXbit+(ii-1)*cfg.nMUX*cfg.nMUXbit;
-		LookUp(idx,3)	= cfg.MUXind(jj);
-	end
-end
-LookUp(:,4)			= repmat(cfg.MUXbit,1,cfg.nRP2*cfg.nMUX);
+
+LookUp(:,1)			= cfg.stimchan; % Stimulus channel 0-31
+idx					= LookUp(:,1)+1;
+LookUp(:,2)			= ceil(idx/(2^4));% MUX number
+idx					= mod(idx,2^4);
+idx(idx==0)			= 2^4;
+LookUp(:,3)			= idx; % TDT bit
 
 %% Combine
 % [PLC-Chan# RP2# MUX# BIT# AZ EL]
-cfg.lookup		= [cfg.lookup(:,3) LookUp(:,2:4) cfg.lookup(:,1)  cfg.lookup(:,2)];
-cfg.lookuplabel = {'Channel' 'RP2' 'MUX' 'Bit' 'Azimuth' 'Elevation'};
+cfg.lookup		= [cfg.lookup(:,3) LookUp(:,2:3) cfg.lookup(:,1)  cfg.lookup(:,2)];
+cfg.lookuplabel = {'Channel' 'MUX' 'Bit' 'Azimuth' 'Elevation'};
+% cfg.lookuplabel = {'Channel' 'RP2' 'MUX' 'Bit' 'Azimuth' 'Elevation'};
 
 
 %% Interpolant
-x		= cfg.lookup(:,5);
-y		= cfg.lookup(:,6);
+x		= cfg.lookup(:,4);
+y		= cfg.lookup(:,5);
 z		= cfg.lookup(:,1);
 sel		= ~isnan(x);
 x		= x(sel);
