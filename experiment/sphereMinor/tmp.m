@@ -38,20 +38,17 @@ end
 %%
 
 t = (1:nsamples)/244.14;
+RZ6_data = RZ6_data*1700;
+
 figure(2)
 subplot(311)
 plot(t,RZ6_data(:,1));
+ylim([-10 10]);
 
 subplot(312)
 plot(t,RZ6_data(:,2));
+ylim([-10 10]);
 
 subplot(313)
 plot(t,RZ6_data(:,3));
-return
-%%
-figure(3)
-clf
-x = RZ6_data(:,1);
-[f,a] = getpower(x,244.14,'display',true);
-
-% [F,A,PH] = PA_GETPOWER(X,FS)
+ylim([-10 10]);

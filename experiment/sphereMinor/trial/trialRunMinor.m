@@ -1,4 +1,4 @@
-function trialRun(cfg,stim)
+function trialRunMinor(cfg,stim)
 % RUNTRIAL(ZBUS,RA16)
 
 %% Run zBus
@@ -9,17 +9,17 @@ cfg.zBus.zBusTrigA(0, 0, 2); % reset, clock start, (0,0,2): trigger entire rack,
 cfg.zBus.zBusTrigB(0, 0, 2); % start event 1/trial onset; trigger zBus 4 = RA16;
 
 %% Button Press
-disp('Waiting for RA16 button press/sound/led/acquisition');
+disp('Waiting for RZ6 button press/sound/led/acquisition');
 % pause(.1); % short break
-while ~cfg.RA16_1.GetTagVal('Wait')
+while ~cfg.RZ6_1.GetTagVal('Wait')
 	% 	disp('waiting')
 	% do nothing
 end
 
 %% Sound play
 % TODO: correct waiting/state machine
-if strcmp(cfg.sRP2_1circuit,'RP2_WAV')
-	disp('Waiting for RP2 sound');
+if strcmp(cfg.sRZ6_1circuit,'RP2_WAV')
+	disp('Waiting for RZ6 sound');
 	selsnd = strcmpi({stim.modality},'sound');
 	if any(selsnd)
 		snd		= stim(selsnd);
@@ -47,6 +47,6 @@ end
 %% Data acquisition
 disp('Waiting for data acquisition');
 % pause(.1); % short break
-while cfg.RA16_1.GetTagVal('Active')
+while cfg.RZ6_1.GetTagVal('Active')
 	% do nothing
 end

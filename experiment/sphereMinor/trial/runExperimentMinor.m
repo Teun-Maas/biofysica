@@ -25,7 +25,6 @@ for trlIdx	= 1:handles.cfg.ntrials
 	%% Trial
 	stim			= handles.trial(trlIdx).stim;
 	trialCleanMinor(stim,handles.cfg);
-	
 	[stim,handles.cfg]	= trialSetupMinor(handles.cfg,stim);
 	trialRun(handles.cfg,stim);
 	handles.data		= trialSaveMinor(handles.cfg,handles.trial,handles.data);

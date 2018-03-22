@@ -1,4 +1,4 @@
-function trialClean(stim,cfg)
+function trialCleanMinor(stim,cfg)
 
 %% Remove ledhandle if it exists
 nstim = numel(stim);
@@ -12,21 +12,20 @@ end
 
 %% Turn sounds off
 % by switching off bits on inactive PM2Relay muliplexers
-for muxIdx = 1:4
-	MUX(cfg.RP2_1,muxIdx,0)
-	MUX(cfg.RP2_2,muxIdx,0)
+for muxIdx = 1:2
+	MUX(cfg.RZ6_1,muxIdx,0)
 end
 
-% and by setting buffersize to 0
-for rpIdx = 1:2
-	RPstr = ['RP2_' num2str(rpIdx)];
-	cfg.RA16_1.SetTagVal(['rp2Enable' num2str(rpIdx)],0);
-	for chanIdx = 1:2
-		str		= ['bufferSize' num2str(chanIdx)];
-		cfg.(RPstr).SetTagVal(str,0);
-		cfg.(RPstr).SetTagVal(['chanEnable'  num2str(chanIdx)],0);
-	end
-end
+% % and by setting buffersize to 0
+% for rpIdx = 1:2
+% 	RPstr = ['RP2_' num2str(rpIdx)];
+% 	cfg.RA16_1.SetTagVal(['rp2Enable' num2str(rpIdx)],0);
+% 	for chanIdx = 1:2
+% 		str		= ['bufferSize' num2str(chanIdx)];
+% 		cfg.(RPstr).SetTagVal(str,0);
+% 		cfg.(RPstr).SetTagVal(['chanEnable'  num2str(chanIdx)],0);
+% 	end
+% end
 
 %% Reset of events to unlikely high number
 % unlikely = 100;

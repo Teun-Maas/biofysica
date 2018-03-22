@@ -1,4 +1,4 @@
-function [stim,cfg] = trialSetup(cfg,stim)
+function [stim,cfg] = trialSetupMinor(cfg,stim)
 % HLED = RUNTRIAL(RA16)
 %
 % Set up experimental parameters
@@ -8,7 +8,7 @@ selled		= strcmpi({stim.modality},'LED') |  strcmpi({stim.modality},'SKY') |  st
 selacq		= strcmpi({stim.modality},'data acquisition');
 % seltrg = strcmpi({stim.modality},'trigger');
 selsnd		= strcmpi({stim.modality},'sound');
-selsndacq	= strcmpi({stim.modality},'sound acquisition');
+% selsndacq	= strcmpi({stim.modality},'sound acquisition');
 
 
 %% LED
@@ -27,12 +27,12 @@ if any(selled)
 		% Note that in RA16 circuit, event 1 = start of experiment
 		str1 = ['eventLED' num2str(2*ledIdx-1)];
 		str2 = ['eventLED' num2str(2*ledIdx)];
-		cfg.RA16_1.SetTagVal(str1,led(ledIdx).onevent+1);
-		cfg.RA16_1.SetTagVal(str2,led(ledIdx).offevent+1);
+		cfg.RZ6_1.SetTagVal(str1,led(ledIdx).onevent+1);
+		cfg.RZ6_1.SetTagVal(str2,led(ledIdx).offevent+1);
 		str1 = ['delayLED' num2str(2*ledIdx-1)];
 		str2 = ['delayLED' num2str(2*ledIdx)];
-		cfg.RA16_1.SetTagVal(str1,led(ledIdx).ondelay+1);
-		cfg.RA16_1.SetTagVal(str2,led(ledIdx).offdelay+1);
+		cfg.RZ6_1.SetTagVal(str1,led(ledIdx).ondelay+1);
+		cfg.RZ6_1.SetTagVal(str2,led(ledIdx).offdelay+1);
 		
 		% PLC
 		if isfield(led,'colour')
@@ -58,9 +58,9 @@ end
 %% Acquisition
 if any(selacq)
 	acq	= stim(selacq);
-	cfg.RA16_1.SetTagVal('eventAcq',acq.onevent+1);
-	cfg.RA16_1.SetTagVal('delayAcq',acq.ondelay);
-	cfg.RA16_1.SetTagVal('acqSamples',cfg.nsamples); % amount of DA samples
+	cfg.RZ6_1.SetTagVal('eventAcq',acq.onevent+1);
+	cfg.RZ6_1.SetTagVal('delayAcq',acq.ondelay);
+	cfg.RZ6_1.SetTagVal('acqSamples',cfg.nsamples); % amount of DA samples
 end
 
 
@@ -71,12 +71,13 @@ if any(selsnd)
 	snd		= stim(selsnd);
 	nsnd	= numel(snd);
 	for sndIdx = 1:nsnd
-		sndsetup	= cfg.lookup(snd(sndIdx).Z+1,2:4);
+		sndsetup	= cfg.lookup(snd(sndIdx).Z+1,2:3);
+		keyboard
 		switch sndsetup(1)
 			case 1
-				maxSamples = setSound(snd(sndIdx),cfg,'RP2_1');
+				maxSamples = setSoundMinor(snd(sndIdx),cfg,'RP2_1');
 			case 2
-				maxSamples = setSound(snd(sndIdx),cfg,'RP2_2');
+				maxSamples = setSoundMinor(snd(sndIdx),cfg,'RP2_2');
 		end
 	end
 end
@@ -106,5 +107,5 @@ sel				= ismember(e,mxevent);
 mxdelay			= max([d(sel) ceil(1000*cfg.nsamples./cfg.medusaFs) ceil(1000*maxSamples/48828.125)]);
 
 %%
-cfg.RA16_1.SetTagVal('eventWait',mxevent+1);
-cfg.RA16_1.SetTagVal('delayWait',mxdelay);
+cfg.RZ6_1.SetTagVal('eventWait',mxevent+1);
+cfg.RZ6_1.SetTagVal('delayWait',mxdelay);

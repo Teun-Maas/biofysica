@@ -130,7 +130,7 @@ while ~feof(fid)
 			trial(tn).stim(sn).offevent		= par(5); % default duration
 			trial(tn).stim(sn).offdelay		= par(6)+150; % default duration
 		case 'LED'
-			if	ismember(cfg.Lab,[1 2])
+			if	ismember(cfg.Lab,[1 2 4]) % Is this correct for sphereMinor?
 			sn								= sn+1;
 			par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d',[7,1]);
 			trial(tn).stim(sn).modality		= 'LED';
@@ -141,7 +141,7 @@ while ~feof(fid)
 			trial(tn).stim(sn).ondelay		= par(5);
 			trial(tn).stim(sn).offevent		= par(6);
 			trial(tn).stim(sn).offdelay		= par(7);
-			elseif	cfg.Lab==3 % sphere with LED colours
+			elseif	ismember(cfg.Lab,3) % sphere and sphereMinor with LED colours
 			sn								= sn+1;
 			par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d',[8,1]);
 			trial(tn).stim(sn).modality		= 'LED';
@@ -248,6 +248,8 @@ end
 %% Extra: Azimuth and Elevation from Hoop
 if cfg.Lab==2
 	cfg		= spherelookup(cfg);
+elseif cfg.Lab==4
+		cfg		= spherelookupMinor(cfg);
 end
 for trlIdx = 1:cfg.ntrials % for every trial
 	s			= trial(trlIdx).stim;
@@ -267,6 +269,10 @@ for trlIdx = 1:cfg.ntrials % for every trial
 				channel = cfg.interpolant(X,Y);
 				Az		= cfg.lookup(channel+1,5);
 				El		= cfg.lookup(channel+1,6);
+			elseif ismember(cfg.Lab,4) % SphereMinor lab
+				channel = cfg.interpolant(X,Y);
+				Az		= cfg.lookup(channel+1,4);
+				El		= cfg.lookup(channel+1,5);
 			end
 			trial(trlIdx).stim(stmIdx).azimuth		= Az;
 			trial(trlIdx).stim(stmIdx).elevation	= El;
