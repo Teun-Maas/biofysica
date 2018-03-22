@@ -16,6 +16,7 @@ else
 	fileNameRoot	= 'HierLinRegressData-Jags-' ;
 
 end
+whos x y s
 
 % file='IncomeFamszState.csv';
 % myData = csvread( file,1,0);
