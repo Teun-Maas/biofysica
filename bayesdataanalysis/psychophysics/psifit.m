@@ -93,7 +93,7 @@ lambda			= keyval('lambda',varargin,'infer');% 0.001 = low lapse rate, 'infer' =
 chain_globals;
 numSavedSteps	= keyval('numSavedSteps',varargin,10000); % number of saved MCMC samples. How many you need depend on autocorrelation (effective sample size>10000), convergence (shrink factor<1.1), etc
 thinSteps		= keyval('thinSteps',varargin,1); % 1/proportion MCMC samples thrown away
-burnInSteps		= keyval('burnInSteps',varargin,1000);
+burnInSteps		= keyval('burnInSteps',varargin,5000);
 saveName		= keyval('saveName',varargin,'Hier-PsychometricCurve-Jags-');
 nChains			= keyval('nChains',varargin,nChainsDefault);
 runjagsMethod	= keyval('runjagsMethod',varargin,runjagsMethodDefault);
