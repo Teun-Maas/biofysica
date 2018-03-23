@@ -3,7 +3,7 @@ clearvars
 
 %% Active X Control/Objects
 % cfg.HF				= figure('Tag','ActXWin','name','ActiveX Window for TDT','numbertitle','off','menubar','none'); % Figure for ActiveX components
-RZ6_1circuit = which('sphereMinor_RZ6.rcx');
+RZ6_1circuit = which('sphereMinor_RZ6_mp_velocity.rcx');
 
 [zBus, err(1)]		= ZBUS(1); % zBus, number of racks
 [RZ6_1, err(2)]	= RZ6(1,RZ6_1circuit); % Real-time acquisition
@@ -18,6 +18,7 @@ zBus.zBusTrigA(0, 0, 2); % reset, clock start, (0,0,2): trigger entire rack, wit
 %% Trigger event 1
 % cfg.zBus.zBusTrigB(0, 0, 2); % start event 1, trial onset
 zBus.zBusTrigB(0, 0, 2); % start event 1/trial onset; trigger zBus 4 = RA16;
+
 
 pause(3)
 %% Configuration
