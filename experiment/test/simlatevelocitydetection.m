@@ -8,8 +8,7 @@ dur			= 1;
 nsamples	= dur*Fs;
 t			= linspace(0,dur,nsamples);
 x			= 30*logisticfun(t,0.3,0.05,0.1)+1;
-x			= 30*logisticfun(t,0.3,0.05,0.1)+0; % very noisy velocity
-% profile near 0
+% x			= 30*logisticfun(t,0.3,0.05,0.1)+0; % very noisy velocity profile near 0
 % x			= 30*logisticfun(t,0.3,0.05,0.1)-1; % velocity peak when crossing thorugh 0
 
 x = x+0.1*randn(size(x)); % add some noise
@@ -68,3 +67,5 @@ subplot(212)
 hold on
 plot(t,vdelay,'LineWidth',2);
 % vdelay
+
+ylim([-100 1000]);
