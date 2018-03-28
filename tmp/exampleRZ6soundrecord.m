@@ -19,11 +19,11 @@ zBus.zBusTrigA(0, 0, 2); % reset, clock start, (0,0,2): trigger entire rack, wit
 % cfg.zBus.zBusTrigB(0, 0, 2); % start event 1, trial onset
 zBus.zBusTrigB(0, 0, 2); % start event 1/trial onset; trigger zBus 4 = RA16;
 
-pause(3)
+pause(15)
 %% Configuration
 
 dur = 3; % s
-nsamples = round(3*244.14)
+nsamples = round(dur*244.14)
 % nsamples = 1000
 RZ6_data		= NaN(nsamples,3);
 tic;
@@ -48,9 +48,9 @@ subplot(313)
 plot(t,RZ6_data(:,3));
 
 %%
-dur = 3; % s
-nsamples = round(3*48828.125)
-RZ6_mic		= NaN(nsamples,3);
+dur = 10; % s
+nsamples = round(dur*48828.125)
+RZ6_mic		= NaN(nsamples,2);
 for ii = 1:2
 	str = ['Recording_' num2str(ii)];
 	d = RZ6_1.ReadTagV(str,0,nsamples)';
@@ -78,7 +78,7 @@ scaling = pref/p;
 figure(4)
 clf
 x = RZ6_mic(:,1);
-[f,a] = getpower(x,48828.125,'display',true);
+[f,a] = getpower(x,48828.125,'display',true,'nfft',2^10);
 
 % [F,A,PH] = PA_GETPOWER(X,FS)
 %%
@@ -86,5 +86,7 @@ Fs = 48828.125;
 p = audioplayer(x,Fs);
 play(p)
 %%
-% save ACOpacific_calibration RZ6_mic
-save etymotic_speech RZ6_mic
+save ACOpacific_calibration RZ6_mic
+% save ACOpacific_labnoise RZ6_mic
+
+% save etymotic_speech RZ6_mic

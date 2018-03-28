@@ -37,13 +37,13 @@ nrep			= floor(maxnfft/nfft);
 if nrep>1
 	idx = (nfft*nrep);
 	x = x(1:idx);
-
+	
 	x		= reshape(x,nfft,nrep);
 	
 	%%
 	fftx = 0;
 	for ii = 1:nrep
-% 		[mx,ph] = getspectrum(x,nfft,NumUniquePts);
+		% 		[mx,ph] = getspectrum(x,nfft,NumUniquePts);
 		% Take fft, padding with zeros so that length(fftx) is equal to nfft
 		fftx			= fftx+fft(x,nfft);
 		% Calculate the number of unique points
@@ -52,22 +52,22 @@ if nrep>1
 		% the length of x
 	end
 	
-			fftx			= fftx(1:NumUniquePts)/nrep;
-
+	fftx			= fftx(1:NumUniquePts)/nrep;
+	
 	mx				= abs(fftx)/length(x);
-ph				= angle(fftx);
-
-% Since we dropped half the FFT, we multiply mx by 2 to keep the same energy.
-% The DC component and Nyquist component, if it exists, are unique and should not
-% be mulitplied by 2.
-if rem(nfft, 2) % odd nfft excludes Nyquist point
-	mx(2:end)	= mx(2:end)*2;
-else
-	mx(2:end -1) = mx(2:end -1)*2;
-end
-
+	ph				= angle(fftx);
+	
+	% Since we dropped half the FFT, we multiply mx by 2 to keep the same energy.
+	% The DC component and Nyquist component, if it exists, are unique and should not
+	% be mulitplied by 2.
+	if rem(nfft, 2) % odd nfft excludes Nyquist point
+		mx(2:end)	= mx(2:end)*2;
+	else
+		mx(2:end -1) = mx(2:end -1)*2;
+	end
+	
 	%%
-% 	keyboard
+	% 	keyboard
 else
 	[mx,ph] = getspectrum(x,nfft,NumUniquePts);
 end
