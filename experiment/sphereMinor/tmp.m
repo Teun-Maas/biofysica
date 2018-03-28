@@ -1,36 +1,43 @@
 close all
 clearvars
 
-d = '/Users/marcw/Dropbox/manuscripts/HRTF RECORDING DATA/Marielle HRTFs';
 
-cd(d)
+%% Unaided
+x = -90:90;
+y = 0.4*x+50+30*randn(size(x));
+y(y>70) = 70;
 
-d = dir('*9996*.sphere');
-fnames = {d.name};
-nfiles = numel(fnames);
+sel = x<0;
+MAE(1) = mean(abs(y(sel)-x(sel)));
+sel = x>0;
+MAE(2) = mean(abs(y(sel)-x(sel)));
 
-for ii = 1:nfiles
-	dat = load(fnames{ii},'-mat');
-	snd = dat.data.sndrec;
-	mod = {dat.trialsingle.stim.modality}; 
-	sel = strcmp(mod,'sound');
-	az = dat.trialsingle.stim(sel).X;
-	el = dat.trialsingle.stim(sel).Y;
-	[az el]
-	
-	subplot(311)
-	plot(snd(:,1)+ii/1000)
-	hold on
+subplot(121)
+plot(x,y,'ko','MarkerFaceColor','w');
 
-	subplot(312)
-	plot(snd(:,2)+ii/10000)
-	hold on
-	
-	[f,m] = getpower(snd(:,2),48828.125);
-	subplot(313)
-	semilogx(f,m);
-	hold on
-	xlim([10 200])
-	drawnow
-end
+xlim([-90 90]);
+ylim([-90 90]);
+nicegraph
 
+title(MAE)
+
+
+
+%% Aided
+x = -90:90;
+y = 0.6*x+20+30*randn(size(x));
+y(y>70) = 70;
+
+sel = x<0;
+MAE(1) = mean(abs(y(sel)-x(sel)));
+sel = x>0;
+MAE(2) = mean(abs(y(sel)-x(sel)));
+
+subplot(122)
+plot(x,y,'ko','MarkerFaceColor','w');
+
+xlim([-90 90]);
+ylim([-90 90]);
+nicegraph
+
+title(MAE)

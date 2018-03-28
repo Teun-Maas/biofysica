@@ -30,14 +30,23 @@ uY			= unique(Y);
 
 [UX,UY] = meshgrid(uX,uY);
 
+% if numel(uY)==1
+% 	keyboard
+% end
+	
 %%
 x		= uY;
+
 TOT		= NaN(size(UX));
-for i	= 1:length(uX)
-	sel			= X == uX(i);
+for ii	= 1:length(uX)
+	sel			= X == uX(ii);
 	r			= Y(sel);
 	N			= hist(r,x);
-	TOT(:,i)	= N;
+	if isscalar(x)
+	N			= histogram(r,[x-Xwidth x+Xwidth]);
+	end
+	TOT(:,ii)	= N;
+
 end
 
 %% Normalize
