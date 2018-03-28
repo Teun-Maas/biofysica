@@ -84,8 +84,8 @@ mx(sel) = min(mx(~sel));
 if disp
 	if strcmpi(orient,'x')
 		w = aweight(f);
-		mx = mx+w;
-		h = semilogx(f,mx,'-');
+		m = mx+w;
+		h = semilogx(f,m,'-');
 		set(h,'Color',col);
 		hold on
 		set(gca,'XTick',[0.05 0.5 1 2 3 4 6 8 10 14]*1000,...
