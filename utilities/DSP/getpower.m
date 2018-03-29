@@ -21,7 +21,7 @@ if nargin<2
 	Fs = 48828.125;
 end
 % Optional display arguments
-disp		= keyval('display',varargin,true);
+disp		= keyval('display',varargin,false);
 orient		= keyval('orientation',varargin,'x');
 col			= keyval('color',varargin,'k');
 
@@ -83,8 +83,9 @@ mx(sel) = min(mx(~sel));
 %% Display option
 if disp
 	if strcmpi(orient,'x')
-		w = aweight(f);
-		m = mx+w;
+		% 		w = aweight(f);
+		% 		m = mx+w;
+		m = mx;
 		h = semilogx(f,m,'-');
 		set(h,'Color',col);
 		hold on

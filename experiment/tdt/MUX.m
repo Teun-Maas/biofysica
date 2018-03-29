@@ -15,7 +15,7 @@ end
 
 DeviceTable = [0 16 32 48];
 RP.SetTagVal('DeviceSelect',DeviceTable(Device));  % select the device
-if Channel, % activate a channel
+if Channel % activate a channel
     RP.SetTagVal('ChanSelect',Channel-1); % select the channel
     RP.SetTagVal('SetReset',64);    % make it active
 else % inactivate all channels on this device

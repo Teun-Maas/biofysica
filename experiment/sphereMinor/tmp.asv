@@ -1,0 +1,49 @@
+close all
+clearvars
+
+Fs = 48828.125;
+nfft = 2^14
+f = linspace(20,20000,nfft);
+t = 1:nfft;
+y = sin(2*pi*f.*t);
+figure(1)
+s
+plot(t,y)
+
+
+% soundsc(y,Fs)
+
+[f,a,p] = getpower(y,Fs);
+
+	p = unwrap(p);
+	p = p-p(1);
+	figure
+		subplot(211)
+
+	plot(f,p)
+
+	Magnitude = ones(nfft,1);
+	Nbin       = length(Magnitude);
+TotalPower = sum(Magnitude.^2);
+NormFactor = 1.0/TotalPower;
+TwoPi      = 2*pi;
+Phi        = 0.0;
+Power      = 0.0;
+Spectrum   = zeros (1, Nbin);
+for j=1:Nbin
+	Spectrum(j) = Magnitude(j) * exp (1i*Phi);
+	Power = Power + NormFactor*Magnitude(j).^2;
+	Phi   = Phi - TwoPi*Power;
+end
+
+
+
+Spectrum = [Spectrum -conj([Spectrum(1) Spectrum((Nbin):-1:2)])];
+Signal   = imag(ifft(Spectrum));
+
+[f,a,p] = getpower(Signal,Fs);
+
+	p = unwrap(p);
+	p = p-p(1);
+	subplot(212)
+	plot(f,p)
