@@ -18,5 +18,5 @@ end;
 
 ir2 = ir;
 for i=1:Nir
-  ir2(:,i) = pa_shift (ir(:,i), dN(i));
+  ir2(:,i) = shift (ir(:,i), dN(i));
 end;

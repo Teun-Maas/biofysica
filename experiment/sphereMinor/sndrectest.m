@@ -8,7 +8,7 @@ nsamples	= length(x);
 t			= (1:nsamples)/Fs;
 p			= rms(x);
 pref		= 10^((94-0.3)/20);
-scaling		= pref/p;
+scaling		= pref/p
 y			= scaling*x;
 % y			= filterA(y,Fs);
 
