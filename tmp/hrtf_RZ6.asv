@@ -27,14 +27,14 @@ ch	= [11:14 1 11:16];
 nch = numel(ch);
 
 
-mic		= NaN(nch,nsamples);
-stim	= mic;
-framp = mic;
+RZ6_mic = NaN(nch,nsamples);
 for ii = 1:nch
-	[mic(ii,:),stim(ii,:),framp(ii,:)]	= playsound(RZ6_1,zBus,nsamples,dev(ii),ch(ii));
+	RZ6_mic(ii,:)		= playsound(RZ6_1,zBus,nsamples,dev(ii),ch(ii));
+	if ii == 4
 		pause(0.1);
 		zBus.zBusTrigA(0, 0, 2); % reset, clock start, (0,0,2): trigger entire rack, with a pulse structure, and 2 ms delay(2 ms = minimum).
 		pause(0.1);
+	end
 end
 
 zBus.zBusTrigA(0, 0, 2); % reset, clock start, (0,0,2): trigger entire rack, with a pulse structure, and 2 ms delay(2 ms = minimum).
@@ -43,12 +43,12 @@ zBus.zBusTrigA(0, 0, 2); % reset, clock start, (0,0,2): trigger entire rack, wit
 %%
 t = (1:nsamples)/48828.125;
 figure(3)
-plot(t,mic);
+plot(t,RZ6_mic);
 
 %%
 figure(4)
 clf
-x = mic(:);
+x = RZ6_mic(:);
 [f,a] = getpower(x,48828.125,'display',true,'nfft',2^10);
 
 % [F,A,PH] = PA_GETPOWER(X,FS)
@@ -57,12 +57,12 @@ x = mic(:);
 % p = audioplayer(x,Fs);
 % play(p)
 %%
-save wanrooij_hrtf mic stim framp
+save ACOpacific_hrtf RZ6_mic
 % save ACOpacific_labnoise RZ6_mic
 
 % save etymotic_speech RZ6_mic
 
-function [rec,stim,framp] = playsound(RZ,zBus,nsamples,dev,ch)
+function [rec,snd] = playsound(RZ,zBus,nsamples,dev,ch)
 %% Set speaker
 MUX(RZ,dev,ch);
 % pause(1)
@@ -74,12 +74,10 @@ zBus.zBusTrigB(0, 0, 2); % start event 1/trial onset; trigger zBus 4 = RA16;
 busy		= 1;
 
 tic
-pause(nsamples/48828.125+0.1);
+pause(nsamples/48828.125);
 while busy
 	busy	= RZ.GetTagVal('Busy');
 end
 toc
 %%
 rec		= RZ.ReadTagV('Recording',0,nsamples)';
-stim	= RZ.ReadTagV('Playing',0,nsamples)';
-framp	= RZ.ReadTagV('FreqRamp',0,nsamples)';

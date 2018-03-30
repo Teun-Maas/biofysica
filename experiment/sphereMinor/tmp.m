@@ -5,13 +5,13 @@ clearvars
 Fs = 48828.125;
 nfft = 2^11
 
-a = Fs/4/nfft
+a = Fs/2/nfft
 
-return
+
 f = linspace(0,round(Fs/2),nfft);
 f = ones(1,nfft);
 f = cumsum(f);
-f = f./nfft*round(Fs/4);
+f = f./nfft*round(Fs/2);
 t = 1:nfft;
 t = t/Fs;
 y = sin(2*pi*f.*t);
@@ -60,7 +60,7 @@ Signal   = imag(ifft(Spectrum));
 whos Signal
 Signal = Signal/max(Signal);
 figure(1)
-plot(t,Signal)
+plot(Signal)
 
 
 % soundsc(Signal,Fs)
