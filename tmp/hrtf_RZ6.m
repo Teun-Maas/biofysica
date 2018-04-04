@@ -22,10 +22,9 @@ nsamples	= 2048*20;
 % dev 1 = B - 11-14 is -10:-10:-40 deg
 % dev 2 = A - 11-16 is 10:10:60 deg
 
-dev = [zeros(1,4) ones(1,7)]+1;
-ch	= [11:14 1 11:16];
+dev = [ones(1,4) zeros(1,7)]+1;
+ch	= [14:-1:11 1 11:16];
 nch = numel(ch);
-
 
 mic		= NaN(nch,nsamples);
 stim	= mic;
@@ -57,8 +56,15 @@ x = mic(:);
 % p = audioplayer(x,Fs);
 % play(p)
 %%
-save wanrooij_hrtf mic stim framp
+save garcia_left_hrtf_6 mic stim framp
 % save ACOpacific_labnoise RZ6_mic
+
+% 1 = 60 dB amp
+% 2 = 50 dB Amp
+% 3 = head at +5 
+% 4 = head at +40 
+% 5 = head at -30 
+% 6 = head at +15 
 
 % save etymotic_speech RZ6_mic
 
