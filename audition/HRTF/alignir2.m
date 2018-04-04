@@ -11,7 +11,7 @@
 %  
 % .. Paul ...
 
-function IR2 = pa_alignir2 (IR)
+function IR2 = alignir2 (IR)
 
 IR0 = IR;
 IR  = IR0(30:100,:);
@@ -35,6 +35,6 @@ end;
 
 IR2 = IR0;
 for i=2:Nref
-  IR2(:,i) = pa_shift(IR0(:,i),DN(i));
+  IR2(:,i) = shift(IR0(:,i),DN(i));
 end;
 
