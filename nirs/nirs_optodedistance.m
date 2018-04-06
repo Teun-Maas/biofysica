@@ -31,7 +31,7 @@ xf		= fpos(:,1);
 yf		= fpos(:,2);
 
 
-% %% Correcting a flaw in fieldtrip Artinis plugin
+%% Correcting a flaw in fieldtrip Artinis plugin
 % for tIdx = 1:16
 % 	flabel{end-16+tIdx} = ['Tx' num2str(tIdx)]; % number from 1 to 16
 % end
@@ -39,10 +39,7 @@ yf		= fpos(:,2);
 
 %% determine distance between Receiver and Transmitter fibers
 d				= NaN(npos,1);
-
-
 for posIdx		= 1:npos
-
 	str			= label{posIdx};
 	chanRstr	= str(1:4);
 	chanTstr	= str(end-10:end-7);

@@ -21,7 +21,7 @@ if ischar(fname)
 elseif isstruct(fname)
 	data	= fname;
 end
-dispFlag		= keyval('disp',varargin,[false false]);
+dispFlag		= keyval('disp',varargin,false);
 layFlag			= keyval('lay',varargin,false);
 % f				= keyval('fig',varargin,2);
 
@@ -30,7 +30,7 @@ layFlag			= keyval('lay',varargin,false);
 if ~isfield(data.opto,'fiberdistance')
 	data	= nirs_optodedistance(data);
 end
-data = nirs_optodedistance(data);
+% data = nirs_optodedistance(data);
 
 
 %% Relevant parameters
@@ -38,8 +38,7 @@ pos		= data.opto.chanpos; % channel position
 label	= data.label; % transformed channel label
 flabel	= data.opto.fiberlabel; % fiber label
 fpos	= data.opto.fiberpos; % fiber positions
-d		= data.opto.fiberdistance; % fiber positions
-
+d		= data.opto.fiberdistance; % fiber distance
 x		= pos(:,1);
 y		= pos(:,2);
 
@@ -112,22 +111,26 @@ end
 %% Graphics
 if dispFlag(1)
 	
-x		= x(1:2:end);
-y		= y(1:2:end);
-label	= label(1:2:end);
-npos	= numel(x);
-d		= d(1:2:end);
-% Deep vs shallow channel
-ud		= unique(d);
-shallow = min(ud);
-deep	= max(ud);
-
+	x		= x(1:2:end)
+	y		= y(1:2:end)
+	label	= label(1:2:end);
+	npos	= numel(x);
+	keyboard
+	d		= d(1:2:end);
+	% Deep vs shallow channel
+	ud		= unique(d);
+	shallow = min(ud);
+	deep	= max(ud);
+	
 	hold on
 	% plot(x,y,'ko','MarkerFaceColor','w')
+	
+	%%
 	for posIdx = 1:npos
-		if d(posIdx)==shallow;
+		posIdx
+		if d(posIdx)==shallow
 			col = 'b';
-		elseif d(posIdx)==deep;
+		elseif d(posIdx)==deep
 			col = 'r';
 		else
 			col = 'k';
@@ -138,6 +141,7 @@ deep	= max(ud);
 		text(x(posIdx),y(posIdx),str,'HorizontalAlignment','center','Color',col)
 	end
 	
+	%%
 	for posIdx = 1:nfpos
 		str = flabel{posIdx};
 		text(xf(posIdx),yf(posIdx),str,'HorizontalAlignment','center','Color',[.7 .7 .7])
@@ -159,7 +163,7 @@ end
 % The 4th and 5th column specify the width and height The 6th column is a string with the channel label.
 % if layFlag
 % 	fid = fopen('kennanhelmet.lay','w');
-% 	
+%
 % 	for ii = 1:numel(x)
 % 		fprintf(fid,'%i\t%i\t%i\t%i\t%i\t%s\n',ii,x(ii),y(ii),w(ii),h(ii),label{ii});
 % 	end

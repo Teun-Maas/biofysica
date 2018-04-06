@@ -1,4 +1,4 @@
-function [f,mx,ph,h]=getpower(x,Fs,varargin)
+function [f,mx,ph,a,h]=getpower(x,Fs,varargin)
 % [F,A,PH] = PA_GETPOWER(X,FS)
 %
 % Get power A and phase PH spectrum of signal X, sampled at FS Hz.
@@ -73,7 +73,7 @@ else
 end
 % This is an evenly spaced frequency vector with NumUniquePts points.
 f		= (0:NumUniquePts-1)*Fs/nfft;
-
+a = mx;
 % Take the square of the magnitude of fft of x -> magnitude 2 power
 % mx				= mx.^2;
 mx		= 20*log10(mx);
