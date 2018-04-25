@@ -17,10 +17,10 @@ classdef lsl_streaminfos < handle
 
         function l=list(this)
             n=length(this.infos);
-            l=cell(n,2);
+            l=cell(n,1);
             for i=1:n
-                l{i,1}=this.infos{i}.name;
-                l{i,2}=this.infos{i}.type;
+                l{i}.name=this.infos{i}.name;
+                l{i}.type=this.infos{i}.type;
             end
         end
         
