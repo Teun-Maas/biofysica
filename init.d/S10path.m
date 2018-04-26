@@ -25,6 +25,7 @@ for i = 1:size(pathdirs,1)
    else
       disp(['directory ', d, ' does not exist, not added to the MATLAB path']);
    end
+   clear pathdirs d p exclude_d i exclude_p
 end
 
 
