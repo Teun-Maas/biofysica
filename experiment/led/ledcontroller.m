@@ -17,7 +17,7 @@ classdef ledcontroller < handle
         baseaddr  = 55000;
         ctlbits   = 55000;
         trigcnt   = 55001;
-        stimttl  = 55002; % LED Time to Live, in PLC cycles, 0=Inf (default)
+        stimttl   = 55002; % LED Time to Live, in PLC cycles, 0=Inf (default)
         basered   = 55100;
         basegrn   = 55108;
         pwm0dc    = 55022; % red, duty cycle, 32 bits, range 0..100
@@ -58,7 +58,7 @@ classdef ledcontroller < handle
             modbus_write_registers(obj.hmodbus, obj.ctlbits, obj.cache_ctlbits);
             
             obj.trigger_enable(1);
-
+            obj.set_stimttl(0);
             obj.clear_all;
         end
         
