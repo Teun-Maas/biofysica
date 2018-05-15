@@ -17,6 +17,7 @@ classdef ledcontroller < handle
         baseaddr  = 55000;
         ctlbits   = 55000;
         trigcnt   = 55001;
+        stimttl   = 55002; % LED Time to Live, in PLC cycles, 0=Inf (default)
         basered   = 55100;
         basegrn   = 55108;
         pwm0dc    = 55022; % red, duty cycle, 32 bits, range 0..100
@@ -57,7 +58,7 @@ classdef ledcontroller < handle
             modbus_write_registers(obj.hmodbus, obj.ctlbits, obj.cache_ctlbits);
             
             obj.trigger_enable(1);
-
+            obj.set_stimttl(0);
             obj.clear_all;
         end
         
@@ -70,6 +71,15 @@ classdef ledcontroller < handle
             modbus_free(obj.hmodbus);
         end
         
+        function set_stimttl(this,count)
+            % SET_STIMTTL(count)
+            % Set the time-to-live for a stimulus in PLC cycles.
+            % This allows for very short led flashes.
+            % By default count=0, LED's stay on until changed by the
+            % next stimulus. 
+            modbus_write_registers(this.hmodbus, this.stimttl, count);
+        end
+
         function trigger_enable(this, value)
             % TRIGGER_ENABLE(value)
             % Set or clear the trigger enable bit in the control register.

@@ -9,6 +9,8 @@ classdef pupil_remote_control < handle
     % libzmq. https://github.com/zeromq/jeromq
 
     % Version 1.0 GW/20170623-1
+    % GW/20180419: Removed record() method because msgpack doesn't run well in Matlab.
+    %              recording of pupil data will be implemented using labstreaminglayer
     
     properties (Access=protected)
         default_port = 50020;
@@ -105,28 +107,29 @@ classdef pupil_remote_control < handle
             ts = str2double(r);
         end
         
-        function result = record(this)
-            import py.msgpack.loads
-            import org.zeromq.ZMQ;
+% 
+%       function result = record(this)
+%           import py.msgpack.loads
+%           import org.zeromq.ZMQ;
 
-            sub_port=this.send('SUB_PORT');
-            sub = this.context.socket(ZMQ.SUB);
-            uri=sprintf('tcp://%s:%s', this.hostname, sub_port);
-            sub.connect(uri);
-            sub.subscribe('pupil.');
-            
-            for i=1:10
-                msg=sub.recvStr
-                data=sub.recvStr
-                c=char(data);
-                size(c)
-                loads(c)
-               % udata=msgpack('unpacker',data)
+%           sub_port=this.send('SUB_PORT');
+%           sub = this.context.socket(ZMQ.SUB);
+%           uri=sprintf('tcp://%s:%s', this.hostname, sub_port);
+%           sub.connect(uri);
+%           sub.subscribe('pupil.');
+%           
+%           for i=1:10
+%               msg=sub.recvStr
+%               data=sub.recvStr
+%               c=char(data);
+%               size(c)
+%               loads(c)
+%              % udata=msgpack('unpacker',data)
 
-            end
-            sub.close();
-            
-            result=data;
-        end
+%           end
+%           sub.close();
+%           
+%           result=data;
+%       end
     end
 end
