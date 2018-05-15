@@ -20,7 +20,11 @@ Ytxt = ylim(1) + y*(ylim(2)-ylim(1));
 %% Print to figure
 if nargin == 3 % no properties defined
   h = text (Xtxt,Ytxt,string);
+set(h,'HorizontalAlignment','center');
+set(h,'FontSize',15);
 else % evaluate properties
   h = text(Xtxt,Ytxt,string,varargin{:});
-end;
+end
+
+
 
