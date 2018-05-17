@@ -1,11 +1,11 @@
-function [evdata, pldata] = exLslReceiveData1
+function [evdata, pldata] = exLslReceiveData2
     %  info=lsl_streaminfos('type=''Digital Events @ clockpi'' and name=''Digital Events 0''');
     %  info=lsl_streaminfos('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Primitive Data - Eye 0''');
     
     %
     % Select digital events stream
     %
-    info=lsl_streaminfos('type=''Digital Events @ clockpi''');
+    info=lsl_streaminfos('type=''Digital Events @ lslder00''');
     l=info.list();
     if isempty(l)
         error('no streams found');
@@ -45,7 +45,8 @@ function [evdata, pldata] = exLslReceiveData1
     input('press enter to start');
     
     ses.start();
-    input('press enter to stop');
+ %   input('press enter to stop');
+    pause(120);
     ses.stop();
     evdata=evstr.read();
     pldata=plstr.read();
