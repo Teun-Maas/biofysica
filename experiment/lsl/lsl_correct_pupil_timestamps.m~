@@ -11,15 +11,10 @@ function corrected_timestamps=lsl_correct_pupil_timestamps(data)
 %contain a lot of jitter. To eliminate the jitter a least-squares fit is
 %done to find a monotonically rising time stamp series with equidistant
 %values, except for the positions where gaps occur. It is taken care for
-%that the fitted time stamps are never earlier than expected in a causal
-%system.
+%that the fitted time stamps are never earlier than 
 %
 % tc=lsl_correct_pupil_timestamps(data) returns the best effort correction
-% for the available timing information in the LSL_DATA in DATA.
-%
-% SEE ALSO: LSL_GET_TIMECORRECTION, LSL_CORRECT_LSL_TIMESTAMPS, LSL_DATA,
-% LSL_SESSION, LSL_STREAM
-
+% for the available timing information 
     assert(isa(data,'lsl_data'),'type mismatch: expected lsl_pupil_data or derived class.');
     assert(size(data.Data,1)>=5, 'data is probably not pupil_data');
     nsamp=size(data.Data,2);

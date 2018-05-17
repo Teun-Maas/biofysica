@@ -5,9 +5,7 @@ function timecorrection=lsl_get_timecorrection(data)
 % LSL_DATA in data. This is done by least squares fitting the
 % time correction information to the time stamps in data.
 %
-% tc=lsl_get_timecorrection(data) get time corrections from data. data must
-% be an LSL_DATA object or derived class.
-%
+% tc=
 %SEE ALSO: LSL_GET_TIMECORRECTION, LSL_CORRECT_LSL_TIMESTAMPS,
 %LSL_CORRECT_PUPIL_TIMESTAMPS, LSL_DATA, LSL_SESSION, LSL_STREAM
 
