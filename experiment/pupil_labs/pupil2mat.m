@@ -1,5 +1,10 @@
 function result=pupil2mat(src,dst)
     % PUPIL2MAT - convert pupil_data file to .mat file using the external
+    % 
+    %   pupil2mat('/path/to/pupil_data', 'pup.mat') converts the
+    %   data in the file /path/to/pupil_data to a .mat-file pup.mat in 
+    %   the current working directory.
+    %
     % python script pupil2mat.py to be found in the same directory as
     % pupil2mat.m.
     % Needs: python3 installed and in the PATH
@@ -18,7 +23,7 @@ function result=pupil2mat(src,dst)
             py_pupil2mat, ' ', src, ' ', dst];
         result=unix(cmd);
     elseif ispc()
-        python='python3';
+        python='python';
         cmd=[python, ' ', py_pupil2mat, ' ', src, ' ', dst];
         result=system(cmd);
     else
