@@ -3,7 +3,7 @@ function result=pupil2mat(src,dst)
     % python script pupil2mat.py to be found in the same directory as
     % pupil2mat.m.
     % Needs: python3 installed and in the PATH
-    % Needs: python libraries: numpy, scipy.io and msgpack (use pip3 to install these)
+    % Needs: python libraries: numpy, scipy and msgpack (use pip3 to install these)
     %
     % example: pupil2mat('~/recordings/2017_11_15/011/pupil_data',...
     %              'pupil_data-2017_11_15-011.mat');
