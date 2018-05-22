@@ -46,7 +46,7 @@ function [evdata, pldata] = exLslReceiveData2
     
     ses.start();
  %   input('press enter to stop');
-    pause(120);
+    pause(30);
     ses.stop();
     evdata=evstr.read();
     pldata=plstr.read();

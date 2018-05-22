@@ -37,7 +37,7 @@ classdef lsl_session < handle
         function setup_timer(this)
             this.tmr = timer('ExecutionMode','fixedRate', ... % Run continuously
                 'TimerFcn',@lsl_timer_callback); % Run callback function at every timer event
-            this.tmr.period=1;
+            this.tmr.period=0.25;
             
             function lsl_timer_callback(~,~)
                 this.collect();

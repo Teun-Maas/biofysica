@@ -1,4 +1,4 @@
-function timecorrection=lsl_get_timecorrection(data)
+function timecorrection=lsl_estimate_timecorrection(data)
 % LSL_GET_TIMECORRECTION - compute time correction values from data
 %
 % tc=lsl_get_timecorrection(data) computes time corrections values from the
@@ -8,14 +8,13 @@ function timecorrection=lsl_get_timecorrection(data)
 % tc=lsl_get_timecorrection(data) get time corrections from data. data must
 % be an LSL_DATA object or derived class.
 %
-%SEE ALSO: LSL_GET_TIMECORRECTION, LSL_CORRECT_LSL_TIMESTAMPS,
+%SEE ALSO:  LSL_CORRECT_LSL_TIMESTAMPS,
 %LSL_CORRECT_PUPIL_TIMESTAMPS, LSL_DATA, LSL_SESSION, LSL_STREAM
 
     assert(isa(data,'lsl_data'),'type mismatch: expected lsl_data or derived class.');
     
     x=data.TCindex;
-    times=data.Timestamps(x);
-    
+    times=data.Timestamps(x)-data.Timestamps(1);
     coeffs=polyfit(times,data.TimeCorrection,1);
     %%% CHECK HERE IF coeffs(1) is sufficiently small!!!
     %%% This happens when the number of sampled timecorrection values is too small,
@@ -25,5 +24,5 @@ function timecorrection=lsl_get_timecorrection(data)
     if coeffs(1) > 1e-4
         warning('timecorrection clock drift may be unrealistic');
     end
-    timecorrection=polyval(coeffs,data.Timestamps);
+    timecorrection=polyval(coeffs,data.Timestamps-data.Timestamps(1));
 end

@@ -33,7 +33,7 @@ classdef lsl_stream < handle
     end
     
     
-    methods (Access=protected)
+    methods (Access={?lsl_session})
         
         function [data,timestamps]=pull_sample(this,timeout)
             [data,timestamps]=this.inlet.pull_sample(timeout);
@@ -86,20 +86,22 @@ classdef lsl_stream < handle
         end
     end
     
-    function timecorrection(this,data)
-        x=data.TCindex;
-        tc=data.TimeCorrection;
-        figure(103);
-        clf;
-        plot(x,tc-tc(1),'o');
-        
-        coeffs=polyfit(x,tc,1);
-        xx=1:numel(ts);
-        xx=indexes;
-        fitted_tc=polyval(coeffs,xx);
-        hold on;
-        plot(xx,fitted_tc-tc(1),'.');
-        hold off;
-        
-        corrected_timestamps=tr+fitted_tc;
-    end
+end
+    
+%     function timecorrection(this,data)
+%         x=data.TCindex;
+%         tc=data.TimeCorrection;
+%         figure(103);
+%         clf;
+%         plot(x,tc-tc(1),'o');
+%         
+%         coeffs=polyfit(x,tc,1);
+%         xx=1:numel(ts);
+%         xx=indexes;
+%         fitted_tc=polyval(coeffs,xx);
+%         hold on;
+%         plot(xx,fitted_tc-tc(1),'.');
+%         hold off;
+%         
+%         corrected_timestamps=tr+fitted_tc;
+%     end

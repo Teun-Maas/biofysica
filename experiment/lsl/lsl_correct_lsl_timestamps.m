@@ -6,10 +6,9 @@ function corrected_timestamps=lsl_correct_lsl_timestamps(data)
 % done best effort by fitting the timecorrection values to the timestamps
 % in the LSL_DATA object.
 %
-% SEE ALSO: LSL_GET_TIMECORRECTION, LSL_CORRECT_PUPIL_TIMESTAMPS, LSL_DATA,
+% SEE ALSO: LSL_ESTIMATE_TIMECORRECTION, LSL_CORRECT_PUPIL_TIMESTAMPS, LSL_DATA,
 % LSL_SESSION, LSL_STREAM
-    timecorrection=lsl_get_timecorrection(data);
+    timecorrection=lsl_estimate_timecorrection(data);
     corrected_timestamps=data.Timestamps+timecorrection;
 end
 
- 
