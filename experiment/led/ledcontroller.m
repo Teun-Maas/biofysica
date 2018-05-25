@@ -5,7 +5,7 @@ classdef ledcontroller < handle
     % See also LEDCONTROLLER, DELETE, TRIGGER_ENABLE, TRIGGER_COUNT, TRIGGERED, GATE_ENABLE,
     % WRITE, WAIT, DUMP_REGISTERS
     
-    % Written by Günter Windau
+    % Written by Gï¿½nter Windau
     % 2014-04-22 version 1.0
     % 2014-04-22 version 1.1 optimized some parts manipulating individual bits
     % 2014-06-02 version 1.2 put led stimuli in a separate class, all stimuli must be triggered
@@ -77,7 +77,7 @@ classdef ledcontroller < handle
             % This allows for very short led flashes.
             % By default count=0, LED's stay on until changed by the
             % next stimulus. 
-            modbus_write_registers(this.hmodbus, this.stimttl, count);
+            modbus_write_registers(this.hmodbus, this.stimttl, uit16(count));
         end
 
         function trigger_enable(this, value)
