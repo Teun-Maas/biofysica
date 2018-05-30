@@ -40,6 +40,6 @@ if any(strcmp(type,formats))
 				print(sptype,'-r300','-painters',file); % to really save in Vector format
 			end
 		otherwise
-			print(sptype,'-r300',file);
+			print(sptype,'-r70',file);
 	end
 end
