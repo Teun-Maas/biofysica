@@ -85,10 +85,17 @@ classdef lsl_stream < handle
             end
         end
         
-        function flush(this)
-            this.pull_chunk();
+        function open_stream(this)
+            this.inlet.open_stream();
+        end;
+
+        function close_stream(this)
+            this.inlet.close_stream();
+        end;
+
+        function flush_stream(this)
             this.databuffer.clear();
-        end
+        end;
     end
     
 end

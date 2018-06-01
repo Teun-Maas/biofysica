@@ -49,22 +49,40 @@ classdef lsl_session < handle
                 this.tmr.period=period;
             end
             this.flush_streams();
+            this.open_streams();
             start(this.tmr);
         end
         
         function stop(this)
             stop(this.tmr);
             this.collect();  % get remaining data
+            this.close_streams();
         end
            
-        function flush_streams(this)
-% TODO: make non blocking
-%             i=1;
-%             while i<=this.nstreams
-%                 this.streams{i}.flush();
-%                 i=i+1;
-%             end
+        function open_streams(this)
+            i=1;
+            while i<=this.nstreams
+                this.streams{i}.open_stream();
+                i=i+1;
+            end
         end
+
+        function close_streams(this)
+            i=1;
+            while i<=this.nstreams
+                this.streams{i}.close_stream();
+                i=i+1;
+            end
+        end
+
+        function flush_streams(this)
+            i=1;
+            while i<=this.nstreams
+                this.streams{i}.flush_stream();
+                i=i+1;
+            end
+        end
+
     end
     
 end
