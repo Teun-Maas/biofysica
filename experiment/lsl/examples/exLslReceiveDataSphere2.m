@@ -1,4 +1,4 @@
-function [evdata, pldata] = exLslReceiveDataSphere1
+function [pldata1, pldata2] = exLslReceiveDataSphere2
     %  info=lsl_streaminfos('type=''Digital Events @ clockpi'' and name=''Digital Events 0''');
     %  info=lsl_streaminfos('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Primitive Data - Eye 0''');
     
@@ -45,11 +45,18 @@ function [evdata, pldata] = exLslReceiveDataSphere1
     input('press enter to start');
     
     ses.start();
-    input('press enter to stop');
-   % pause(30);
+    %input('press enter to stop');
+    pause(3);
     ses.stop();
-    evdata=evstr.read();
-    pldata=plstr.read();
+  %  evdata=evstr.read();
+    pldata1=plstr.read();
+    pause(2);
+    ses.start();
+    pause(1);
+    ses.stop();
+    
+  %  evdata=evstr.read();
+    pldata2=plstr.read();
     delete(ses);
     delete(evstr);
     delete(plstr);
@@ -64,5 +71,5 @@ end
 
 function pl_listener(src, event)
     disp('pl_listener called');
-    % event
+    event
 end
