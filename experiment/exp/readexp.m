@@ -32,19 +32,19 @@ cfg.comment		= comment;
 
 %% Header lines
 % The header lines of the exp file contain some parameters on the overall
-% experiment, such as # trials, # repeats, etc. 
-% Most are obsolete: 
+% experiment, such as # trials, # repeats, etc.
+% Most are obsolete:
 % - ITI / Inter trial interval: should typically be zero, as the experiment
 %		should not take unnecessary time
 % - Trials / # trials: obtained from actual number of trials
 % - Repeats / # repeats: if you want to have multiple repetitions, include that in
 %			the trial section of the exp file (it is better to have control
 %			over the experiment, than to instruct a algorithm to take
-%			control) 
+%			control)
 % - Random / randomization: take control and randomize the trials with
-%			RANDPERM 
+%			RANDPERM
 % - Motor / power on of motor: the SPHERE setup does not have a motor
-%			installed (yet) 
+%			installed (yet)
 % All header lines can be followed by a comment (which are ignored).
 %
 % Sphere exp files are allowed to have any number of header lines, but any
@@ -77,6 +77,9 @@ if isfield(cfg,'Lab')
 	end
 else
 	cfg.Lab = 1; % Hoop = default
+	% 2 = Sphere
+	% 3 = SphereMinor
+	% 4 = NIRS-EEG?
 end
 
 %% Trial
@@ -123,37 +126,37 @@ while ~feof(fid)
 			trial(tn).stim(sn).X			= par(1);
 			trial(tn).stim(sn).Y			= par(2);
 			trial(tn).stim(sn).matfile		= ['snd' num2str(par(3),'%03i') '.mat'];
-			trial(tn).stim(sn).wavfile		= ['snd' num2str(par(3),'%03i') '.wav'];	 % double		
+			trial(tn).stim(sn).wavfile		= ['snd' num2str(par(3),'%03i') '.wav'];	 % double
 			trial(tn).stim(sn).intensity	= par(4);
 			trial(tn).stim(sn).onevent		= par(5);
 			trial(tn).stim(sn).ondelay		= par(6);
 			trial(tn).stim(sn).offevent		= par(5); % default duration
 			trial(tn).stim(sn).offdelay		= par(6)+150; % default duration
 		case 'LED'
-			if	ismember(cfg.Lab,[1 2 4]) % Is this correct for sphereMinor?
-			sn								= sn+1;
-			par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d',[7,1]);
-			trial(tn).stim(sn).modality		= 'LED';
-			trial(tn).stim(sn).X			= par(1);
-			trial(tn).stim(sn).Y			= par(2);
-			trial(tn).stim(sn).intensity	= par(3);
-			trial(tn).stim(sn).onevent		= par(4);
-			trial(tn).stim(sn).ondelay		= par(5);
-			trial(tn).stim(sn).offevent		= par(6);
-			trial(tn).stim(sn).offdelay		= par(7);
-			elseif	ismember(cfg.Lab,3) % sphere and sphereMinor with LED colours
-			sn								= sn+1;
-			par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d',[8,1]);
-			trial(tn).stim(sn).modality		= 'LED';
-			trial(tn).stim(sn).X			= par(1);
-			trial(tn).stim(sn).Y			= par(2);
-			trial(tn).stim(sn).colour		= par(3);
-			trial(tn).stim(sn).intensity	= par(4);
-			trial(tn).stim(sn).onevent		= par(5);
-			trial(tn).stim(sn).ondelay		= par(6);
-			trial(tn).stim(sn).offevent		= par(7);
-			trial(tn).stim(sn).offdelay		= par(8);
-					end
+			if	ismember(cfg.Lab,[1 4]) % Is this correct for sphereMinor?
+				sn								= sn+1;
+				par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d',[7,1]);
+				trial(tn).stim(sn).modality		= 'LED';
+				trial(tn).stim(sn).X			= par(1);
+				trial(tn).stim(sn).Y			= par(2);
+				trial(tn).stim(sn).intensity	= par(3);  % hoop: range 0-255, sphere range 1-50
+				trial(tn).stim(sn).onevent		= par(4);
+				trial(tn).stim(sn).ondelay		= par(5);
+				trial(tn).stim(sn).offevent		= par(6);
+				trial(tn).stim(sn).offdelay		= par(7);
+			elseif	ismember(cfg.Lab,[2 3]) % sphere and sphereMinor with LED colours
+				sn								= sn+1;
+				par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d',[8,1]);
+				trial(tn).stim(sn).modality		= 'LED';
+				trial(tn).stim(sn).X			= par(1);
+				trial(tn).stim(sn).Y			= par(2);
+				trial(tn).stim(sn).colour		= par(3); % 0 - red, 1 - green
+				trial(tn).stim(sn).intensity	= par(4);  % hoop: range 0-255, sphere range 1-50
+				trial(tn).stim(sn).onevent		= par(5);
+				trial(tn).stim(sn).ondelay		= par(6);
+				trial(tn).stim(sn).offevent		= par(7);
+				trial(tn).stim(sn).offdelay		= par(8);
+			end
 		case 'IRLED'
 			sn								= sn+1;
 			par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d%d',[8,1]);
@@ -165,7 +168,7 @@ while ~feof(fid)
 			trial(tn).stim(sn).onevent		= par(5);
 			trial(tn).stim(sn).ondelay		= par(6);
 			trial(tn).stim(sn).offevent		= par(7);
-			trial(tn).stim(sn).offdelay		= par(8);			
+			trial(tn).stim(sn).offdelay		= par(8);
 		case 'SKY'
 			sn								= sn+1;
 			if ~sscanf(curLine(nchar+1:end),'%d',1) % center SKY led
@@ -249,7 +252,7 @@ end
 if cfg.Lab==2
 	cfg		= spherelookup(cfg);
 elseif cfg.Lab==4
-		cfg		= spherelookupMinor(cfg);
+	cfg		= spherelookupMinor(cfg);
 end
 for trlIdx = 1:cfg.ntrials % for every trial
 	s			= trial(trlIdx).stim;

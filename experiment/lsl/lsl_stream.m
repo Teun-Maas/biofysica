@@ -84,6 +84,11 @@ classdef lsl_stream < handle
                 notify(this, 'DataAvailable', evdata);
             end
         end
+        
+        function flush(this)
+            this.pull_chunk();
+            this.databuffer.clear();
+        end
     end
     
 end

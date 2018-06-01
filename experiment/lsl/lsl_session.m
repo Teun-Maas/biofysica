@@ -15,7 +15,6 @@ classdef lsl_session < handle
         function delete(this)
              this.stop();
              delete(this.tmr);
-             disp delete
         end        
         
         function add_stream(this,stream)
@@ -49,6 +48,7 @@ classdef lsl_session < handle
             if nargin>1
                 this.tmr.period=period;
             end
+            this.flush_streams();
             start(this.tmr);
         end
         
@@ -57,7 +57,14 @@ classdef lsl_session < handle
             this.collect();  % get remaining data
         end
            
-
+        function flush_streams(this)
+% TODO: make non blocking
+%             i=1;
+%             while i<=this.nstreams
+%                 this.streams{i}.flush();
+%                 i=i+1;
+%             end
+        end
     end
     
 end
