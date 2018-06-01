@@ -46,13 +46,14 @@ function [pldata1, pldata2] = exLslReceiveDataSphere2
     
     ses.start();
     %input('press enter to stop');
-    pause(3);
+    pause(2.7);
     ses.stop();
+    disp('take two');
   %  evdata=evstr.read();
     pldata1=plstr.read();
-    pause(2);
+    pause(2.1);
     ses.start();
-    pause(1);
+    pause(2.7);
     ses.stop();
     
   %  evdata=evstr.read();
