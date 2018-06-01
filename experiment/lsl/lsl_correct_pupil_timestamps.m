@@ -33,13 +33,13 @@ function corrected_timestamps=lsl_correct_pupil_timestamps(data)
     
     % generate the reference timestamps using a least squares fit followed
     % by adding an offset too keep timestamps 'causal'
-    dejittered_timestamps=estimate_tref_lsq(indexes,data.Timestamps);
+    dejittered_timestamps=estimate_timestamps_lsq(indexes,data.Timestamps);
     timecorrection=lsl_estimate_timecorrection(data);
     corrected_timestamps=dejittered_timestamps+timecorrection;
 end
 
 
-function fitted_ts=estimate_tref_lsq(x,ts)
+function fitted_ts=estimate_timestamps_lsq(x,ts)
     %least squares fit of a line
     coeffs=polyfit(x,ts,1);
     fitted_ts=polyval(coeffs,x);

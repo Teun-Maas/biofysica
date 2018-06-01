@@ -31,7 +31,7 @@ function [evdata, pldata] = exLslReceiveData2
         fprintf('%d: name: ''%s'' type: ''%s''\n',i,l{i}.name,l{i}.type);
     end
     
-    n=input('enter digital event stream number to acquire: ');
+    n=input('enter pupil labs stream number to acquire: ');
     plstr=lsl_stream(info{n});
     
     
