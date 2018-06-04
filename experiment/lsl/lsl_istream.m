@@ -86,15 +86,17 @@ classdef lsl_istream < handle
         end
         
         function open_stream(this)
-            this.inlet.open_stream();
+        %    this.inlet.open_stream();
         end;
 
         function close_stream(this)
-            this.inlet.close_stream();
+       %     this.inlet.close_stream();
         end;
 
         function flush_stream(this)
-            this.databuffer.clear();
+            [data,timestamps]=this.pull_chunk();
+            delete(this.databuffer);
+            this.databuffer=lsl_databuffer();
         end;
     end
     
