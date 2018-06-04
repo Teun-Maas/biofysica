@@ -1,6 +1,6 @@
 classdef lsl_databuffer < handle
     % lsl_databuffer is used to collect incoming data chunks/objects in
-    % lsl_stream
+    % lsl_istream
     % the merge_data() methos takes care of combining single
     % chuncks into one contiguous lsl_data object.
     % SEE ALSO: APPEND, READ, CLEAR

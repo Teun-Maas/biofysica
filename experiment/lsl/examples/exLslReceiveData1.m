@@ -15,7 +15,7 @@ function data = exLslReceiveData1
   
   n=input('enter stream number to acquire: ');
   
-  evstr=lsl_stream(info{n});
+  evstr=lsl_istream(info{n});
   ses=lsl_session();
   ses.add_stream(evstr);
   addlistener(evstr,'DataAvailable',@listener);

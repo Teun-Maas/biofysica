@@ -16,7 +16,7 @@ function [pldata1, pldata2] = exLslReceiveDataSphere2
     end
     
     n=input('enter digital event stream number to acquire: ');
-    evstr=lsl_stream(info{n});
+    evstr=lsl_istream(info{n});
     
     %
     % Select Pupil Labs event stream
@@ -32,7 +32,7 @@ function [pldata1, pldata2] = exLslReceiveDataSphere2
     end
     
     n=input('enter digital event stream number to acquire: ');
-    plstr=lsl_stream(info{n});
+    plstr=lsl_istream(info{n});
     
     
     

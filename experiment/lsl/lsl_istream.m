@@ -1,4 +1,4 @@
-classdef lsl_stream < handle
+classdef lsl_istream < handle
     events
         DataAvailable
     end
@@ -10,7 +10,7 @@ classdef lsl_stream < handle
     end
     
     methods
-        function this=lsl_stream(streaminfo)
+        function this=lsl_istream(streaminfo)
             this.inlet=lsl_inlet(streaminfo);
             this.inlet.time_correction();  % initialize network time correction protocol
             this.isstring=strcmp(streaminfo.channel_format,'cf_string');
