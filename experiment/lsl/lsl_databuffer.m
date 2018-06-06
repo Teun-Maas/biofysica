@@ -88,8 +88,15 @@ classdef lsl_databuffer < handle
             end
             mchan=size(this.buf{first}.Data,1); % each row holds a sample
             
+            % are we dealing with cell array data?
+            do_cell=iscell(this.buf{first}.Data);
+            
             % construct target matrixes
-            merged_data=zeros(mchan,n_alldata);
+            if do_cell
+                merged_data=cell(mchan,n_alldata);
+            else
+                merged_data=zeros(mchan,n_alldata);
+            end
             merged_timestamps=zeros(1,n_alldata); 
             merged_timecorrection=zeros(1,nbuf);
             merged_tcindex=zeros(1,nbuf);
@@ -101,7 +108,11 @@ classdef lsl_databuffer < handle
             % loop over data structures and copy into targets
             for i=first:last
                mrows=size(this.buf{i}.Data,2);
-               merged_data(1:mchan,nn:nn+mrows-1)=this.buf{i}.Data;
+%                if do_cell
+%                    merged_data{1:mchan,nn:nn+mrows-1}=this.buf{i}.Data;
+%                else
+                    merged_data(1:mchan,nn:nn+mrows-1)=this.buf{i}.Data;
+%                end
                merged_timestamps(nn:nn+mrows-1)=this.buf{i}.Timestamps;
                merged_timecorrection(i)=this.buf{i}.TimeCorrection;
                % indexes to timecorrection values

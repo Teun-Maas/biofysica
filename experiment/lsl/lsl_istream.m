@@ -55,7 +55,7 @@ classdef lsl_istream < handle
                     ds{bufsz}=[];
                     ts{bufsz}=[];
                 end
-                ds{i}=d;
+                ds{i}=d{1};
                 ts{i}=t;
                 [d,t]=this.inlet.pull_sample(0);
             end
