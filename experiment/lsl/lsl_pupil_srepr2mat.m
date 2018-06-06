@@ -7,9 +7,25 @@ function result=lsl_pupil_srepr2mat(srepr)
     % GW/20180606
 
     global biofpy
-    dictvar=biofpy.eval_srepr(srepr);
-    result=py_cast_recursive(dictvar);
- 
+
+    if ischar(srepr)
+        dictvar=biofpy.eval_srepr(srepr);
+        result=py_cast_recursive(dictvar);
+    elseif iscell(srepr)
+        result=convert_multi(srepr);
+    else
+        error('oops, cannot handle data of class %s',class(srepr));
+    end
+end
+
+function r=convert_multi(s)
+    [m,n]=size(s);
+    r=cell(m,n);
+    for ii=1:m
+       for jj=1:n
+          r{ii,jj}=lsl_pupil_srepr2mat(s{ii,jj});
+       end
+    end
 end
 
 function result=py_cast_recursive(var)
