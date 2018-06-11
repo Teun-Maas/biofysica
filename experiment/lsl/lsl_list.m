@@ -1,6 +1,6 @@
 function l=lsl_list(varargin)
 % LSL_LIST - resolves lsl streams on the local network and returns them in
-% a Nx2 cell array.
+% a Nx2 struct array.
 % To resolve streams one of three calling methods can be used:
 % lsl_list() uses lsl_resolve_all(lib);
 % lsl_list(predicate_string) uses lsl_resolve_bypred(lib,predicate_string);
@@ -16,6 +16,10 @@ function l=lsl_list(varargin)
 %
 % SEE ALSO: LSL_RESOLVE_ALL, LSL_RESOLVE_BYPRED, LSL_RESOLVE_BYPROP
   info=lsl_resolver(varargin{:});
-  l=info.list();
+  if nargout > 0
+      l=info.list();
+  else
+      info.list_verbose();
+  end
   delete(info);
 end

@@ -18,10 +18,17 @@ classdef lsl_resolver < handle
 
         function l=list(this)
             n=length(this.infos);
-            l=cell(n,1);
+            l=struct();
             for i=1:n
-                l{i}.name=this.infos{i}.name;
-                l{i}.type=this.infos{i}.type;
+                l(i).name=this.infos{i}.name;
+                l(i).type=this.infos{i}.type;
+            end
+        end
+        
+        function l=list_verbose(this)
+            l=this.list();
+            for i=1:numel(l)
+                disp(l(i));
             end
         end
         
