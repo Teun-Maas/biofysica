@@ -1,7 +1,7 @@
 function data = exLslReceiveData1
-%  info=lsl_streaminfos('type=''Digital Events @ clockpi'' and name=''Digital Events 0''');
-%  info=lsl_streaminfos('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Primitive Data - Eye 0''');
-  info=lsl_streaminfos('type=''Digital Events @ lslder00''');
+%  info=lsl_resolver('type=''Digital Events @ clockpi'' and name=''Digital Events 0''');
+%  info=lsl_resolver('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Primitive Data - Eye 0''');
+  info=lsl_resolver('type=''Digital Events @ lslder00''');
 
  
   l=info.list();

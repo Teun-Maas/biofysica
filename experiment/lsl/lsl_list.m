@@ -15,7 +15,7 @@ function l=lsl_list(varargin)
 % For more information on predicate strings see the help on lsl_resolve_by_pred.
 %
 % SEE ALSO: LSL_RESOLVE_ALL, LSL_RESOLVE_BYPRED, LSL_RESOLVE_BYPROP
-  info=lsl_streaminfos(varargin{:});
+  info=lsl_resolver(varargin{:});
   l=info.list();
   delete(info);
 end

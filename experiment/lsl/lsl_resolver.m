@@ -1,11 +1,11 @@
-classdef lsl_streaminfos < handle
+
+classdef lsl_resolver < handle
     properties
         infos
     end
     
     methods
-        function this=lsl_streaminfos(arg1, arg2)
-            warning('please use lsl_resolver instead of lsl_streaminfos class');
+        function this=lsl_resolver(arg1, arg2)
             lib=lsl_loadlib();
             if nargin==0
                 this.infos=lsl_resolve_all(lib);

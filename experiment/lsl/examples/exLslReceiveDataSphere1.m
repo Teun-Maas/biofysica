@@ -1,11 +1,11 @@
 function [evdata, pldata] = exLslReceiveDataSphere1
-    %  info=lsl_streaminfos('type=''Digital Events @ clockpi'' and name=''Digital Events 0''');
-    %  info=lsl_streaminfos('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Primitive Data - Eye 0''');
+    %  info=lsl_resolver('type=''Digital Events @ clockpi'' and name=''Digital Events 0''');
+    %  info=lsl_resolver('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Primitive Data - Eye 0''');
     
     %
     % Select digital events stream
     %
-    info=lsl_streaminfos('type=''Digital Events @ lslder00'' and name=''Digital Events 1''');
+    info=lsl_resolver('type=''Digital Events @ lslder00'' and name=''Digital Events 1''');
     l=info.list();
     if isempty(l)
         error('no streams found');
@@ -21,7 +21,7 @@ function [evdata, pldata] = exLslReceiveDataSphere1
     %
     % Select Pupil Labs event stream
     %
-    info=lsl_streaminfos('type=''Pupil Capture @ pupil-hpdesktop'' and name=''Pupil Primitive Data - Eye 0''');
+    info=lsl_resolver('type=''Pupil Capture @ pupil-hpdesktop'' and name=''Pupil Primitive Data - Eye 0''');
     l=info.list();
     if isempty(l)
         error('no streams found');

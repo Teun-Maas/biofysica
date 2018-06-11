@@ -1,12 +1,12 @@
 function pldata = exLslReceiveData2
-    %  info=lsl_streaminfos('type=''Digital Events @ clockpi'' and name=''Digital Events 0''');
-    %  info=lsl_streaminfos('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Primitive Data - Eye 0''');
+    %  info=lsl_resolver('type=''Digital Events @ clockpi'' and name=''Digital Events 0''');
+    %  info=lsl_resolver('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Primitive Data - Eye 0''');
     
 
     %
     % Select Pupil Labs event stream
     %
-    info=lsl_streaminfos('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Python Representation - Eye 0''');
+    info=lsl_resolver('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Python Representation - Eye 0''');
     l=info.list();
     if isempty(l)
         error('no streams found');
