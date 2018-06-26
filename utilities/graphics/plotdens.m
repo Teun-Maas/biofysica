@@ -1,4 +1,4 @@
-function plotdens(x,y,varargin)
+function [F,X1,X2] = plotdens(x,y,varargin)
 % PLOTDENS(X,Y)
 %
 % Plot density
@@ -37,7 +37,7 @@ end
 X1		= reshape(XI(:,1),m,n);
 X2		= reshape(XI(:,2),m,n);
 cmap	= statcolor(64,[],[],[],'def',6);
-[~,h] = contourf(X1,X2,F.^2,0:0.01:1);
+[~,h] = contourf(X1,X2,F,0:0.01:1);
 h.EdgeColor = 'none';
 hold on
 colormap(cmap)
