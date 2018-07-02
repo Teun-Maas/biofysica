@@ -1,4 +1,4 @@
-function [betai,sei,XI] = weightedregress(X,Y,Z,sigma,XI,varargin)
+function [betai,sei,XI,Ni] = weightedregress(X,Y,Z,sigma,XI,varargin)
 % [BETA,SE,XI] = WEIGHTEDREGRESS(X,Y,Z,SIGMA,XI)
 %
 % Perform linear regression  Y vs Z weighted by factor X.
@@ -77,6 +77,7 @@ end
 beta	= NaN(length(XI),nreg); % regression coefficients
 se		= beta; % standard error
 xi		= NaN(size(XI)); % wfuned average x-parameter
+N = xi;
 for ii   = 1:length(XI)
 	switch wfun
 		case 'gaussian'
@@ -92,6 +93,7 @@ for ii   = 1:length(XI)
 			xi(ii)	= nanmean(X(sel));
 			x		= Y(sel,:);
 			y		= Z(sel);
+			N(ii) = sum(sel);
 	end
 	if nansum(sel)>nbin && nansum(sel)>n
 		switch fittype
@@ -128,7 +130,7 @@ sel		= ~isnan(beta(:,1));
 beta	= beta(sel,:);
 se		= se(sel,:);
 xi		= xi(sel);
-
+N		= N(sel);
 %% unique x-values
 % interpolation dis not possible if there are multiple equivalent x-values
 % solution: throw away equivalent x-values with corresponding y-values,
@@ -136,6 +138,8 @@ xi		= xi(sel);
 [xi,indx] = unique(xi);
 beta	= beta(indx,:);
 se		= se(indx,:);
+N		= N(indx);
+whos N se
 %% interpolate at XI
 
 if numel(xi)>1 % to interpolate you should have at least 2 data points
@@ -145,9 +149,12 @@ if numel(xi)>1 % to interpolate you should have at least 2 data points
 		betai(:,ii) = interp1(xi,beta(:,ii),XI,'linear','extrap');
 		sei(:,ii)	= interp1(xi,se(:,ii),XI,'linear','extrap');
 	end
+			Ni	= interp1(xi,N,XI,'linear','extrap');
+
 else % Create some NaNs
 	betai	= zeros(length(XI),size(beta,2));
 	sei		= betai;
 end
+whos Ni sei
 
 
