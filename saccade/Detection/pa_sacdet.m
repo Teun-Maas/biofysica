@@ -110,8 +110,8 @@ lv                                          = length(varargin);
 if lv<1
     handles.fname                               = [];
     handles.fname                               = pa_fcheckexist(handles.fname,'*.hv');
-    det.velocityon                                = 10;       %deg/s
-    det.velocityoff                             = 10;      %deg/s
+    det.velocityon                                = 30;       %deg/s
+    det.velocityoff                             = 30;      %deg/s
     det.smooth                                  = 0.01;
     det.duration                                = 10;       % ms
     det.amplitude                               = 2;        % deg
@@ -227,10 +227,34 @@ SacN                                            = SacOn;    % Saccade Number in 
 k                                               = 0;
 
 % Find Velocity
-for i                                           = 1:size(handles.smvtrace,2);
-    V                                           = handles.smvtrace(:,i);
+for i                                           = 1:size(handles.smvtrace,2)
+
+	%%
+% 	i = 3
+	V                                           = handles.smvtrace(:,i);
     HOR                                         = handles.htrace(:,i);
     VER                                         = handles.vtrace(:,i);
+	
+	
+	
+% 	figure(42)
+% 	clf
+% 	subplot(221)
+% 	plot(HOR)
+% 
+% 		
+% 	subplot(222)
+% 	plot(VER)
+% 	
+% 		
+% 	subplot(223)
+% 	plot(HOR,VER)
+% 	
+% 	subplot(224)
+% 	plot(V)
+	
+	%%
+% 	keyboard
     %     % Detect Velocity
     %     sel                                         = (V>handles.det.velocityon);  % Trace Index in trial where saccade velocity exceeds minimum velocity
     %     onoff                                       = zeros(size(V));        % If saccade velocity does not exceed velocity -> value = 0

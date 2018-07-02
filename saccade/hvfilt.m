@@ -21,7 +21,7 @@ if nargin<1
 end
 if nargin <2
     outfiles            = datfiles;
-end;
+end
 nchan                   = 2;        % Azimuth channel and elevation channel = 2 channels
 h                       = 1;        % Channel number 1 = azimuth
 v                       = 2;        % Channel number 2 = elevation
@@ -66,7 +66,7 @@ for i                   = 1 : size(datfiles,1)
             fs          = filtfilt(lpFilt,mtx(v,indx));
             mtx(v,indx) = fs;
 			
-        end;
+		end
         %% save filtered data
         fname       = outfiles(i,:);
         fname       = pa_fcheckext(fname,ext);
@@ -75,7 +75,7 @@ for i                   = 1 : size(datfiles,1)
         if fid==-1
             disp(['   Error writing ' fname ]);
             return;
-        end;
+		end
         MTX         = [mtx(h,:); mtx(v,:)];
         MTX         = MTX(:);
         fwrite(fid,MTX,'float');
@@ -84,7 +84,7 @@ for i                   = 1 : size(datfiles,1)
         disp(['skip ' fname])
         warning('HVfilt:OrderotEnoughSamples','Data is not filtered due to small number of samples');
     end
-end;
+end
 
 
 
