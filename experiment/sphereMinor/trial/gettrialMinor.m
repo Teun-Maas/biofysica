@@ -13,12 +13,18 @@ cfg						= fexistdlg(handles.cfg); % check datafile name
 % % Dialog to choose the exp-file and load experimental parameters
 [trial,cfg]				= readexp(cfg); % load experimental trial parameters and configuration
 
+%% filter parameters
+fname			= fullfile(cfg.expdir,cfg.expfname);
+fname			= fcheckext(fname,'mat');
+load(fname);
+cfg.parameters = parameters;
+
 
 %% CFG file
 cfg						= readcfg(cfg); % read cfg cfile
 cfg.acqdur				= cfg.humanv1.ADC(1).samples / cfg.humanv1.ADC(1).rate * 1000; % TODO: HumanV1/duration of data acquisition (ms)
 cfg.nsamples			= round(cfg.acqdur/1000*cfg.RZ6Fs); % length data acquisition (samples)
-cfg.nchan				= 8;
+cfg.nchan				= 3;
 
 
 % TODO: code to verify experiment

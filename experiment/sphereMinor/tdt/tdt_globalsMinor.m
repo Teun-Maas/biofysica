@@ -1,4 +1,4 @@
-function cfg = tdt_globals(cfg)
+function cfg = tdt_globalsMinor(cfg)
 % TDT_GLOBALS
 %
 % "Globals" for TDT system:
@@ -27,19 +27,6 @@ cfg.mux2rp2				= [1 2]; % which RP2 channel belongs to which MUX?
 
 %% Fixed setup (SA1 & PA5 & RP2.rcx)
 % cfg.maxsndlevel		= 75; % ?
-
-%% Hardware "defaults" - needs to be checked every time
-% cfg.SA1gain			= 0;
-% 
-% cfg.remmel.X.gain	= 500;
-% cfg.remmel.X.offset	= 500;
-% cfg.remmel.X.invert	= 0;
-% cfg.remmel.Y.gain	= 500;
-% cfg.remmel.Y.offset	= 500;
-% cfg.remmel.Y.invert	= 0;
-% cfg.remmel.Z.gain	= 500;
-% cfg.remmel.Z.offset	= 500;
-% cfg.remmel.Z.invert	= 0;
 
 %% standard variables
 if ~isfield(cfg,'RZ6_1circuit')

@@ -120,73 +120,38 @@ while ~feof(fid)
 			tn	= tn+1; % trial number count
 			sn	= 0; % stimulus number count
 		case {'SND1','SND2','SND'} % could also have 7
-			if	ismember(cfg.Lab,[1 2 3]) % Is this correct for sphereMinor?
 			sn								= sn+1;
 			par		= sscanf(curLine(nchar+1:end),'%d%d%d%f%d%d',[6,1]);
 			trial(tn).stim(sn).modality		= 'sound';
 			trial(tn).stim(sn).X			= par(1);
 			trial(tn).stim(sn).Y			= par(2);
-			trial(tn).stim(sn).matfile		= ['snd' num2str(par(3),'%03i') '.mat']; % for sphere
-			trial(tn).stim(sn).wavfile		= ['snd' num2str(par(3),'%03i') '.wav']; % double, for hoop
-			trial(tn).stim(sn).parameters	= par(3); % for sphereMinor
-
 			trial(tn).stim(sn).matfile		= ['snd' num2str(par(3),'%03i') '.mat'];
 			trial(tn).stim(sn).wavfile		= ['snd' num2str(par(3),'%03i') '.wav'];	 % double
-
 			trial(tn).stim(sn).intensity	= par(4);
 			trial(tn).stim(sn).onevent		= par(5);
 			trial(tn).stim(sn).ondelay		= par(6);
 			trial(tn).stim(sn).offevent		= par(5); % default duration
 			trial(tn).stim(sn).offdelay		= par(6)+150; % default duration
-			elseif  ismember(cfg.Lab,4) % sphereMinor
-				
-				sn								= sn+1;
-				par		= sscanf(curLine(nchar+1:end),'%d%d%d%f%d%d',[7,1]);
-				trial(tn).stim(sn).modality		= 'sound';
-				trial(tn).stim(sn).X			= par(1);
-				trial(tn).stim(sn).Y			= par(2);
-				trial(tn).stim(sn).matfile		= ['snd' num2str(par(3),'%03i') '.mat']; % for sphere
-				trial(tn).stim(sn).wavfile		= ['snd' num2str(par(3),'%03i') '.wav']; % double, for hoop
-				trial(tn).stim(sn).parameters	= par(3); % for sphereMinor
-				trial(tn).stim(sn).intensity	= par(4);
-				trial(tn).stim(sn).onevent		= par(5);
-				trial(tn).stim(sn).ondelay		= par(6);
-				trial(tn).stim(sn).offevent		= par(5); % default duration
-				trial(tn).stim(sn).offdelay		= par(6)+150; % default duration
-				trial(tn).stim(sn).duration		= par(7); % duration. Note that sound offset cannot be triggered (e.g. by button press or by movement)
-			end
 		case 'LED'
 			if	ismember(cfg.Lab,[1 4]) % Is this correct for sphereMinor?
-
 				sn								= sn+1;
 				par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d',[7,1]);
 				trial(tn).stim(sn).modality		= 'LED';
 				trial(tn).stim(sn).X			= par(1);
 				trial(tn).stim(sn).Y			= par(2);
-
-				trial(tn).stim(sn).intensity	= par(3);
-
 				trial(tn).stim(sn).intensity	= par(3);  % hoop: range 0-255, sphere range 1-50
-
 				trial(tn).stim(sn).onevent		= par(4);
 				trial(tn).stim(sn).ondelay		= par(5);
 				trial(tn).stim(sn).offevent		= par(6);
 				trial(tn).stim(sn).offdelay		= par(7);
-
 			elseif	ismember(cfg.Lab,[2 3]) % sphere and sphereMinor with LED colours
-
 				sn								= sn+1;
 				par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d',[8,1]);
 				trial(tn).stim(sn).modality		= 'LED';
 				trial(tn).stim(sn).X			= par(1);
 				trial(tn).stim(sn).Y			= par(2);
-
-				trial(tn).stim(sn).colour		= par(3);
-				trial(tn).stim(sn).intensity	= par(4);
-
 				trial(tn).stim(sn).colour		= par(3); % 0 - red, 1 - green
 				trial(tn).stim(sn).intensity	= par(4);  % hoop: range 0-255, sphere range 1-50
-
 				trial(tn).stim(sn).onevent		= par(5);
 				trial(tn).stim(sn).ondelay		= par(6);
 				trial(tn).stim(sn).offevent		= par(7);
@@ -261,9 +226,9 @@ while ~feof(fid)
 		case {'INP1','INP2','INP'}
 			sn = sn+1;
 			trial(tn).stim(sn).modality		= 'sound acquisition';
-			
 	end
 end
+
 
 %% check number of trials
 ntrials			= numel(trial);

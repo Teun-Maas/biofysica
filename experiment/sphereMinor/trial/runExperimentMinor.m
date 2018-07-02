@@ -1,7 +1,7 @@
 function runExperimentMinor(handles)
 
 % get trial information
-handles = setupShowMinor(handles);
+handles		= setupShowMinor(handles);
 handles		= gethandlesMinor(handles);
 handles		= gettrialMinor(handles);
 createdir(handles);
@@ -23,7 +23,7 @@ for trlIdx	= 1:handles.cfg.ntrials
 	disp(['Trial: ' num2str(trlIdx)])
 	
 	%% Trial
-	stim			= handles.trial(trlIdx).stim;
+	stim				= handles.trial(trlIdx).stim;
 	trialCleanMinor(stim,handles.cfg);
 	[stim,handles.cfg]	= trialSetupMinor(handles.cfg,stim);
 	trialRunMinor(handles.cfg,stim);

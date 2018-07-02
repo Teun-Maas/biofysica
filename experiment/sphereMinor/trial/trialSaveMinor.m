@@ -1,40 +1,37 @@
-function data = trialSave(cfg,trial,data)
+function data = trialSaveMinor(cfg,trial,data)
 % DATA = SAVETRIAL(RA16_1,CFG,LED,DATA)
 %
 % Save data
 
-% %% Read RP2 DATA
-% RP2_data	= NaN(cfg.maxSamples,2,2);
-% for rpIdx		= 1:2
-% 	for inpIdx = 1:2
-% 		
-% 		RP2_data(:,rpIdx,inpIdx) = cfg.RP2_2.ReadTagV(cfg.recdataidx{1},0,cfg.maxSamples)';
-% 	end
-% end
-% data(1).rawRP2 = RP2_data;
-
 %% Read DATA
-% warning('spherePrime now checks each trial whether data should be acquired'); % this warning should be removed
 % t = {trial(cfg.trial).stim.modality};
 % if any(strcmp('data acquisition',t)) % check whether data should be acquired
-	RA16_data		= NaN(cfg.nsamples,cfg.nchan);
-	t				= tic;
-	for ii			= 1:cfg.nchan
-		RA16_data(:,ii) = cfg.RA16_1.ReadTagV(cfg.dataidx{ii},0,cfg.nsamples)';
-	end
-radur				= toc(t);
-% else
-% 		RA16_data		= [];
-% 		radur = 0;
-% end
-data(1).raw			= RA16_data;
-data(1).trialnr		= cfg.trial;
-data(1).RAsavedur	= radur;
+RZ6_data		= NaN(cfg.nsamples,cfg.nchan);
+t				= tic;
 
-%% Read RA16 Event buffer
-eventN					= cfg.RA16_1.GetTagVal('eventSize');
-RA16_event				= cfg.RA16_1.ReadTagV('eventData',0,eventN)';
-data(1).event			= 10^45*RA16_event/1.4; % to convert to scalars
+for	ii			= 1:cfg.nchan % only 3 data channels...
+	RZ6_data(:,ii) = cfg.RZ6_1.ReadTagV(cfg.dataidx{ii},0,cfg.nsamples)';
+end
+dur				= toc(t);
+data(1).raw			= RZ6_data;
+
+%%
+data(1).trialnr		= cfg.trial;
+data(1).savedur		= dur;
+
+stim = trial.stim;
+
+selsnd		= strcmpi({stim.modality},'sound');
+if any(selsnd) % Check if a sound was played
+	stim		= stim(selsnd);
+	stim		= stim(1); % stores only 1 sound
+	nsamples = round(stim.duration/1000*cfg.RZ6Fs);
+	snd = cfg.RZ6_1.ReadTagV('sound',0,nsamples)'; %#ok<*NASGU>
+else % Defaults when no sound was played
+	stim = nan;
+	nsamples = 0;
+	snd = nan;
+end
 
 %% Save trial data
 % Because an experiment might be stopped at any time, we need to record
@@ -48,11 +45,11 @@ fname			= fullfile([cfg.dname filesep 'trial' filesep],fname);
 
 %% remove graphics and objects
 % from saved data, not from GUI handles
-delhandles	= {'hcurtar','hcurdat','RP2_1','RP2_2','RA16_1','zBus','PA5_1','PA5_2','PA5_3','PA5_4'};
+delhandles	= {'hcurtar','hcurdat','RZ6_1','zBus'};
 ndelhandles = numel(delhandles);
 for ii = 1:ndelhandles
 	if isfield(cfg,delhandles{ii})
 		cfg				= rmfield(cfg,delhandles{ii});
 	end
 end
-save(fname,'data','cfg','trialsingle');
+save(fname,'data','cfg','trialsingle','snd');

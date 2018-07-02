@@ -1,4 +1,4 @@
-function handles = trialShow(handles)
+function handles = trialShowMinor(handles)
 % Modify to your own preference
 
 % need for automatic calibration
@@ -9,8 +9,8 @@ function handles = trialShow(handles)
 % history in gray
 % current black bold
 handles.stim	= handles.trial(handles.cfg.trial).stim;
-handles			= stimShow(handles);
-handles			= datShow(handles);
+handles			= stimShowMinor(handles); % This should work ('Minor' not needed)
+handles			= datShowMinor(handles); % probably needs adjustments
 
 %% Linear Regression
 % subplot(132)
