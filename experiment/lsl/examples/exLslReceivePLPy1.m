@@ -1,4 +1,4 @@
-function pldata = exLslReceiveData2
+function pldata = exLslReceivePLPy1
     %  info=lsl_resolver('type=''Digital Events @ clockpi'' and name=''Digital Events 0''');
     %  info=lsl_resolver('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Primitive Data - Eye 0''');
     
@@ -18,8 +18,6 @@ function pldata = exLslReceiveData2
     
     n=input('enter pupil labs stream number to acquire: ');
     plstr=lsl_istream(info{n});
-    
-    
     
     ses=lsl_session();
     ses.add_stream(plstr);
