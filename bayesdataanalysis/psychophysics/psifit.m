@@ -48,9 +48,7 @@ function samples = psifit(x,y,s,varargin)
 
 
 %% Initialization
-if isempty(s)
-	s = ones(1,size(y,2));
-end
+
 % check for input orientation
 % Y needs to be either:
 % - a nx1 column vector with 0s and 1s
@@ -65,12 +63,11 @@ if size(y,1)~=size(x,1)
 	warning('Y and X should have same orientations');
 	x = x';
 end
-if size(y,1)~=size(s,1)
-	warning('Y and S should have same orientations');
-	s = s';
-end
 if size(y,1)~=size(x,1)
 	error('X and Y should have same number of rows');
+end
+if isempty(s)
+	s = ones(size(y,1),1);
 end
 %% S should contain consecutive values, no missing values
 [~,~,s] = unique(s);
@@ -82,6 +79,7 @@ elseif size(y,2)==1
 	respDist = 'bernouilli';
 end
 
+respDist
 
 fun				= keyval('function',varargin,@logisticfun); % logistic, probit, gumbell, inversegumbell,  weibull, inverseweibull + fun
 fig				= keyval('figure',varargin,200); % logistic, probit, gumbell, inversegumbell,  weibull, inverseweibull + fun
@@ -119,17 +117,7 @@ end
 
 %% MCMC diagnostics
 if diagFlag
-	parameterNames	= fieldnames(samples); % get all parameter names
-	for parIdx			= 1:numel(parameterNames)
-		n = size(samples.(parameterNames{parIdx}),3);
-		for ii = 1:n
-			figure
-			a		= squeeze(samples.(parameterNames{parIdx})(:,:,ii));
-			samp	= samples;
-			samp.(parameterNames{parIdx}) = a;
-			diagmcmc(samp,'parName',parameterNames{parIdx});
-		end
-	end
+	diagmcmc(samples)
 end
 
 %% Extract chain values:
