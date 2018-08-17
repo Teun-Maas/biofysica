@@ -11,6 +11,7 @@ pref		= 10^((94-0.3)/20);
 scaling		= pref/p
 y			= scaling*x;
 % y			= filterA(y,Fs);
+
 figure(1)
 subplot(211)
 plot(t,x);
@@ -27,9 +28,8 @@ p		= 10.^(a/20);
 psum	= sqrt(sum(p.^2));
 L		= 20*log10(psum);
 
-p		= 10.^(m/20); % Pressure in Pascal!
+p		= 10.^(m/20);
 psum	= sqrt(sum(p.^2));
-% psum = rms(p);
 La		= 20*log10(psum);
 
 levels = [20*log10(rms(y)) L La]
@@ -44,6 +44,7 @@ str = ['L_{spec,A} = ' num2str(round(levels(3)))];
 text(1000+100,94-9,str,'FontSize',20);
 % p = audioplayer(x,Fs);
 % play(p)
+
 
 
 %%
@@ -89,7 +90,6 @@ xlim([100 15000]);
 horline(94);
 legend('1000 Hz @ 94 dB','Background noise');
 ylabel('Sound Pressure Level (dB), A-weighted');
-
 %%
 cd('/Users/marcw/Dropbox/manuscripts/Divers/Patientlab');
 savegraph('background','eps');
