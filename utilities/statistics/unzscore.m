@@ -23,7 +23,7 @@ function B = unzscore(varargin)
 % E-mail: marcvanwanrooij@gmail.com
 
 narg = nargin;
-if narg==6 && numel(varargin{1})==1;
+if narg==6 && numel(varargin{1})==1
 	narg = narg+1;
 end
 switch narg
