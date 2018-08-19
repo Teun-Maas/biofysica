@@ -258,16 +258,19 @@ for ii = 1:ns
 	%% Posterior predictive
 	% Data
 	if size(y,2)==1 % y = bernouilli rate
-		[ux,~,subs]		= unique(x(sel));
-		r				= accumarray(subs,y(sel),[],@sum);
-		n				= accumarray(subs,ones(size(subs)),[],@sum);
+		[r,ux]	= assemble(y(sel),x(sel),'fun',@sum);
+		n		= assemble(ones(size(y(sel))),x(sel),'fun',@sum);
 	elseif size(y,2)==2 % y = [rate n]
-		r = y(sel,1);
-		n = y(sel,2);
-		ux = x(sel);
+		 % % this should work
+% 		r = y(sel,1);
+% 		n = y(sel,2);
+% 		ux = x(sel);
+% % but perhaps the experimenter did not 'assemble' the data correctly
+		[r,ux]	= assemble(y(sel,1),x(sel),'fun',@sum);
+		n		= assemble(y(sel,2),x(sel),'fun',@sum);		
 	end
 	rprop			= r./n;
-	
+	[lb, ub]		= binomialci(r, n, 0.05);	
 	%
 % 	for cIdx	= cVec
 % 		ypred	= psifun(ux,theta(cIdx,ii),omega(cIdx,ii),gamma(cIdx,ii),lambda(cIdx,ii),0.1,'function',fun);
@@ -302,7 +305,8 @@ for ii = 1:ns
 	text(mean(x),1.1,str,'HorizontalAlignment','center');
 	
     
-	plot(ux,rprop,'ks','MarkerFaceColor','w','MarkerSize',5); % data
+% 	plot(ux,rprop,'ks','MarkerFaceColor','w','MarkerSize',5); % data
+	errorbar(ux,rprop,rprop-lb,ub-rprop,'ks','MarkerFaceColor','w','MarkerSize',10); % data
 	
 % 	%% Density
 % 	if size(y,2)==1

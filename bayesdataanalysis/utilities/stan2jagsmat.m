@@ -5,7 +5,7 @@ function samples = stan2jagsmat(fit)
 %
 % See also STAN, MATJAGS
 
-samplesstruct = fit.extract('permuted',false,'par',{'theta','omega','lambda','gamma','g'});
+samplesstruct = fit.extract('permuted',false,'par',{'theta','omega','lambda','l','gamma','g'});
 
 parameterNames		= fieldnames(samplesstruct); % get all parameter names
 for ii				= 1:numel(parameterNames)
@@ -15,5 +15,10 @@ end
 if isfield(samples,'g')
 	samples.gamma = samples.g;
 	samples = rmfield(samples,'g');
+end
+
+if isfield(samples,'l')
+	samples.lambda = samples.l;
+	samples = rmfield(samples,'l');
 end
 

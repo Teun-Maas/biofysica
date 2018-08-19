@@ -14,7 +14,7 @@ chain_globals;
 numSavedSteps	= keyval('numSavedSteps',varargin,10000); % number of saved MCMC samples. How many you need depend on autocorrelation (effective sample size>10000), convergence (shrink factor<1.1), etc
 thinSteps		= keyval('thinSteps',varargin,1); % 1/proportion MCMC samples thrown away
 burnInSteps		= keyval('burnInSteps',varargin,5000);
-saveName		= keyval('saveName',varargin,'Hier-PsychometricCurve-Jags-');
+saveName		= keyval('saveName',varargin,'Hier-PsychometricCurve-Stan-');
 nChains			= keyval('nChains',varargin,nChainsDefault);
 runjagsMethod	= keyval('runjagsMethod',varargin,runjagsMethodDefault);
 dic				= keyval('dic',varargin,false);
@@ -67,28 +67,31 @@ fprintf( 'Running STAN...\n' );
 % 	'verbosity',0, ...               % 0=do not produce any output; 1=minimal text output; 2=maximum text output
 % 	'cleanup',1);                    % clean up of temporary files?
 
-% fit = stan( ...
-% 	'model_code',model,...		% File that contains model definition
-% 	'data',dataStruct,...		% Observed data
-% 	'iter',nIter,...			% Number of samples to extract
-% 	'chains',nChains,...		% Number of MCMC chains
-% 	'warmup',burnInSteps,...	% Number of burnin steps
-% 	'thin', thinSteps, ...      % Thinning parameter
-% 	'model_name','stan_psi_model',...
-% 	'file_overwrite',true);
-
-
 fit = stan( ...
 	'model_code',model,...		% File that contains model definition
 	'data',dataStruct,...		% Observed data
 	'init',initsStruct,...		% Observed data
-	'iter',1000,...			% Number of samples to extract
-	'chains',4,...		% Number of MCMC chains
-	'warmup',500,...	% Number of burnin steps
-	'thin', 1, ...      % Thinning parameter
+	'iter',nIter,...			% Number of samples to extract
+	'chains',nChains,...		% Number of MCMC chains
+	'warmup',burnInSteps,...	% Number of burnin steps
+	'thin', thinSteps, ...      % Thinning parameter
 	'model_name','stan_psi_model',...
 	'file_overwrite',true,...
+	'sample_file',fcheckext(saveName,'csv'),...
 	'working_dir',pwd);
+
+
+% fit = stan( ...
+% 	'model_code',model,...		% File that contains model definition
+% 	'data',dataStruct,...		% Observed data
+% 	'init',initsStruct,...		% Observed data
+% 	'iter',1000,...			% Number of samples to extract
+% 	'chains',4,...		% Number of MCMC chains
+% 	'warmup',500,...	% Number of burnin steps
+% 	'thin', 1, ...      % Thinning parameter
+% 	'model_name','stan_psi_model',...
+% 	'file_overwrite',true,...
+% 	'working_dir',pwd);
 
 % fit = stan('model_code',model,'data',dataStruct,'model_name','stan_psi_model','file_overwrite',true);
 % fit = stan('fit',fit,'data',dataStruct,'iter',10000,'chains',4);
@@ -146,10 +149,10 @@ initsStruct = struct([]);
 for ii = 1:nChains
 	initsStruct(ii).theta			= zeros(Nsubj,1); % standardized mean
 	initsStruct(ii).omega			= ones(Nsubj,1);  % standardized std
-	if ~isnumeric(gamma)
+	if isnumeric(gamma)
 		initsStruct(ii).g		= zeros(Nsubj,1); % no guessing
 	end
-	if ~isnumeric(lambda)
+	if isnumeric(lambda)
 		initsStruct(ii).l		= zeros(Nsubj,1); % no lapses
 	end
 end
@@ -179,11 +182,16 @@ function model = writemodel(gamma,lambda,ngroups,fun,respDist,modelname)
 
 
 %% Psychometric function
-fun = @logisticfun
-gamma = 'infer';
-lambda = 0;
-respDist = 'bernouilli';
-ngroups = 1;
+% fun = @logisticfun
+% gamma = 'infer';
+% lambda = 0;
+% respDist = 'bernouilli';
+% ngroups = 1;
+% fun
+% gamma
+% lambda
+% respDist
+% ngroups
 
 fun = func2str(fun);
 switch fun
@@ -238,10 +246,14 @@ if isnumeric(lambda)
 	lambdastr1	= 	[];
 	lambdastr2	= 	" l   <- " + num2str(lambda);
 	fixlambdastr	= 	"  real<lower=0,upper=1> l;";
+	inflambdastr	= 	[];
 elseif strcmp(lambda,"infer")
 	fixlambdastr	= 	[];
-	lambdastrmu = "lambda[s[i]]";
-	lambdastr1	=	"  lambda[j] ~ dbeta(alambda,blambda)   ";
+	lambdastrmu = "l";
+	lambdastr1	=	" l ~ beta(1.0,1.0);";
+	inflambdastr	= 	"  real<lower=0,upper=1> l;";
+	
+	
 	lambdastr2	= [	" # lapse rate/lambda hyperprior  "
 		" alambda  <- mulambda*kappalambda  "
 		" blambda  <- (1.0-mulambda) * kappalambda   "
@@ -317,8 +329,6 @@ str = [
 	"} "
 	];
 
-str
-
 
 % %%
 % %%
@@ -335,12 +345,14 @@ model =[
 	"  real theta ;"
 	"  real omega ;"
 	infgammastr
+	inflambdastr
 	"}"
 	"model {"
 	" vector[N] rate;"
 	" theta ~ normal(0,100);"
 	" omega ~ gamma(1,0.25);"
 	gammastr1
+	lambdastr1
 	mustr
 	distr
 	"}"

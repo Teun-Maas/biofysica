@@ -108,10 +108,10 @@ for ii = 1:nChains
 	initsStruct(ii).theta			= zeros(Nsubj,1); % standardized mean
 	initsStruct(ii).omega			= ones(Nsubj,1);  % standardized std
 	if ~isnumeric(gamma)
-		initsStruct(ii).gamma		= zeros(Nsubj,1); % no guessing
+		initsStruct(ii).gamma		= repmat(0.01,Nsubj,1); % no guessing
 	end
 	if ~isnumeric(lambda)
-		initsStruct(ii).lambda		= zeros(Nsubj,1); % no lapses
+		initsStruct(ii).lambda		= repmat(0.01,Nsubj,1); % no lapses
 	end
 end
 
