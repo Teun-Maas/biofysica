@@ -1,4 +1,4 @@
-function H = pa_rgb2hex(RGB)
+function H = rgb2hex(RGB)
 % H = RGB2HEX(RGB)
 %
 % Convert RGB color values to hexadecimal colour values H

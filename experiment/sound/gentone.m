@@ -1,7 +1,7 @@
 function [snd,Fs] = gentone(Freq, dur, varargin)
 % Generate TONE Stimulus
 %
-% STM = GENTONE (DUR, FREQ, NENV)
+% STM = GENTONE (FREQ, DUR, NENV)
 %
 % Generate a sine-shaped tone, with
 % dur       - duration                 [150]      ms
