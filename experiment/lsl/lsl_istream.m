@@ -30,6 +30,9 @@ classdef lsl_istream < handle
             data=this.databuffer.read();
         end
         
+        function inlet_info=info(this)
+            inlet_info = this.inlet.info();
+        end
     end
     
     
