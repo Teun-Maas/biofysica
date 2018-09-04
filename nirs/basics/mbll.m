@@ -1,5 +1,6 @@
-function nirs = pa_mbll(nirs)
-% DC = PA_MBLL(OD,WL,DST,DPF)
+function nirs = mbll(nirs)
+% C = MBLL(OD,WL,DST,DPF)
+%
 % Modified Beer-Lambert Law
 % OD_{\lambda} = \epsilon_{\lambda} \dot c \dot L \dot DPF + OD_{R,\lambda}
 % Assume  OD_{R,\lambda} (oxygen-independent optical losses) is constant,
@@ -7,17 +8,17 @@ function nirs = pa_mbll(nirs)
 %
 % \Deltac = \DeltaOD_{\lambda}/(\epsilon_{\lambda} \dot c \dot L \dot DPF)
 %
-% See also PA_MOLAREXTCOEF_HEMO
+% See also MOLAREXTCOEF_HEMO
 
 %% Initialization
 % dist		= [hdr.optodedistance hdr.optodedistance]; % Distance between source and detector
 % DPF		= hdr.DPF; % differential pathway factor DPF
 % wavlen	= hdr.laserwavelength
-epsilon	= pa_molarextcoef_hemo; % Molar extinction coefficients
+epsilon	= molarextcoef_hemo; % Molar extinction coefficients
 epsilon = round(epsilon);
 
 %%
-if ~isfield(nirs,'preprOD');
+if ~isfield(nirs,'preprOD')
 	OD = nirs.OD;
 else
 	OD = nirs.preprOD;
