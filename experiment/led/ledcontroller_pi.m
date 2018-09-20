@@ -23,7 +23,7 @@ classdef ledcontroller_pi < handle
         hostnames = {''};
         context;
         sockets;
-        nbuf = 8;  % nr of buffers in PLC for playing LED stimuli.
+        nbuf = 256;  % nr of buffers in PLC for playing LED stimuli.
         nbuf_written = 0; % nr of buffers written in ledpattern/write
         default_timeout = 30;
     end
@@ -50,7 +50,7 @@ classdef ledcontroller_pi < handle
             %   this.sockets{i}.setSocketOpt(ZMQ.RCVTIMEO,1000); FIXME
                 i=1+1;
             end
-            this.nbuf=8;
+            this.nbuf=256;
             this.trigger_enable(1);
             this.clear_all;
         end
