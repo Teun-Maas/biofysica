@@ -23,7 +23,7 @@ classdef ledcontroller_pi < handle
         hostnames = {''};
         context;
         sockets;
-        nbuf = 256;  % nr of buffers in PLC for playing LED stimuli.
+        nbuf;  % nr of buffers in PLC for playing LED stimuli.
         nbuf_written = 0; % nr of buffers written in ledpattern/write
         default_timeout = 30;
     end
@@ -137,9 +137,9 @@ classdef ledcontroller_pi < handle
             else
                 cmd=strcat(command, sprintf(' %d', args), char(0));
             end
-            %fprintf('send_command sent: %s\n', cmd);
-
-            message = zmq.Msg(256);
+            
+            fprintf('send_command sent: %s\n', cmd);
+            message = zmq.Msg(1024);
             message.put(unicode2native(cmd));
 
             socket.send(message,0);
@@ -155,12 +155,12 @@ classdef ledcontroller_pi < handle
                     break;
                 end   
                 pause(0.01);
-                if toc(t0)>1
+                if toc(t0)>20
                     error('recv timeout');
                 end
             end
             r=native2unicode(message.data)';
-            % fprintf('receive_from recv: %s\n', r);
+             fprintf('receive_from recv: %s\n', r);
 
             if (all(r(1:2)=='ER') || all(r(1:2)=='RX'))
                   % get verbose error message first, then call error()
@@ -249,6 +249,7 @@ classdef ledcontroller_pi < handle
             % Turn all leds off. This function is optimized, and changes
             % are written to the PCL immediately, but still depending on
             % trigger and gate signals.
+
             this.send_command('WR', [0, 0, 0, 0, 0, 0, 0, 0]);
             this.send_command('WG', [0, 0, 0, 0, 0, 0, 0, 0]);
         end
@@ -307,9 +308,10 @@ classdef ledcontroller_pi < handle
                     %Handle LED bits
                     %pack all boolean values into 16 bit words
                     T = 2.^(0:15)';  % bit transformation matrix
-                    red = reshape(leds_red, 16, this.nbuf)';
-                    grn = reshape(leds_grn, 16, this.nbuf)';
-
+                 %BUG   red = reshape(leds_red, 16, this.nbuf)';
+                 %BUG   grn = reshape(leds_grn, 16, this.nbuf)';
+                    red = reshape(leds_red, 16, [])';
+                    grn = reshape(leds_grn, 16, [])';
                     red_bits = uint16(red*T);
                     grn_bits = uint16(grn*T);
                     
