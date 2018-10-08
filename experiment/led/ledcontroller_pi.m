@@ -138,7 +138,7 @@ classdef ledcontroller_pi < handle
                 cmd=strcat(command, sprintf(' %d', args), char(0));
             end
             
-            fprintf('send_command sent: %s\n', cmd);
+            %fprintf('send_command sent: %s\n', cmd);
             message = zmq.Msg(1024);
             message.put(unicode2native(cmd));
 
@@ -160,7 +160,7 @@ classdef ledcontroller_pi < handle
                 end
             end
             r=native2unicode(message.data)';
-             fprintf('receive_from recv: %s\n', r);
+             %fprintf('receive_from recv: %s\n', r);
 
             if (all(r(1:2)=='ER') || all(r(1:2)=='RX'))
                   % get verbose error message first, then call error()

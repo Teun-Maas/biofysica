@@ -22,7 +22,6 @@ end
 
 leds = ledcontroller_pi(host2);          %one LED box
 %leds = ledcontroller_pi(host1, host2);  %two LED boxes in parallel
-leds.nbuf=256;
 
 % leds = ledcontroller_pi('dcn-led00.local', 'dcn-led01.local');
 %leds = ledcontroller_pi('dcn-led00.local');
