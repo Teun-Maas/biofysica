@@ -6,14 +6,14 @@ function pldata = exLslReceivePLPy1
     %
     % Select Pupil Labs event stream
     %
-    info=lsl_resolver('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Python Representation - Eye 0''');
+    info=lsl_resolver('name=''Pupil Python Representation - Eye 0''');
     l=info.list();
     if isempty(l)
         error('no streams found');
     end
     
     for i=1:size(l,1)
-        fprintf('%d: name: ''%s'' type: ''%s''\n',i,l{i}.name,l{i}.type);
+        fprintf('%d: name: ''%s'' type: ''%s''\n',i,l(i).name,l(i).type);
     end
     
     n=input('enter pupil labs stream number to acquire: ');

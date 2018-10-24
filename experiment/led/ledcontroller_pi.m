@@ -50,9 +50,10 @@ classdef ledcontroller_pi < handle
             %   this.sockets{i}.setSocketOpt(ZMQ.RCVTIMEO,1000); FIXME
                 i=1+1;
             end
+            this.print_version;
             this.nbuf=256;
-            this.trigger_enable(1);
-            this.clear_all;
+      %      this.trigger_enable(1);
+      %      this.clear_all;
         end
         
         function print_version(this)
