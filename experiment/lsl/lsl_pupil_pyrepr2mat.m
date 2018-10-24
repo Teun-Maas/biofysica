@@ -3,6 +3,9 @@ function result=lsl_pupil_pyrepr2mat(srepr)
     % A REPR string can be captured using the pupil_lsl plugin in PupilCapture and
     % selecting one of the Pupil Python Representation streams.
     % The python srepr is recursively converted to a matlab structure.
+    % If SREPR is an array of PYTHON REPR strings, the result is an array
+    % of matlab structure. You can convert this to a structure of arrays
+    % using the AOS2SOA function.
 
     % GW/20180606
 
@@ -26,9 +29,7 @@ function r=convert_multi(s)
           r{ii,jj}=lsl_pupil_pyrepr2mat(s{ii,jj});
        end
     end
-class(r)
     r=[r{:}];  % convert the cell array in r to a structure array
-class(r)
 end
 
 function result=py_cast_recursive(var)
