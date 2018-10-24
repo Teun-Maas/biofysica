@@ -293,7 +293,7 @@ classdef ledcontroller_pi < handle
                     else
                         ig=0;
                     end
-                    if (ir>0) && (ig>=0) && (ir~=ig)
+                    if (ir>0) && (ig>0) && (ir~=ig)
                         warning('(ir,ig)=(%d,%d),Arduino LED driver cannot set different intensities for red and green',ir,ig);
                     end
                     intens=max(ir,ig);
