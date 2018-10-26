@@ -24,14 +24,13 @@ if nargin<1
     SacFile             = pa_fcheckext(DatFile,'sac');
 end
 
-% [pathstr,name,ext]      = fileparts(DatFile);
 
 %% load log data 
 disp(['   Loading from ' LogFile ]);
 [expinfo,chaninfo,clog] = pa_readcsv(LogFile);
 Stim                    = pa_log2stim(clog);
 
-% get header information
+%% get header information
 Nsample                 = chaninfo(1,6);
 Fsample                 = chaninfo(1,5);
 Tsample                 = 1000/Fsample;     % ms
@@ -45,10 +44,10 @@ Nstim                   = size(Stim,1);
 if Nstim == 0
   disp(['   No stimuli found in LogFile ' LogFile]);
   return;
-end;
+end
 if Nstim<Ntrial
   fprintf('   %d trials missing in log file ',Ntrial-Nstim);
-end;
+end
 
 % Onset of first target 
 % First get rid of Trig0 and Acq "stimuli"
@@ -68,7 +67,8 @@ OnOff                       = pa_loadsac(SacFile);
 if size(OnOff,2)==0
   disp(['Error in SAC2MAT: No Saccades found in SacFile ' SacFile]);
   return;
-end;
+end
+OnOff = mod(OnOff,Nsample);
 On                          = OnOff(1,:)';
 Off                         = OnOff(2,:)';
 Nresp                       = 1+fix(max(On)/Nsample);   % number of trials
@@ -82,7 +82,7 @@ Ntrace                  = size(H,1);
 if Ntrace~=Nsac
   disp(['   Number of traces does not match number of saccades ' DatFile ]);
   return;
-end; 
+end
 
 %% saccade parameters
 % truncate matrices if not all trials are included in log file
@@ -94,7 +94,7 @@ if Nstim<Nresp
   Off                   = Off(S);
   Ntrial                = Nstim;
   Nsac                  = length(On);
-end;
+end
 % initialize sac matrix
 Sac                     = zeros(Nsac,20);
 Sac(:,1)                = 1+fix(On/Nsample);             % 1 trial number
@@ -107,14 +107,14 @@ for i                   = 1:Ntrial
   ts                    = (Sac(:,1)==i);
   if sum(ts)>0
     Sac(ts,2)           = (1:sum(ts))';                 % 2 saccade number in trial
-  end;
-end;
+  end
+end
 Sac(:,6)                = H(:,1);                       % 6 Hor Onset Position      
 Sac(:,7)                = V(:,1);                       % 7 Ver Onset Position      
 for i                   = 1:Nsac
   Sac(i,8)              = H(i,Off(i)-On(i)+1);                       % 8 Hor Offset Position    
   Sac(i,9)              = V(i,Off(i)-On(i)+1);                       % 9 Ver Offset Position
-end;
+end
 Sac(:,10)               = Sac(:,8)-Sac(:,6);                          % 10 Horizontal Displacement
 Sac(:,11)               = Sac(:,9)-Sac(:,7);                          % 11 Vertical Displacement
 [R,Phi]                 = pa_azel2pol(Sac(:,10:11));
@@ -134,11 +134,11 @@ for i                   = 1:Nsac
   Sac(i,16)             = Vmax;                                    % 16 Peak Sac Vel.    
   Sac(i,17)             = Tmax;                                    % 17 Time To Peak
   Sac(i,19)             = pa_instdir(R,Phi,Sac(i,12));  % 19 init sac direction
-end;
+end
 Sac(:,18)               = Sac(:,17)./Sac(:,14);          % 18 Skewness
 for i                   = 1:Nsac
   Sac(i,20)             = pa_curv(H(i,:),V(i,:));         % 20 trajectory curvature 
-end;
+end
 
 
 %% save output in matlab file

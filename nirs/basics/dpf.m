@@ -26,7 +26,7 @@ function DPF = dpf(lambda,Age,varargin) %#ok<*STOUT>
 % See also: MBLL
 
 % Optional display arguments
-disp         = keyval('display',varargin,false);
+disp         = keyval('display',varargin,true);
 % dataset      = keyval('data',varargin,'default');
 if nargin<1
 	lambda = 600:10:800;
