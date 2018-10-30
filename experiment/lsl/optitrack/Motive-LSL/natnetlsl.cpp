@@ -98,7 +98,7 @@ void natnetlsl_init()
 		//.append_child_value("AnalogSamplesPerMocapFrame",sAnalogSamplesPerMocapFrame);
 
 	const char* labels_m[] = {
-		"FrameID", "TimeStamp", "SoftwareLatency", "TransmitLatency",
+		"FrameID", "fTimeStamp", "CameraDataReceivedTimestamp", "TransmitTimestamp", "SoftwareLatency", "TransmitLatency",
 		"ModelID", "MarkerID", "Occluded", "PCSolved", "ModelSolved",
 		"size", "x", "y", "z"
 	};
@@ -127,7 +127,7 @@ void natnetlsl_init()
 		//.append_child_value("AnalogSamplesPerMocapFrame", sAnalogSamplesPerMocapFrame);
 
 	const char* labels_r[] = {
-		"FrameID", "TimeStamp", "SoftwareLatency", "TransmitLatency",
+		"FrameID", "fTimeStamp", "CameraDataReceivedTimestamp", "TransmitTimestamp", "SoftwareLatency", "TransmitLatency",
 		"BodyID", "Error", "Valid",
 		"x", "y", "z", "qx", "qy", "qz", "qw"
 	};
@@ -151,16 +151,18 @@ void natnetlsl_write(sFrameOfMocapData* data, NatNetClient* pClient)
 	// This figure may appear slightly higher than the "software latency" reported in the Motive user interface,
 	// because it additionally includes the time spent preparing to stream the data via NatNet.
 	const uint64_t softwareLatencyHostTicks = data->TransmitTimestamp - data->CameraDataReceivedTimestamp;
-	const double softwareLatencyMillisec = (softwareLatencyHostTicks * 1000) / static_cast<double>(g_serverDescription.HighResClockFrequency);
+	const double softwareLatency = softwareLatencyHostTicks / static_cast<double>(g_serverDescription.HighResClockFrequency);
+	const double CameraDataReceivedTimestamp = (data->CameraDataReceivedTimestamp) / static_cast<double>(g_serverDescription.HighResClockFrequency);
+	const double TransmitTimestamp = (data->TransmitTimestamp) / static_cast<double>(g_serverDescription.HighResClockFrequency);
 
 	// Transit latency is defined as the span of time between Motive transmitting the frame of data, and its reception by the client (now).
 	// The SecondsSinceHostTimestamp method relies on NatNetClient's internal clock synchronization with the server using Cristian's algorithm.
-	const double transitLatencyMillisec = pClient->SecondsSinceHostTimestamp(data->TransmitTimestamp) * 1000.0;
+	const double transitLatency = pClient->SecondsSinceHostTimestamp(data->TransmitTimestamp);
 	int i = 0;
 
 	dprintf("FrameID : %d\n", data->iFrame);
 	dprintf("Timestamp : %3.2lf\n", data->fTimestamp);
-	dprintf("Software latency : %.2lf milliseconds\n", softwareLatencyMillisec);
+	dprintf("Software latency : %.5lf seconds\n", softwareLatency);
 
 	// Only recent versions of the Motive software in combination with ethernet camera systems support system latency measurement.
 	// If it's unavailable (for example, with USB camera systems, or during playback), this field will be zero.
@@ -183,11 +185,11 @@ void natnetlsl_write(sFrameOfMocapData* data, NatNetClient* pClient)
 		//const double clientLatencyMillisec = systemLatencyMillisec + transitLatencyMillisec;
 
 		dprintf("System latency : %.2lf milliseconds\n", systemLatencyMillisec);
-		dprintf("Total client latency : %.2lf milliseconds (transit time +%.2lf ms)\n", clientLatencyMillisec, transitLatencyMillisec);
+		//dprintf("Total client latency : %.2lf milliseconds (transit time +%.2lf ms)\n", clientLatencyMillisec, transitLatencyMillisec);
 	}
 	else
 	{
-		dprintf("Transit latency : %.2lf milliseconds\n", transitLatencyMillisec);
+		dprintf("Transit latency : %.2lf milliseconds\n", transitLatency);
 	}
 
 	// FrameOfMocapData params
@@ -214,7 +216,7 @@ void natnetlsl_write(sFrameOfMocapData* data, NatNetClient* pClient)
 		// params
 		// 0x01 : bool, rigid body was successfully tracked in this frame
 		bool bTrackingValid = data->RigidBodies[i].params & 0x01;
-		double lsldata[] = { double(data->iFrame), data->fTimestamp, softwareLatencyMillisec / 1000, transitLatencyMillisec / 1000,
+		double lsldata[] = { double(data->iFrame), data->fTimestamp, CameraDataReceivedTimestamp, TransmitTimestamp, softwareLatency, transitLatency,
 			double(data->RigidBodies[i].ID), data->RigidBodies[i].MeanError, double(bTrackingValid),
 			data->RigidBodies[i].x,	data->RigidBodies[i].y,	data->RigidBodies[i].z,
 			data->RigidBodies[i].qx,data->RigidBodies[i].qy,data->RigidBodies[i].qz,data->RigidBodies[i].qw
@@ -290,7 +292,7 @@ void natnetlsl_write(sFrameOfMocapData* data, NatNetClient* pClient)
 
 		dprintf("%s Marker [ModelID=%d, MarkerID=%d, Occluded=%d, PCSolved=%d, ModelSolved=%d] [size=%3.2f] [pos=%3.2f,%3.2f,%3.2f]\n",
 			szMarkerType, modelID, markerID, bOccluded, bPCSolved, bModelSolved, marker.size, marker.x, marker.y, marker.z);
-		double lsldata[] = { double(data->iFrame), data->fTimestamp, softwareLatencyMillisec/1000, transitLatencyMillisec/1000,
+		double lsldata[] = { double(data->iFrame), data->fTimestamp, CameraDataReceivedTimestamp, TransmitTimestamp, softwareLatency, transitLatency,
 			double(modelID), double(markerID), double(bOccluded), double(bPCSolved), double(bModelSolved),
 			marker.size, marker.x, marker.y, marker.z
 		};

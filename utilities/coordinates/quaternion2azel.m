@@ -1,5 +1,7 @@
 function [az,el,rot] = quaternion2azel(qx,qy,qz,qw)
-     
+    % [az el rot] = quaternion_to_azel(qx,qy,qz,qw)
+    % convert q to double polar coordinates (Knudsen & Konishi, 1979)
+    % see also: google double polar site:www.neural-code.com     
     n=numel(qx);
     az = zeros(1,n);
     el = zeros(1,n);
