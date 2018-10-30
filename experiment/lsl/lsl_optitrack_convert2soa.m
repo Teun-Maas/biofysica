@@ -15,9 +15,9 @@ function soadata=lsl_optitrack_convert2soa(optitrack_data)
         'size', 'x', 'y', 'z'...
         };
 
-    if size(optitrack_data.Data(1))==numel(rigid_fields)
+    if size(optitrack_data.Data,1)==numel(rigid_fields)
         fields=rigid_fields;
-    elseif size(optitrack_data.Data(1))==numel(marker_fields)
+    elseif size(optitrack_data.Data,1)==numel(marker_fields)
         fields=marker_fields;
     else
         error('cannot determine OptiTrack data type');
