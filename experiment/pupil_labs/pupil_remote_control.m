@@ -35,6 +35,18 @@ classdef pupil_remote_control < handle
                 port = this.default_port;
             end
             this.hostname=hostname;
+            
+            % zmq workaround to prevent infinite wait:
+            % probe if hostname:port is available 
+            con=pnet('tcpconnect',hostname,port);
+            if con < 0
+                ME = MException('pupil_remote_control:connect_error',...
+                    'cannot connect to %s:%d, check hostname, port number and/or port number in pupil-capture remote control plugin',...
+                    hostname, port);
+                throw(ME);
+            end
+            pnet(con,'close');
+            
             this.context=ZMQ.context(1);
             this.socket=this.context.socket(ZMQ.REQ);
             uri=sprintf('tcp://%s:%d',hostname,port);
