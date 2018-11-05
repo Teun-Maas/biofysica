@@ -27,7 +27,10 @@ methods
     end
     
     function enable(this)
-        this.set_enable(1);
+        if ~this.is_enabled()
+            warndlg(sprintf('Enable servo drives, then\npress OK to continue'),...
+                'Warning','modal');
+        end
     end
     
     function disable(this)
