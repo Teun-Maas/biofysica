@@ -10,6 +10,15 @@ properties
 
 end
 
+methods (Access=protected)
+    
+    function set_enable(this, value)
+        this.plc.IEC_write(this.varmap.Mch_Enable_Servo_1, value==1);
+        this.plc.IEC_write(this.varmap.Mch_Enable_Servo_2, value==1);
+    end
+    
+end
+
 methods
     function this = vs_servo
         this.plc = m2c_plc('192.168.1.10');
@@ -21,13 +30,11 @@ methods
         delete(this.plc);
     end
 
-    function set_enable(this, value)
-        this.plc.IEC_write(this.varmap.Mch_Enable_Servo_1, value==1);
-        this.plc.IEC_write(this.varmap.Mch_Enable_Servo_2, value==1);
-    end
-    
     function enable(this)
-        this.set_enable(1);
+        if ~this.is_enabled()
+            warndlg(sprintf('Enable servo drives, then\npress OK to continue'),...
+                'Warning','modal');
+        end
     end
     
     function disable(this)
@@ -48,7 +55,7 @@ methods
         this.plc.IEC_write(this.varmap.cmd_Run_Program_A, 0);
     end
 
-    function status = print_status(this)
+    function print_status(this)
         status_vars = {
             'X_S1_Ready'
             'X_S1_Alarm'
@@ -116,7 +123,7 @@ methods
         data = int32(round(10*data));
         r_pos = 10*range(data);  % r_pos in degrees
         if  nargin >=4
-           if (r_pos(1) < limit_r_pos(1)) | (r_pos(2) > limit_r_pos(2))
+           if (r_pos(1) < limit_r_pos(1)) || (r_pos(2) > limit_r_pos(2))
               warning('profile position out of range');
            end
         end
@@ -136,11 +143,11 @@ methods
         idata = int16([idata; zeros(npad, 1)]);
     end
     
-    function result = clear_profile(this);
+    function result = clear_profile(this)
        result = this.write_profile([],[]);
     end
 
-    function result = write_profile(this, axis1, axis2);     
+    function result = write_profile(this, axis1, axis2)     
         
        p1 = this.convert_profile(axis1);
        p2 = this.convert_profile(axis2);
@@ -150,14 +157,14 @@ methods
        result = 0;
     end
 
-    function [ax1, ax2] = read_profile_sv(this);
+    function [ax1, ax2] = read_profile_sv(this)
        ax1=this.plc.IEC_read(this.varmap.Table_1A, 0, 2000);
        ax2=this.plc.IEC_read(this.varmap.Table_2A, 0, 2000);
        ax1=cumsum(double(ax1))/10.0;
        ax2=cumsum(double(ax2))/10.0;
     end
 
-    function [ax1, ax2] = read_profile_pv(this);
+    function [ax1, ax2] = read_profile_pv(this)
        ax1=this.plc.IEC_read(this.varmap.PV_Position_1A, 0, 2000);
        ax2=this.plc.IEC_read(this.varmap.PV_Position_2A, 0, 2000);
        ax1=double(ax1)/10.0;
