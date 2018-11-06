@@ -24,8 +24,8 @@ void natnetlsl_init()
 		delete outlet_r;
 	}
 	printf("setting up LSL outlets:\n");
-	int szmarkers = 13;
-	int szrigids = 14;
+	int szmarkers = 15;
+	int szrigids = 16;
 
 	char sProgramVersion[255];
 	sprintf(sProgramVersion,"NatNet-LSL (build %s %s)", __DATE__, __TIME__);
@@ -216,6 +216,7 @@ void natnetlsl_write(sFrameOfMocapData* data, NatNetClient* pClient)
 		// params
 		// 0x01 : bool, rigid body was successfully tracked in this frame
 		bool bTrackingValid = data->RigidBodies[i].params & 0x01;
+		// IMPORTANT: lsldata, szrigids and the xml information must be matching !!!!!
 		double lsldata[] = { double(data->iFrame), data->fTimestamp, CameraDataReceivedTimestamp, TransmitTimestamp, softwareLatency, transitLatency,
 			double(data->RigidBodies[i].ID), data->RigidBodies[i].MeanError, double(bTrackingValid),
 			data->RigidBodies[i].x,	data->RigidBodies[i].y,	data->RigidBodies[i].z,
@@ -292,6 +293,7 @@ void natnetlsl_write(sFrameOfMocapData* data, NatNetClient* pClient)
 
 		dprintf("%s Marker [ModelID=%d, MarkerID=%d, Occluded=%d, PCSolved=%d, ModelSolved=%d] [size=%3.2f] [pos=%3.2f,%3.2f,%3.2f]\n",
 			szMarkerType, modelID, markerID, bOccluded, bPCSolved, bModelSolved, marker.size, marker.x, marker.y, marker.z);
+		// IMPORTANT: lsldata, szmarkers and the xml information must be matching !!!!!
 		double lsldata[] = { double(data->iFrame), data->fTimestamp, CameraDataReceivedTimestamp, TransmitTimestamp, softwareLatency, transitLatency,
 			double(modelID), double(markerID), double(bOccluded), double(bPCSolved), double(bModelSolved),
 			marker.size, marker.x, marker.y, marker.z
