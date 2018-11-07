@@ -33,3 +33,5 @@ end
 
 cd(INIT_CWD);
 clear n INIT_*
+
+disp('biofysica toolbox initialization completed');

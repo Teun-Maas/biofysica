@@ -1,7 +1,7 @@
 function exLslPlotOptitrackData(optitrack_data)
     
     data=lsl_optitrack_convert2soa(optitrack_data);
-    ot_ts = data.Timestamp;
+    ot_ts = data.fTimestamp;
     % lsl_ts = optitrack_data.Timestamps;
     lsl_ts = lsl_correct_lsl_timestamps(optitrack_data);
     

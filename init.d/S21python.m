@@ -8,6 +8,8 @@ function S21python
         PYPATH=[BIOFYSICA_ROOT '/utilities/python'];
         BIOFYSICA_PY_SYS.path.append(PYPATH);
         biofpy=py.eval('__import__(''biofpy'')',struct);
+    else
+        warning('biofysica toolbox needs python version >= 3, you have %s',v);
     end
 
 end
