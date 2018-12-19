@@ -20,29 +20,28 @@ fname                                   = pa_fcheckexist(fname);
 [pathstr,name,ext]                      = fileparts(fname); %#ok<*ASGLU>
 ext                                     = upper(ext);
 Nbyte                                   = 0;
-if strcmp(ext,'.HUM'), Nbyte             = 2;  end;
-if strcmp(ext,'.AAP'), Nbyte             = 2;  end;
-if strcmp(ext,'.HV'),  Nbyte             = 4;  end;
-if strcmp(ext,'.HVN'), Nbyte             = 4;  end;
+if strcmp(ext,'.HUM'), Nbyte             = 2;  end
+if strcmp(ext,'.AAP'), Nbyte             = 2;  end
+if strcmp(ext,'.HV'),  Nbyte             = 4;  end
+if strcmp(ext,'.HVN'), Nbyte             = 4;  end
 if Nbyte==0
     disp(['invalid fname extension ',ext]);
     return;
-end;
+end
 
 %% read file
 fid                                     = fopen(fname,'r','l');
 if fid==-1
     disp(['   Error opening ' fname ]);
     return;
-end;
+end
 if Nbyte==2
     mtx                                 = fread(fid,[nchan*nsample,inf],'ushort');
-end;
+end
 if Nbyte==4
     mtx                                 = fread(fid,[nchan*nsample,inf],'float');
-end;
+end
 fclose(fid);
-
 
 %% separate channels
 nout                                    = nargout;
@@ -50,7 +49,7 @@ if nout~=nchan
     error('Number of outputs does not equal number of channels');
 end
 varargout                               = cell(nout,1);
-for i                                   = 1:nchan,
+for i                                   = 1:nchan
     ch                                  = mtx(i:nchan:nchan*nsample,:);
     varargout(i)                        = {ch};
-end;
+end
