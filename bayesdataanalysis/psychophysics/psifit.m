@@ -105,7 +105,7 @@ mcmcMethod		= keyval('mcmcMethod',varargin,def);
 % graphic flags
 diagFlag		= keyval('showDiag',varargin,false); % show MCMC diagnostics
 postFlag		= keyval('showPost',varargin,false); % show posterior estimate distribution
-predFlag		= keyval('showPred',varargin,true); % show posterior predictive
+predFlag		= keyval('showPred',varargin,false); % show posterior predictive
 centroidFlag	= keyval('showCentroid',varargin,'mean'); % mode, median, mean
 
 %% Actual regression
