@@ -39,4 +39,4 @@ if nargout<1
     h2 = plot(xavg,avg,'r-'); set(h2,'LineWidth',3);
     xlabel('Sample Number');
     ylabel('Amplitude');
-end;
+end

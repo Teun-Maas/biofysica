@@ -1,7 +1,7 @@
 close all
 clearvars
 
-load('/Users/marcw/Dropbox/manuscripts/Divers/Patientlab/ACOpacific_calibration.mat');
+load('/Users/marcw/Dropbox/Work/Divers/Patientlab/ACOpacific_calibration.mat');
 Fs			= 48828.125;
 x			= RZ6_mic(:,1);
 nsamples	= length(x);
@@ -48,7 +48,7 @@ text(1000+100,94-9,str,'FontSize',20);
 
 
 %%
-load('/Users/marcw/Dropbox/manuscripts/Divers/Patientlab/ACOpacific_labnoise.mat');
+load('/Users/marcw/Dropbox/Work/Divers/Patientlab/ACOpacific_labnoise.mat');
 Fs			= 48828.125;
 x			= RZ6_mic(:,1);
 nsamples	= length(x);
@@ -91,12 +91,12 @@ horline(94);
 legend('1000 Hz @ 94 dB','Background noise');
 ylabel('Sound Pressure Level (dB), A-weighted');
 %%
-cd('/Users/marcw/Dropbox/manuscripts/Divers/Patientlab');
-savegraph('background','eps');
+% cd('/Users/marcw/Dropbox/manuscripts/Divers/Patientlab');
+% savegraph('background','eps');
 
 
 %%
-load('/Users/marcw/Dropbox/manuscripts/Divers/Patientlab/ACOpacific_speech.mat');
+load('/Users/marcw/Dropbox/Work/Divers/Patientlab/ACOpacific_speech.mat');
 Fs			= 48828.125;
 x			= RZ6_mic(:,1);
 nsamples	= length(x);
