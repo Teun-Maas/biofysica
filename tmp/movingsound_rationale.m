@@ -1,12 +1,20 @@
-function movingsound_rationale
+function movingsound_rationale(spk1,spk2,panningmeth)
 
 close all;
 clearvars;
 
 %% Speaker locations
-spk1			= 0;
-spk2			= 5;
-panningmeth		= 2;
+if nargin<1
+	spk1			= 0;
+end
+if nargin<2
+	spk2			= 5;
+end
+if nargin<3
+	panningmeth		= 2;
+end
+
+%%
 desired_angle	= spk1:0.1:spk2; % in deg, at a 'speed' of 0.1 deg/sample
 desired_angle	= desired_angle(1:end-1);
 s1_lin			= (desired_angle-min(desired_angle))/(max(desired_angle)-min(desired_angle));
