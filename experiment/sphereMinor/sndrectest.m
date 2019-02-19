@@ -17,7 +17,16 @@ subplot(211)
 plot(t,x);
 figure(2)
 clf
-[f,a] = getpower(y,48828.125,'display',true,'nfft',2^12);
+
+n = 2^(nextpow2(length(y))-1);
+n = 2^17;
+[f,a] = getpower(y,48828.125,'display',true,'nfft',n);
+
+[pxx,F] = pwelch(y,n,[],[],48828.125);
+Lp=10*log10(pxx);
+plot(F,Lp,'b-')
+return
+%%
 ylim([-10 110]);
 title(20*log10(rms(y)));
 
@@ -94,7 +103,7 @@ ylabel('Sound Pressure Level (dB), A-weighted');
 % cd('/Users/marcw/Dropbox/manuscripts/Divers/Patientlab');
 % savegraph('background','eps');
 
-
+return
 %%
 load('/Users/marcw/Dropbox/Work/Divers/Patientlab/ACOpacific_speech.mat');
 Fs			= 48828.125;
