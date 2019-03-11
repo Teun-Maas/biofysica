@@ -18,9 +18,11 @@ classdef h5group < h5object
         end
         
         function group=creategroup(this,name)
-            fid = H5F.open(this.filename);
+            fid = H5F.open(this.filename,'H5F_ACC_RDWR','H5P_DEFAULT');
+            gid = H5G.open(fid,this.fullname);
             plist = 'H5P_DEFAULT';
-            gid = H5G.create(fid,name,plist,plist,plist);
+            subgid = H5G.create(gid,name,100);
+            H5G.close(subgid);
             H5G.close(gid);
             H5F.close(fid);
             group=h5group(this,name);

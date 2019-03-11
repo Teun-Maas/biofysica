@@ -31,6 +31,15 @@ classdef h5file < h5group
             fn=this.filename_;
         end
         
+        function group=creategroup(this,name)
+            fid = H5F.open(this.filename,'H5F_ACC_RDWR','H5P_DEFAULT');
+            plist = 'H5P_DEFAULT';
+            gid = H5G.create(fid,name,plist,plist,plist);
+            H5G.close(gid);
+            H5F.close(fid);
+            group=h5group(this,name);
+        end
+
     end
     
     methods (Access=protected)
