@@ -1,6 +1,6 @@
 % Set up matlab path for the biofysica toolbox
 pathdirs = { ...
-   BIOFYSICA_ROOT
+   biofysica_root
    };
 
 for i = 1:size(pathdirs,1)

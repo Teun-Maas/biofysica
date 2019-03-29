@@ -8,9 +8,14 @@ function result=lsl_pupil_pyrepr2mat(srepr)
     % using the AOS2SOA function.
 
     % GW/20180606
+    % GW/20190329 added check for biofpy library
 
     global biofpy
 
+    if isempty(biofpy)
+        error('biofpy python library has not been not initialized, or has been cleared!');
+    end
+    
     if ischar(srepr)
         dictvar=biofpy.eval_srepr(srepr);
         result=py_cast_recursive(dictvar);
