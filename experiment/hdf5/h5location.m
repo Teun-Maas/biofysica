@@ -22,6 +22,10 @@ classdef h5location < handle
             fn=this.parent_location.filename();
         end
         
+        function fid=file_id(this)
+            fid=this.parent_location.file_id();
+        end
+        
         function n=name(this)
             n=this.name_;
         end
