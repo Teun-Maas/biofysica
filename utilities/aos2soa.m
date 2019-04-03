@@ -27,10 +27,23 @@ function dst_data=recursive_copy_struct(s,srcpath)
             tmp=recursive_copy_struct(s,current_path);
             dst_data=setfield(dst_data,current_path{:},tmp);
         else
+            % GW/FIXME? The getfield call below consumes 80% of the
+            % processing time.
+            % GW/FIXME? Can this be optimized?
             tmp=arrayfun(@(x) getfield(x,current_path{:}),s,'UniformOutput',false);
+
             % tmp is a cell array now
-            try % try converting into something numeric
-                if(isnumeric(tmp{1}))
+            try % try converting into something numeric or string array
+                
+                if isstring(tmp{1}) || ischar(tmp{1})
+%                     fprintf('%s is a string thing\n', field);
+                    tmp=string(tmp);
+                    % use the code below to compact arrays of all the same strings
+                    utmp=unique(tmp);
+                    if numel(utmp)==1  % they are all the same
+                        tmp=utmp;
+                    end
+                elseif(isnumeric(tmp{1}))
                     tmp=cell2mat(tmp');
                 end
             catch
@@ -39,6 +52,6 @@ function dst_data=recursive_copy_struct(s,srcpath)
             f={field}; % field is a character array, setfield needs a cell array of strings
             dst_data=setfield(dst_data,f{:},tmp);
         end
-    end
+    end 
     
 end

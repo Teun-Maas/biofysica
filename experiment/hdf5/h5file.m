@@ -36,8 +36,9 @@ classdef h5file < h5group
         end
         
         function delete(this)
-             H5F.close(this.file_id_);
+             H5F.close(this.loc_id_);
         end
+        
         function fn=filename(this)
             fn=this.filename_;
         end

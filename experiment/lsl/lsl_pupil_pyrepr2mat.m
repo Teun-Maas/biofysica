@@ -69,20 +69,21 @@ function result=py_cast_recursive(var)
 end
 
 function result=cast_dict(pyvar)
-    var=struct(pyvar);
+    var=struct(pyvar);  % conversion of python variables eats CPU time. Optimize?
     fieldnames=fields(var);
     S.type='.';
     result=struct;
-    n=numel(fieldnames);
+    n=numel(fieldnames); 
     for ii=1:n
-       S.subs=fieldnames{ii};
-       pyvalue=var.(fieldnames{ii});
-       result.(fieldnames{ii})=py_cast_recursive(pyvalue);
+       fnii=fieldnames{ii};
+       S.subs=fnii;
+       pyvalue=var.(fnii);
+       result.(fnii)=py_cast_recursive(pyvalue);
     end
 end
 
 function result=cast_tuple(pyvar)
-    var=cell(pyvar);
+    var=cell(pyvar); % conversion of python variables eats CPU time. Optimize?
     n=numel(var);
     result=cell(1,n);
     for ii=1:n
