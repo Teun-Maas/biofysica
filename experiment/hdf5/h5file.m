@@ -12,10 +12,10 @@ classdef h5file < h5group
             end
             file_id=NaN;
             if strcmpi(options,'create')
-                if exist(filename,'file')
-                    ME=MException('h5file:h5file:fileExists','file exists: %s',filename);
-                    throw(ME);
-                end
+%                 if exist(filename,'file')
+%                     ME=MException('h5file:h5file:fileExists','file exists: %s',filename);
+%                     throw(ME);
+%                 end
                 fcpl = H5P.create('H5P_FILE_CREATE');
                 fapl = H5P.create('H5P_FILE_ACCESS');
                 file_id = H5F.create(filename, 'H5F_ACC_TRUNC', fcpl, fapl);

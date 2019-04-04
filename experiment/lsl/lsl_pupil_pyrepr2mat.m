@@ -26,7 +26,12 @@ function result=lsl_pupil_pyrepr2mat(srepr)
     end
 end
 
+%cellfun version of convert_multi()
 function r=convert_multi(s)
+    r=cellfun(@lsl_pupil_pyrepr2mat, s);
+end
+
+function r=XXconvert_multi(s)
     [m,n]=size(s);
     r=cell(m,n);
     for ii=1:m
