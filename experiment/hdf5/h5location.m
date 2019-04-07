@@ -43,7 +43,7 @@ classdef h5location < handle
         end
         
         function e=exists(this,name)
-            
+           error('not implemented'); 
         end
     end
 end
