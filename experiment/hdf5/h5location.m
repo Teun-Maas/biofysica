@@ -27,10 +27,13 @@ classdef h5location < handle
         end
         
         function n=name(this)
+            % get the short name
             n=this.name_;
+            [~,n]=fileparts(this.name_); 
         end
         
         function p=fullname(this)
+            % get the full name
             if this.name_(1)=='/'
                 p=this.name_;
             else
