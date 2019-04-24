@@ -48,7 +48,7 @@ classdef ledcontroller_pi < handle
                 this.sockets{i}.connect(strcat('tcp://', h, ':5555'));
             %   TODO 
             %   this.sockets{i}.setSocketOpt(ZMQ.RCVTIMEO,1000); FIXME
-                i=1+1;
+                i=i+1;
             end
             %this.print_version;
             this.nbuf=256;

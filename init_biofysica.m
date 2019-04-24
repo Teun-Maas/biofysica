@@ -7,11 +7,9 @@
 % order. Architecture specific files are in
 % biofysica/init.d/{glnx64,maci64,win64}
 
-global BIOFYSICA_ROOT
-[BIOFYSICA_ROOT,~,~]=fileparts(mfilename('fullpath'));
 INIT_ARCH=computer('arch');
-INIT_DIR=strcat(BIOFYSICA_ROOT,'/init.d');
-INIT_ARCH_DIR=strcat(BIOFYSICA_ROOT,'/init.d/',INIT_ARCH);
+INIT_DIR=strcat(biofysica_root,'/init.d');
+INIT_ARCH_DIR=strcat(biofysica_root,'/init.d/',INIT_ARCH);
 
 INIT_CWD=cd;
 

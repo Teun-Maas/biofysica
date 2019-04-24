@@ -1,7 +1,7 @@
 classdef h5group < h5object
     
     properties (Access=protected)
-        
+        loc_id_
     end
     
     methods
@@ -9,20 +9,26 @@ classdef h5group < h5object
             this=this@h5object(parent_group,name);
         end
           
+        function id = loc_id(this)
+            id = this.loc_id_;
+        end
+        
         function result=exists(this,link_name)
-            fid = H5F.open(this.filename);
+            fid = this.file_id(); % H5F.open(this.filename);
             gid = H5G.open(fid,this.fullname);
             result=H5L.exists(gid,link_name,'H5P_DEFAULT');
             H5G.close(gid);
-            H5F.close(fid);
+         %   H5F.close(fid);
         end
         
         function group=creategroup(this,name)
-            fid = H5F.open(this.filename);
+            fid = this.file_id(); %= H5F.open(this.filename,'H5F_ACC_RDWR','H5P_DEFAULT');
+            gid = H5G.open(fid,this.fullname);
             plist = 'H5P_DEFAULT';
-            gid = H5G.create(fid,name,plist,plist,plist);
+            subgid = H5G.create(gid,name,100);
+            H5G.close(subgid);
             H5G.close(gid);
-            H5F.close(fid);
+            % H5F.close(fid);
             group=h5group(this,name);
         end
         
@@ -43,7 +49,7 @@ classdef h5group < h5object
         function dataset=opendataset(this,name)
             dataset=h5dataset(this,name);
         end
-        
+       
     end
     
 end

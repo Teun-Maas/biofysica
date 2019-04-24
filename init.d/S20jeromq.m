@@ -1,4 +1,4 @@
 % initialization for JEROMQ
 
-javaclasspath([BIOFYSICA_ROOT '/experiment/zeromq/jeromq.jar'])
+javaclasspath([biofysica_root '/experiment/zeromq/jeromq.jar'])
 

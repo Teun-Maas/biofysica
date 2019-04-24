@@ -10,8 +10,11 @@ classdef h5object < h5location
             attr=h5attribute(this,attr_name);
         end
         
-        function attr=createattr(this,attr_name)
+        function attr=createattr(this,attr_name,value)
             attr=h5attribute(this,attr_name);
+            if nargin >= 3
+                attr.write(value);
+            end
         end
         
         function members=info(this)

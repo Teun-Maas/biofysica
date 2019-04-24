@@ -8,9 +8,14 @@ function result=lsl_pupil_pyrepr2mat(srepr)
     % using the AOS2SOA function.
 
     % GW/20180606
+    % GW/20190329 added check for biofpy library
 
     global biofpy
 
+    if isempty(biofpy)
+        error('biofpy python library has not been not initialized, or has been cleared!');
+    end
+    
     if ischar(srepr)
         dictvar=biofpy.eval_srepr(srepr);
         result=py_cast_recursive(dictvar);
@@ -21,7 +26,12 @@ function result=lsl_pupil_pyrepr2mat(srepr)
     end
 end
 
+%cellfun version of convert_multi()
 function r=convert_multi(s)
+    r=cellfun(@lsl_pupil_pyrepr2mat, s);
+end
+
+function r=XXconvert_multi(s)
     [m,n]=size(s);
     r=cell(m,n);
     for ii=1:m
@@ -64,20 +74,21 @@ function result=py_cast_recursive(var)
 end
 
 function result=cast_dict(pyvar)
-    var=struct(pyvar);
+    var=struct(pyvar);  % conversion of python variables eats CPU time. Optimize?
     fieldnames=fields(var);
     S.type='.';
     result=struct;
-    n=numel(fieldnames);
+    n=numel(fieldnames); 
     for ii=1:n
-       S.subs=fieldnames{ii};
-       pyvalue=var.(fieldnames{ii});
-       result.(fieldnames{ii})=py_cast_recursive(pyvalue);
+       fnii=fieldnames{ii};
+       S.subs=fnii;
+       pyvalue=var.(fnii);
+       result.(fnii)=py_cast_recursive(pyvalue);
     end
 end
 
 function result=cast_tuple(pyvar)
-    var=cell(pyvar);
+    var=cell(pyvar); % conversion of python variables eats CPU time. Optimize?
     n=numel(var);
     result=cell(1,n);
     for ii=1:n
