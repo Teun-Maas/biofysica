@@ -92,7 +92,7 @@ writemodel;
 parameters = {'beta0','beta1','beta0mu','beta1mu','zbeta1sigma','zbeta0sigma','sigma','nu'};
 burnInSteps		= 2000;			% Number of steps to 'burn-in' the samplers.
 nIter			= ceil((numSavedSteps*thinSteps )/nChains); % Steps per chain.
-if strcmp(runjagsMethodDefault,'parallel');
+if strcmp(runjagsMethodDefault,'parallel')
 	doparallel		= 1; % do use parallelization
 else
 	doparallel		= 0; % do not use parallelization

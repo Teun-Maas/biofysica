@@ -7,6 +7,7 @@ x			= RZ6_mic(:,1);
 nsamples	= length(x);
 t			= (1:nsamples)/Fs;
 p			= rms(x);
+
 pref		= 10^((94-0.3)/20);
 scaling		= pref/p
 y			= scaling*x;
@@ -22,10 +23,12 @@ n = 2^(nextpow2(length(y))-1);
 n = 2^17;
 [f,a] = getpower(y,48828.125,'display',true,'nfft',n);
 
-[pxx,F] = pwelch(y,n,[],[],48828.125);
-Lp=10*log10(pxx);
-plot(F,Lp,'b-')
-return
+% [pxx,F] = pwelch(y,n,[],[],48828.125);
+% Lp=10*log10(pxx);
+% plot(F,Lp,'b-')
+
+[mn,idx] = min(abs(f-1000));
+f(idx)
 %%
 ylim([-10 110]);
 title(20*log10(rms(y)));
@@ -34,14 +37,14 @@ w = aweight(f);
 m = a+w;
 		
 p		= 10.^(a/20);
-psum	= sqrt(sum(p.^2));
-L		= 20*log10(psum);
+psum	= sum(p.^2);
+L		= 10*log10(psum);
 
 p		= 10.^(m/20);
-psum	= sqrt(sum(p.^2));
-La		= 20*log10(psum);
+psum	= sum(p.^2);
+La		= 10*log10(psum);
 
-levels = [20*log10(rms(y)) L La]
+levels = [20*log10(rms(y)) L La a(idx+1)]
 
 str = ['L_{rms} = ' num2str(round(levels(1)))];
 text(1000+100,94-3,str,'FontSize',20);
@@ -51,6 +54,10 @@ text(1000+100,94-6,str,'FontSize',20);
 
 str = ['L_{spec,A} = ' num2str(round(levels(3)))];
 text(1000+100,94-9,str,'FontSize',20);
+
+
+str = ['L_{spec,1000} = ' num2str(round(levels(4)))];
+text(1000+100,94-12,str,'FontSize',20);
 % p = audioplayer(x,Fs);
 % play(p)
 

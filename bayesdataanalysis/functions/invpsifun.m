@@ -11,7 +11,7 @@ function x = invpsifun(p,theta,omega,gamma,lambda,alpha,varargin)
 %% Initialization
 hfun = keyval('function',varargin,@logisticfun);
 
-if ~isa(hfun,'function_handle');
+if ~isa(hfun,'function_handle')
 	error('Please pass a function handle')
 end
 strfun	= func2str(hfun);

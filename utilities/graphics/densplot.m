@@ -7,31 +7,29 @@ function densplot(x,y,varargin)
 
 dep				= keyval('dependent',varargin,false); % logistic, probit, gumbell, inversegumbell,  weibull, inverseweibull + fun
 BW				= keyval('Bandwidth',varargin); % logistic, probit, gumbell, inversegumbell,  weibull, inverseweibull + fun
+lim				= keyval('limit',varargin); % logistic, probit, gumbell, inversegumbell,  weibull, inverseweibull + fun
 
 X		= [x y];
-% if dep
-gridx1	= linspace(min(x),max(x),100);
-gridx2	= linspace(min(y),max(y),100);
-
-% else
-% gridx1	= linspace(prctile(x,5),prctile(x,95),100);
-% end
-% gridx2	= linspace(prctile(y,5),prctile(y,95),100);
+if isempty(lim)
+	lim = [min(x) max(x) min(y) max(y)];
+end
+gridx1	= linspace(lim(1),lim(2),100);
+gridx2	= linspace(lim(3),lim(4),100);
 [x1,x2] = meshgrid(gridx1, gridx2);
 [m,n]	= size(x1);
 x1		= x1(:);
 x2		= x2(:);
 xi		= [x1 x2];
 if isempty(BW)
-[F,XI,BW] =  ksdensity(X,xi);
+	[F,XI] =  ksdensity(X,xi);
 else
-[F,XI] =  ksdensity(X,xi,'Bandwidth',BW);
+	[F,XI] =  ksdensity(X,xi,'Bandwidth',BW);
 end
 F		= reshape(F,m,n);
-F		= F./max(F(:));
+F		= F./sum(F(:));
 if dep
-mu		= max(F);
-F = bsxfun(@rdivide,F,mu);
+	mu		= max(F);
+	F = bsxfun(@rdivide,F,mu);
 end
 
 X1		= reshape(XI(:,1),m,n);

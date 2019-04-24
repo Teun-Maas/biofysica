@@ -27,7 +27,7 @@ function [snd,Fs] = gengwn(Dur, order, Fc, Fs, Fh, varargin)
 
 %% Initialization
 if nargin<5
-    Fh          = 3000;
+    Fh          = 500;
 end
 if nargin<4
     Fs          = 48828.125; % TDT Nyquist sampling frequency (Hz)
