@@ -1,4 +1,4 @@
-function [postSummary,histInfo] = plotpost(paramSampleVec, varargin)
+function [postSummary,histInfo,h] = plotpost(paramSampleVec, varargin)
 % PLOTPOST(P)
 %
 % plot MCMC parameter sample vector P

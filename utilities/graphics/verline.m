@@ -32,3 +32,7 @@ set(gcf,'Nextplot',n_fi);
 if ~oldhold
 	hold off;
 end
+
+if nargout==0
+	clear h
+end
