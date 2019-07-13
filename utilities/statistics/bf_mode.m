@@ -1,4 +1,4 @@
-function omega = bf_mode(x)
+function [omega,l] = bf_mode(x)
 % OMEGA = BF_MODE(X)
 %
 % Determine mode, or most frequent value, OMEGA for vector X, which are
@@ -13,5 +13,5 @@ function omega = bf_mode(x)
 % see also KSDENSITY, MODE
 
 [f,xi]		= ksdensity(x);
-[~,indx]	= max(f);
+[l,indx]	= max(f);
 omega		= xi(indx);

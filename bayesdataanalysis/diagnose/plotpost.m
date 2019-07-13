@@ -41,6 +41,8 @@ xl			= keyval('xlim', varargin,minmax([compVal; paramSampleVec]'));
 main		= keyval('main', varargin);
 col			= keyval('col', varargin,[.6 .6 1]);
 breaks		= keyval('breaks', varargin);
+nbreaks		= keyval('nbreaks', varargin,18);
+
 % HDItextPlace = keyval('HDItextPlace', varargin); if isempty(HDItextPlace), HDItextPlace = 0.7; end;
 % border		= keyval('border', varargin); if isempty(border), border='w'; end;
 
@@ -58,7 +60,7 @@ postSummary.hdiHigh	= HDI(2);
 %% Plot histogram.
 hold on
 if isempty(breaks)
-	by=(HDI(2)-HDI(1))/18;
+	by=(HDI(2)-HDI(1))/nbreaks;
 	breaks = unique([min(paramSampleVec):by:max(paramSampleVec) max(paramSampleVec)]);
 end
 
