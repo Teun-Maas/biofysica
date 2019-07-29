@@ -4,6 +4,7 @@ classdef rz6_tq < handle
         tag_name;
         tq = [];
         nq = 0;
+        ip;
     end
 
     properties (Constant)
@@ -44,6 +45,100 @@ classdef rz6_tq < handle
            this.nq = this.nq+1;
            this.tq(this.nq,:) = desc;
         end
+
+    end
+
+
+    methods (Access=protected)
+        function desc = parse_command(this,command,varargin)
+            switch lower(command)
+                case 'waitfortrigger'
+                    desc = this.parse_waitfortrigger(varargin);
+
+                case 'startsound'
+                    desc = this.parse_startsound(varargin);
+
+                case 'stopsound'
+                    desc = this.parse_stopsound(varargin);
+
+                case 'setmux'
+                    desc = this.parse_setmux(varargin);
+
+                case 'resetmux'
+                    desc = this.parse_resetmux(varargin);
+
+                case 'setsignalingbyte'
+                    desc = this.parse_setsignalingbyte(varargin);
+
+                case 'startmovingsound'
+                    desc = this.parse_startmovingsound(varargin);
+
+                case 'stopmovingsound'
+                    desc = this.parse_stopmovingsound(varargin);
+
+                case 'startdaq'
+                    desc = this.parse_startdaq(varargin);
+
+                case 'stopdaq'
+                    desc = this.parse_stopdaq(varargin);
+
+                case 'setdigitalout'
+                    desc = this.parse_setdigitalout(varargin);
+
+                case 'outputtrigger'
+                    desc = this.parse_outputtrigger(varargin);
+
+            otherwise
+                error('unknown task');
+            end
+        end
+
+        function desc = parse_waitfortrigger(this,varargin)
+            p = inputParser;
+            validInput = @(x) isnumeric(x) && isscalar(x) && (x >= 0) && (x < 8);
+            p.addRequired('input', validInput);
+            desc.apaprrar = p.Results.input;
+        end
+
+        function desc = parse_startsound(this,varargin)
+        end
+
+        function desc = parse_stopsound(this,varargin)
+        end
+
+        function desc = parse_setmux(this,varargin)
+        end
+
+        function desc = parse_resetmux(this,varargin)
+        end
+
+        function desc = parse_setsignalingbyte(this,varargin)
+        end
+
+        function desc = parse_startmovingsound(this,varargin)
+        end
+
+        function desc = parse_stopmovingsound(this,varargin)
+        end
+
+        function desc = parse_startdaq(this,varargin)
+        end
+
+        function desc = parse_stopdaq(this,varargin)
+        end
+
+        function desc = parse_setdigitalout(this,varargin)
+        end
+
+        function desc = parse_outputtrigger(this,varargin)
+        end
+
+        %function desc = parse_(this,varargin)
+        %end
+
+        %function desc = parse_(this,varargin)
+        %end
+
 
     end
 
