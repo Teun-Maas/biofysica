@@ -8,6 +8,8 @@ classdef rz6_tq < handle
     end
 
     properties (Constant)
+        desclen = 7;
+
         wait_for_trigger = 0;
         start_stop_sound_a = 1;
         start_stop_sound_b = 2;
@@ -93,11 +95,34 @@ classdef rz6_tq < handle
             end
         end
 
+        function desc = newdesc(this)
+            desc = struct(
+              'TaskType', 0, ...
+              'SoundType', 0, ...
+              'DelayTime', 0, ...
+              'Par1', 0, ...
+              'Par2', 0, ...
+              'Par3', 0, ...
+              'Par4', 0 ...
+            );
+        end
+
         function desc = parse_waitfortrigger(this,varargin)
+            desc = this.newdesc();
+            desc.TaskType = this.wait_for_trigger;
+
             p = inputParser;
-            validInput = @(x) isnumeric(x) && isscalar(x) && (x >= 0) && (x < 8);
-            p.addRequired('input', validInput);
-            desc.apaprrar = p.Results.input;
+            validDelayTime = @(x) isnumeric(x) && isscalar(x) && (x >= 0) && (x < 2^31);
+            validExternalTrigger = @(x) isnumeric(x) && isscalar(x) && (x >= 0) && (x < 8);
+            p.addRequired('DelayTime', validDelayTime);
+            p.addRequired('Input', @(x) any(validatestring(x,expectedInputs)));
+            p.addOptional('ExternalTrigger', validByte);
+            desc(4) = p.Results.input;
+
+            function validInput(x)
+               stringInputs = { 'ZBusB', 'External', 'Soft1' };
+               if isstring(x)
+            end
         end
 
         function desc = parse_startsound(this,varargin)
