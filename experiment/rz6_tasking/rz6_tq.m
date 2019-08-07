@@ -43,60 +43,78 @@ classdef rz6_tq < handle
             this.module.WriteTagVEX(this.tag_name, nOS, 'I32', tq_i32);
         end
         
-        function append_task(this, desc)
-           this.nq = this.nq+1;
-           this.tq(this.nq,:) = desc;
+ 
+        function add_task(this, task, varargin)
+           desc = this.parse_command(task, varargin{:});
+           this.append_task(desc);
         end
-
     end
 
 
     methods (Access=protected)
-        function desc = parse_command(this,command,varargin)
+        function append_task(this, desc)
+           this.nq = this.nq+1;
+           this.tq(this.nq,:) = struct2array(desc);
+        end
+
+        function desc = parse_command(this,command, delaytime, varargin)
+            funcName='rz6_tq/parse_command';
+            validCommands = { 'WaitForTrigger', 'SoundA','SoundB','Mux','Signaling',...
+               'SoundMov','Daq','SetDIO','TrigOut','Reset','Ready','HoldInp'};
+            command=validatestring(command,validCommands,funcName,'Command',1);
+
+            validateattributes(delaytime,{'numeric'},{'scalar','nonnegative'}, ...
+                funcName,'DelayTime',2);
+
             switch lower(command)
                 case 'waitfortrigger'
-                    desc = this.parse_waitfortrigger(varargin);
+                    desc = this.parse_waitfortrigger(varargin{:});
 
-                case 'startsound'
-                    desc = this.parse_startsound(varargin);
+                case 'sounda'
+                    desc = this.parse_sounda(varargin{:});
 
-                case 'stopsound'
-                    desc = this.parse_stopsound(varargin);
+                case 'soundb'
+                    desc = this.parse_soundb(varargin{:});
 
-                case 'setmux'
-                    desc = this.parse_setmux(varargin);
+                case 'mux'
+                    desc = this.parse_mux(varargin{:});
 
-                case 'resetmux'
-                    desc = this.parse_resetmux(varargin);
+                case 'signaling'
+                    desc = this.parse_signaling(varargin{:});
 
                 case 'setsignalingbyte'
-                    desc = this.parse_setsignalingbyte(varargin);
+                    desc = this.parse_setsignalingbyte(varargin{:});
 
-                case 'startmovingsound'
-                    desc = this.parse_startmovingsound(varargin);
+                case 'soundmov'
+                    desc = this.parse_soundmov(varargin{:});
 
-                case 'stopmovingsound'
-                    desc = this.parse_stopmovingsound(varargin);
+                case 'daq'
+                    desc = this.parse_daq(varargin{:});
 
-                case 'startdaq'
-                    desc = this.parse_startdaq(varargin);
+                case 'setdio'
+                    desc = this.parse_setdio(varargin{:});
 
-                case 'stopdaq'
-                    desc = this.parse_stopdaq(varargin);
+                case 'trigout'
+                    desc = this.parse_trigout(varargin{:});
 
-                case 'setdigitalout'
-                    desc = this.parse_setdigitalout(varargin);
+                case 'reset'
+                    desc = this.parse_reset(varargin{:});
 
-                case 'outputtrigger'
-                    desc = this.parse_outputtrigger(varargin);
+                case 'ready'
+                    desc = this.parse_ready(varargin{:});
+
+                case 'holdinp'
+                    desc = this.parse_holdinp(varargin{:});
 
             otherwise
                 error('unknown task');
             end
+
+            desc.DelayTime = delaytime;
         end
 
         function desc = newdesc(this)
-            desc = struct(
+            desc = struct( ...
               'TaskType', 0, ...
               'SoundType', 0, ...
               'DelayTime', 0, ...
@@ -112,57 +130,78 @@ classdef rz6_tq < handle
             desc.TaskType = this.wait_for_trigger;
 
             p = inputParser;
-            validDelayTime = @(x) isnumeric(x) && isscalar(x) && (x >= 0) && (x < 2^31);
-            validExternalTrigger = @(x) isnumeric(x) && isscalar(x) && (x >= 0) && (x < 8);
-            p.addRequired('DelayTime', validDelayTime);
-            p.addRequired('Input', @(x) any(validatestring(x,expectedInputs)));
-            p.addOptional('ExternalTrigger', validByte);
-            desc(4) = p.Results.input;
 
-            function validInput(x)
-               stringInputs = { 'ZBusB', 'External', 'Soft1' };
-               if isstring(x)
+            validDelayTime = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
+            validExtTrig = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',8});
+            %p.addRequired('DelayTime', validDelayTime);
+            p.addRequired('Input', @(x) validInput(x));
+            p.addOptional('ExternalTrigger', 0, @(x) validExtTrig(x));
+            p.parse(varargin{:});
+            %desc.DelayTime = p.Results.DelayTime;
+            desc.Par1 = input2num(p.Results.Input);
+            desc.Par2 = p.Results.ExternalTrigger;
+
+            function isValid = validInput(x)
+               expectedStringInputs = { 'ZBusB', 'External', 'Soft1' };
+               if ischar(x)
+                  isValid = any(validatestring(x,expectedStringInputs));
+               else
+                  isValid = validateattributes(x, {'numeric'},{'scalar','nonnegative','<',8});
+               end
+            end
+
+            function n = input2num(x)
+               % expectedStringInputs = { 'ZBusB', 'External', 'Soft1' };
+               if ischar(x)
+                  x = lower(x);
+                  if x(1) == 'z'
+                     n = 1;
+                  elseif x(1) == 'e'
+                     n = 2;
+                  elseif x(1) == 's'
+                     n = 4;
+                  end
+               else
+                  n = x;
+               end
             end
         end
 
-        function desc = parse_startsound(this,varargin)
+        function desc = parse_sounda(this,varargin)
         end
 
-        function desc = parse_stopsound(this,varargin)
+        function desc = parse_soundb(this,varargin)
         end
 
-        function desc = parse_setmux(this,varargin)
+        function desc = parse_mux(this,varargin)
         end
 
-        function desc = parse_resetmux(this,varargin)
+        function desc = parse_signaling(this,varargin)
         end
 
         function desc = parse_setsignalingbyte(this,varargin)
         end
 
-        function desc = parse_startmovingsound(this,varargin)
+        function desc = parse_soundmov(this,varargin)
         end
 
-        function desc = parse_stopmovingsound(this,varargin)
+        function desc = parse_daq(this,varargin)
         end
 
-        function desc = parse_startdaq(this,varargin)
+        function desc = parse_setdio(this,varargin)
         end
 
-        function desc = parse_stopdaq(this,varargin)
+        function desc = parse_trigout(this,varargin)
         end
 
-        function desc = parse_setdigitalout(this,varargin)
+        function desc = parse_reset(this,varargin)
         end
 
-        function desc = parse_outputtrigger(this,varargin)
+        function desc = parse_ready(this,varargin)
         end
 
-        %function desc = parse_(this,varargin)
-        %end
-
-        %function desc = parse_(this,varargin)
-        %end
+        function desc = parse_holdinp(this,varargin)
+        end
 
 
     end
