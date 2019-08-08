@@ -13,7 +13,7 @@ classdef rz6_tq < handle
         wait_for_trigger = 0;
         start_stop_sound_a = 1;
         start_stop_sound_b = 2;
-        set_reset_mux = 3;
+        set_mux = 3;
         set_signaling_byte = 4;
         start_stop_moving_sounds = 5;
         start_stop_daq = 6;
@@ -44,8 +44,8 @@ classdef rz6_tq < handle
         end
         
  
-        function add_task(this, task, varargin)
-           desc = this.parse_command(task, varargin{:});
+        function add_task(this, delaytime, task, varargin)
+           desc = this.parse_command(delaytime, task, varargin{:});
            this.append_task(desc);
         end
     end
@@ -57,7 +57,7 @@ classdef rz6_tq < handle
            this.tq(this.nq,:) = struct2array(desc);
         end
 
-        function desc = parse_command(this,command, delaytime, varargin)
+        function desc = parse_command(this, delaytime, command, varargin)
             funcName='rz6_tq/parse_command';
             validCommands = { 'WaitForTrigger', 'SoundA','SoundB','Mux','Signaling',...
                'SoundMov','Daq','SetDIO','TrigOut','Reset','Ready','HoldInp'};
@@ -111,6 +111,9 @@ classdef rz6_tq < handle
             end
 
             desc.DelayTime = delaytime;
+            if any(isnan(struct2array(desc)))
+               error('missing arguments');
+            end
         end
 
         function desc = newdesc(this)
@@ -168,24 +171,159 @@ classdef rz6_tq < handle
         end
 
         function desc = parse_sounda(this,varargin)
+            desc = this.parse_sound(1,varargin{:});
         end
 
         function desc = parse_soundb(this,varargin)
+            desc = this.parse_sound(2,varargin{:});
+        end
+
+        function desc = parse_sound(this,channel,varargin)
+            desc = this.newdesc();
+            if channel==1
+               desc.TaskType = this.start_stop_sound_a;
+            elseif channel==2
+               desc.TaskType = this.start_stop_sound_b;
+            else
+               error('expected channel to be 1 or 2');
+            end
+
+            expectedSounds = { 'None','Stop','Tone','Sweep','Noise','Ripple','Wav','B=A'};
+
+            p = inputParser;
+
+            p.addRequired('SoundType', @(x) any(validatestring(x, expectedSounds)));
+            p.addOptional('arg1', NaN);
+            p.addOptional('arg2', NaN);
+            p.addOptional('arg3', NaN);
+            p.addOptional('arg4', NaN);
+            p.parse(varargin{:});
+
+            % Expand partially matched SoundType strings, and convert to lowercase
+            SoundType=lower(validatestring(p.Results.SoundType, expectedSounds));
+
+            switch SoundType
+            case 'stop'
+               desc.SoundType = 0;
+
+            case 'tone'
+               desc.SoundType = 1;
+               desc.Par1 = p.Results.arg1; % f_center
+               desc.Par2 = p.Results.arg2; % f_mod
+               desc.Par3 = p.Results.arg3; % mod_bw
+               desc.Par4 = p.Results.arg4; % att
+
+            case 'sweep'
+               desc.SoundType = 2;
+               desc.Par1 = p.Results.arg1; % f_start
+               desc.Par2 = p.Results.arg2; % n_octaves
+               desc.Par3 = p.Results.arg3; % sweeps/1000sec
+               desc.Par4 = p.Results.arg4; % att
+
+            case 'noise'
+               desc.SoundType = 3;
+               desc.Par1 = p.Results.arg1; % f_lp
+               desc.Par2 = p.Results.arg2; % f_hp
+               desc.Par4 = p.Results.arg3; % att
+
+            case 'ripple'
+               desc.SoundType = 4;
+               desc.Par1 = p.Results.arg1; % f_start
+               desc.Par2 = p.Results.arg2; % mod in time
+               desc.Par3 = p.Results.arg3; % mod in freq
+               desc.Par4 = p.Results.arg4; % att
+
+            case 'wav'
+               desc.SoundType = 5;
+               desc.Par1 = p.Results.arg1; % wav_index
+               desc.Par4 = p.Results.arg2; % att
+
+            case 'b=a'
+               desc.SoundType = 6;
+               desc.Par1 = p.Results.arg1; % mov_type
+               desc.Par2 = p.Results.arg2; % period
+               desc.Par3 = p.Results.arg3; % start_phase
+               desc.Par4 = p.Results.arg4; % att
+
+            otherwise
+               error(p.Results.SoundType);
+            end
+
         end
 
         function desc = parse_mux(this,varargin)
+           desc = this.newdesc();
+           desc.TaskType = this.set_mux;
+
+           p = inputParser;
+           validByte = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','nonnegative','<',256});
+           p.addRequired('MuxByte', @(x) validByte(x));
+           p.parse(varargin{:});
+           desc.Par1 = p.Results.MuxByte;
         end
 
-        function desc = parse_signaling(this,varargin)
-        end
+        function desc = parse_signaling_byte(this,varargin)
+           desc = this.newdesc();
+           desc.TaskType = this.set_signaling_byte;
 
-        function desc = parse_setsignalingbyte(this,varargin)
+           p = inputParser;
+           validByte = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','nonnegative','<',256});
+           p.addRequired('SignalingByte', @(x) validByte(x));
+           p.parse(varargin{:});
+           desc.Par1 = p.Results.SignalingByte;
         end
 
         function desc = parse_soundmov(this,varargin)
+           desc = this.newdesc();
+           desc.TaskType = this.start_stop_moving_sounds;
+
+           p = inputParser;
+           validBool = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','nonnegative','<=',1});
+           validByte = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','nonnegative','<',256});
+           validNumSpeakers = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','nonnegative','>',1});
+           validPeriod = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','nonnegative'});
+           validStartPhase = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','>=',-180, '<=',180});
+           p.addRequired('StartStop', @(x) validBool(x));
+           p.addRequired('NumSpeakers', @(x) validNumSpeakers(x));
+           p.addRequired('Period', @(x) validPeriod(x));
+           p.addRequired('StartPhase', @(x) validStartPhase(x));
+           p.parse(varargin{:});
+           desc.Par1 = p.Results.StartStop;
+           desc.Par2 = p.Results.NumSpeakers;
+           desc.Par3 = p.Results.Period;
+           desc.Par4 = p.Results.StartPhase;
         end
 
+%
+% !!! opsplitsen in start en stop functies
         function desc = parse_daq(this,varargin)
+           desc = this.newdesc();
+           desc.TaskType = this.start_stop_daq;
+
+           p = inputParser;
+           validBool = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','nonnegative','<=',1});
+           validByte = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','nonnegative','<',256});
+           validAcqTime = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','positive'});
+           validInputSelByte = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','nonnegative'});
+           p.addRequired('StartStop', @(x) validBool(x));
+           p.addRequired('AcqTime', @(x) validAcqTime(x));
+           p.addRequired('InputSelByte', @(x) validInputSelByte(x));
+           p.parse(varargin{:});
+           desc.Par1 = p.Results.StartStop;
+           desc.Par2 = p.Results.AcqTime;
+           desc.Par3 = p.Results.InputSelByte;
+
         end
 
         function desc = parse_setdio(this,varargin)
