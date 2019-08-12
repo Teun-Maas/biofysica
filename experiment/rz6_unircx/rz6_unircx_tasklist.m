@@ -1,10 +1,11 @@
-classdef rz6_tq < handle
+classdef rz6_unircx_tasklist < handle
     properties (Access=protected)
         module;
         tag_name;
         tq = [];
         nq = 0;
         ip;
+        debugflag = false;
     end
 
     properties (Constant)
@@ -34,7 +35,7 @@ classdef rz6_tq < handle
     end
 
     methods
-        function this = rz6_tq(rz6_module)
+        function this = rz6_unircx_tasklist.m(rz6_module)
             this.module = rz6_module;
             this.tag_name = 'wherethedatagoes';
         end
@@ -51,6 +52,14 @@ classdef rz6_tq < handle
            desc = this.parse_command(delaytime, task, varargin{:});
            this.append_task(desc);
         end
+
+        function debug(this, val)
+           if (val)
+              this.debugflag = true;
+           else
+              this.debugflag = false;
+           end
+        end
     end
 
 
@@ -61,7 +70,7 @@ classdef rz6_tq < handle
         end
 
         function desc = parse_command(this, varargin)
-            funcName='rz6_tq/add_task';
+            funcName='rz6_unircx_tasklist.m/add_task';
             validCommands = { 'WaitForTrigger', 'SoundA','SoundB','Mux','Signaling',...
                'SoundMov','Daq','SetDIO','TrigOut','Reset','Ready','HoldInp'};
 
@@ -88,7 +97,7 @@ classdef rz6_tq < handle
                     desc = this.parse_mux(p,varargin{:});
 
                 case 'signaling'
-                    desc = this.parse_signaling(p,varargin{:});
+                    desc = this.parse_signaling_byte(p,varargin{:});
 
                 case 'setsignalingbyte'
                     desc = this.parse_setsignalingbyte(p,varargin{:});
@@ -119,6 +128,17 @@ classdef rz6_tq < handle
             end
 
             desc.DelayTime = p.Results.DelayTime;
+
+            if this.debugflag
+               disp(['---',mfilename,' debug output---']);
+               disp('INPUT:');
+               disp(p.Results);
+               disp('');
+               disp('RESULT:');
+               disp(desc);
+               disp('---end---');
+            end
+
             if any(isnan(struct2array(desc)))
                error('missing arguments');
             end
@@ -140,7 +160,6 @@ classdef rz6_tq < handle
             desc = this.newdesc();
             desc.TaskType = this.wait_for_trigger;
 
-            validDelayTime = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
             validExtTrig = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',8});
             
             p.addRequired('Input', @(x) validInput(x));
@@ -194,7 +213,7 @@ classdef rz6_tq < handle
                error('expected channel to be 1 or 2, this is a bug');
             end
 
-            validFreq = @(x) validateattributes(x,{'numeric'},{'scalar','positive'});
+            validFreq = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
             validAttenuation = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
             validPosNum = @(x) validateattributes(x,{'numeric'},{'scalar','positive'});
             validStartPhase = @(x) validateattributes(x,{'numeric'},{'scalar','>=',-180,'<=',180});
@@ -238,7 +257,7 @@ classdef rz6_tq < handle
             case 'noise'
                desc.SoundType = 3;
                p.addRequired('fLowPass', validFreq);
-               p.addRequired('fHighPas', validFreq);
+               p.addRequired('fHighPass', validFreq);
                p.addRequired('Attenuation', validAttenuation);
                p.parse(varargin{:});
                desc.Par1 = p.Results.fLowPass;
@@ -259,7 +278,7 @@ classdef rz6_tq < handle
 
             case 'wav'
                desc.SoundType = 5;
-               p.addRequired('wavIndex', validNum);
+               p.addRequired('wavIndex', validPosNum);
                p.addRequired('Attenuation', validAttenuation);
                p.parse(varargin{:});
                desc.Par1 = p.Results.wavIndex;
@@ -269,23 +288,34 @@ classdef rz6_tq < handle
                desc.SoundType = 6;
                expectedMovTypes = { 'None','Linear','Sine' };
                p.addRequired('movType', @(x) any(validatestring(x, expectedMovTypes)));
-               p.addRequired('tPeriod', validPosNum);
-               p.addRequired('startPhase', validStartPhase);
-               p.addRequired('Attenuation', validAttenuation);
-               p.parse(varargin{:});
+               p.parse(varargin{1:4});
                switch lower(p.Results.movType)
                case 'none'
+                  p.addRequired('Attenuation', validAttenuation);
+                  p.parse(varargin{:});
                   desc.Par1 = 0;
+                  desc.Par4 = p.Results.Attenuation;
                case 'sine'
+                  p.addRequired('tPeriod', validPosNum);
+                  p.addRequired('startPhase', validStartPhase);
+                  p.addRequired('Attenuation', validAttenuation);
+                  p.parse(varargin{:});
                   desc.Par1 = 1;
+                  desc.Par2 = p.Results.tPeriod; % msec
+                  desc.Par3 = p.Results.startPhase; 
+                  desc.Par4 = p.Results.Attenuation;
                case 'linear'
+                  p.addRequired('tPeriod', validPosNum);
+                  p.addRequired('startPhase', validStartPhase);
+                  p.addRequired('Attenuation', validAttenuation);
+                  p.parse(varargin{:});
                   desc.Par1 = 2;
+                  desc.Par2 = p.Results.tPeriod; % msec
+                  desc.Par3 = p.Results.startPhase; 
+                  desc.Par4 = p.Results.Attenuation;
                otherwise
                   error('invalid mov type, this is a bug');
                end
-               desc.Par2 = p.Results.tPeriod; % msec
-               desc.Par3 = p.Results.startPhase; 
-               desc.Par4 = p.Results.Attenuation;
 
             otherwise
                error('unknown sound type, this is a bug');
@@ -320,10 +350,6 @@ classdef rz6_tq < handle
            desc.TaskType = this.start_stop_moving_sounds;
 
            validStartStop = @(x) any(validatestring(x,{'Start','Stop'}));
-           validBool = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','nonnegative','<=',1});
-           validByte = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','nonnegative','<',256});
            validNumSpeakers = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','nonnegative','>',1});
            validPeriod = @(x) validateattributes(x, ...
@@ -355,10 +381,6 @@ classdef rz6_tq < handle
            desc = this.newdesc();
            desc.TaskType = this.start_stop_daq;
 
-           validBool = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','nonnegative','<=',1});
-           validByte = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','nonnegative','<',256});
            validAcqTime = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','positive'});
            validInputSelByte = @(x) validateattributes(x, ...
@@ -385,27 +407,27 @@ classdef rz6_tq < handle
 
         function desc = parse_setdio(this,p,varargin)
            desc = this.newdesc();
-           desc.TaskType = this.setdio;
+           desc.TaskType = this.set_digital_out;
 
            validByte = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','nonnegative','<',256});
 
-           p.addRequired(OutputByte, validByte);
+           p.addRequired('OutputByte', validByte);
            p.parse(varargin{:});
            desc.Par1 = p.Results.OutputByte;
         end
 
         function desc = parse_trigout(this,p,varargin)
            desc = this.newdesc();
-           desc.TaskType = this.setdio;
+           desc.TaskType = this.output_trigger;
 
            validByte = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','nonnegative','<',256});
            validDTInterval = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar',''>',100});
+              {'numeric'}, {'scalar','>',100});
 
 
-           p.addRequired(OutputByte, validByte);
+           p.addRequired('OutputByte', validByte);
            p.addOptional('DoubleTriggerInterval',0, validDTInterval);
            p.parse(varargin{:});
            desc.Par1 = p.Results.OutputByte;
