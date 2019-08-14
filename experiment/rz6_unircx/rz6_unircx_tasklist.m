@@ -381,8 +381,6 @@ classdef rz6_unircx_tasklist < handle
            desc = this.newdesc();
            desc.TaskType = this.start_stop_daq;
 
-           validAcqTime = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','positive'});
            validInputSelByte = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','nonnegative'});
            validStartStop = @(x) any(validatestring(x,{'Start','Stop'}));
@@ -395,11 +393,9 @@ classdef rz6_unircx_tasklist < handle
                desc.Par1 = 0;
            case 'start'
                desc.Par1 = 1;
-               p.addRequired('AcqTime', validAcqTime);
                p.addRequired('InputSelByte', validInputSelByte);
                p.parse(varargin{:});
-               desc.Par2 = p.Results.AcqTime;
-               desc.Par3 = p.Results.InputSelByte;
+               desc.Par2 = p.Results.InputSelByte;
            otherwise
                error('unexcpected error, this is a bug');
            end

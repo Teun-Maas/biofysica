@@ -18,7 +18,7 @@ tl.add_task(112,'Mux', 8);
 tl.add_task(113,'Signaling', 9);
 tl.add_task(114,'SoundMov','Start',32,2000,-90);
 tl.add_task(115,'SoundMov','Stop');
-tl.add_task(116,'Daq','Start',10000,15);
+tl.add_task(116,'Daq','Start',15);
 tl.add_task(117,'Daq','Stop');
 tl.add_task(118,'SetDio',255);
 tl.add_task(119,'TrigOUt',2);
