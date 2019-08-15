@@ -17,15 +17,35 @@ classdef rz6_unircx_processor < handle
         end
 
         function upload_tasklist(this, tasklist)
+            x=tasklist.get();
+            this.write('STM_Matrix',x);
+        end
+
+        function write(this, tagname, value, offset)
+            if nargin < 4
+                offset = 0;
+            end
+            if isscalar(value)
+                if ~this.rz6.SetTagVal(tagname,value)
+                    error('SetTagVal');
+                end
+            else
+                v=reshape(value,[],1);
+                if ~this.rz6.WriteTagVEX(tagname, offset, 'I32', v)
+                   error('WriteTagVEX');
+                end
+            end
 
         end
 
-        function write(this, tagname, value)
-
-        end
-
-        function read(this, tagname, value)
-
+        function data=read(this, tagname, nWords, offset, nChannels)
+            if nargin < 4
+                offset = 0;
+            end
+            if nargin < 5
+                nChannels=1;
+            end
+            data=this.rz6.ReadTagVEX(tagname,offset,nWords,'I32','I32',nChannels);
         end
 
     end

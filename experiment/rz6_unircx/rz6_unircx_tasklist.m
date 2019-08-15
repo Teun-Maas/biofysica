@@ -40,11 +40,8 @@ classdef rz6_unircx_tasklist < handle
             this.tag_name = 'wherethedatagoes';
         end
         
-        function upload(this)
-            tq_i32 = int32(this.tq(1:this.nq,:))';     
-            nOS = 0;
-            %TODO
-            this.module.WriteTagVEX(this.tag_name, nOS, 'I32', tq_i32);
+        function tq_i32=get(this)
+            tq_i32 = int32(this.tq(1:this.nq,:));     
         end
         
  
@@ -144,7 +141,7 @@ classdef rz6_unircx_tasklist < handle
             end
         end
 
-        function desc = newdesc(this)
+        function desc = newdesc(~)
             desc = struct( ...
               'TaskType', 0, ...
               'SoundType', 0, ...
@@ -383,6 +380,8 @@ classdef rz6_unircx_tasklist < handle
 
            validInputSelByte = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','nonnegative'});
+           validDivisor = @(x) validateattributes(x, ...
+              {'numeric'}, {'scalar','positive'});
            validStartStop = @(x) any(validatestring(x,{'Start','Stop'}));
 
            p.addRequired('StartStop', validStartStop);
@@ -394,8 +393,10 @@ classdef rz6_unircx_tasklist < handle
            case 'start'
                desc.Par1 = 1;
                p.addRequired('InputSelByte', validInputSelByte);
+               p.addOptional('Divisor', 1, validDivisor);
                p.parse(varargin{:});
                desc.Par2 = p.Results.InputSelByte;
+               desc.Par3 = p.Results.Divisor;
            otherwise
                error('unexcpected error, this is a bug');
            end
