@@ -20,5 +20,9 @@ classdef r6z_dummy < handle
            disp('ReadTagVEX:');
            disp(varargin); 
         end
+
+        function Run(this)
+           disp('Run:');
+        end
     end
 end
