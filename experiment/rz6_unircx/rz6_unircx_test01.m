@@ -1,6 +1,7 @@
 tl=rz6_unircx_tasklist;
+rz6=rz6_unircx_client(-1);
 
-tl.debug(true);
+tl.debug(false);
 
 tl.add_task(100,'WaitForTrigger','ZbusB');
 tl.add_task(101,'WaitForTrigger','External', 2);
@@ -31,4 +32,6 @@ tl.add_task(122,'Ready');
 tl.add_task(123,'HoldInp','Start',4);
 tl.add_task(124,'HoldInp','Stop');
 
+rz6.write_tasklist(tl);
 delete(tl);
+delete(rz6);

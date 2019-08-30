@@ -1,14 +1,33 @@
-classdef rz6_unircx_processor < handle
+classdef rz6_unircx_client < handle
     properties (Access=protected)
         zBus;
         rz6;
     end
 
     methods
-        function this = rz6_unircx_processor(zBus, rz6)
-           this.zBus = zBus;
-           this.rz6 = rz6;
-           rz6.Run;
+        function this = rz6_unircx_client(number, circuit)
+            if number == -1
+                this.zBus = zbus_dummy;
+                this.rz6 = rz6_dummy;
+                return;
+            end
+            this.zBus = actxcontrol('ZBUS.x',[1 1 1 1]);
+            if ~this.zBus.ConnectZBUS('GB')
+               error('zBus.ConnectZBUS');
+            end
+
+            this.rz6=actxcontrol('RPco.x',[5 5 26 26]);
+            if ~this.rz6.ConnectRZ6('GB',number)
+               error('rz6.ConnectRZ6');
+            end
+            
+            this.rz6.reset();
+
+            if ~this.rz6.LoadCOF(circuit)
+               error('LoadCOF');
+            end
+
+            this.rz6.Run();
         end
 
         function delete(this)
@@ -21,7 +40,7 @@ classdef rz6_unircx_processor < handle
             this.write('STM_Matrix',x);
         end
 
-        functions write_wavdata(this, data, chanlist)
+        function write_wavdata(this, data, chanlist)
             for i=1:length(chanlist)
                chan=chanlist(i);
                nsamp=size(data,2);
