@@ -1,5 +1,6 @@
 tl=rz6_unircx_tasklist;
-rz6=rz6_unircx_client(1,'RCX_Uni_1C_50kHz_V2.13.rcx');
+%rz6=rz6_unircx_client(1,'RCX_Uni_1C_50kHz_V2.13.rcx');
+rz6=rz6_unircx_client(-1);
 
 tl.debug(false);
 
