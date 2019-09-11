@@ -37,7 +37,7 @@ classdef rz6_unircx_client < handle
 
         function write_tasklist(this, tasklist)
             x=tasklist.get();
-            this.write('STM_Matrix',x);
+            this.write('STM_Matrix',x');
         end
 
         function write_wavdata(this, data, chanlist)

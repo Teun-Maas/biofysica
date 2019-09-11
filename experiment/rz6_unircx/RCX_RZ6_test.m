@@ -190,7 +190,7 @@ else
  e = 'Unable to connect RZ6'
 end
 
-if RZ6.LoadCOF('RCX_Uni_1C_50kHz_V3.00.rcx')
+if RZ6.LoadCOF('RCX_Uni_1C_50kHz_V2.13.rcx')
  e='LoadCOF OK';
 else
  e='LoadCOF error'
