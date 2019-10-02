@@ -15,7 +15,7 @@ classdef rz6_unircx_tasklist < handle
         start_stop_sound_a = 1;
         start_stop_sound_b = 2;
         set_mux = 3;
-        set_signaling_byte = 4;
+        set_signaling_byte = 4;    %% TODO: nu hold_inp ?
         start_stop_moving_sounds = 5;
         start_stop_daq = 6;
         set_digital_out = 7;
@@ -243,12 +243,12 @@ classdef rz6_unircx_tasklist < handle
                desc.SoundType = 2;
                p.addRequired('fStart', validFreq);
                p.addRequired('nOctaves', validPosNum);
-               p.addRequired('nSweeps', validPosNum);
+               p.addRequired('Period', validPosNum);
                p.addRequired('Attenuation', validAttenuation);
                p.parse(varargin{:});
                desc.Par1 = p.Results.fStart;
                desc.Par2 = p.Results.nOctaves;
-               desc.Par3 = p.Results.nSweeps; % sweeps/1000sec
+               desc.Par3 = p.Results.Period; % Period/1000sec
                desc.Par4 = p.Results.Attenuation;
 
             case 'noise'
@@ -293,21 +293,21 @@ classdef rz6_unircx_tasklist < handle
                   desc.Par1 = 0;
                   desc.Par4 = p.Results.Attenuation;
                case 'sine'
-                  p.addRequired('tPeriod', validPosNum);
+                  p.addRequired('Period', validPosNum);
                   p.addRequired('startPhase', validStartPhase);
                   p.addRequired('Attenuation', validAttenuation);
                   p.parse(varargin{:});
                   desc.Par1 = 1;
-                  desc.Par2 = p.Results.tPeriod; % msec
+                  desc.Par2 = p.Results.Period; % msec
                   desc.Par3 = p.Results.startPhase; 
                   desc.Par4 = p.Results.Attenuation;
                case 'linear'
-                  p.addRequired('tPeriod', validPosNum);
+                  p.addRequired('Period', validPosNum);
                   p.addRequired('startPhase', validStartPhase);
                   p.addRequired('Attenuation', validAttenuation);
                   p.parse(varargin{:});
                   desc.Par1 = 2;
-                  desc.Par2 = p.Results.tPeriod; % msec
+                  desc.Par2 = p.Results.Period; % msec
                   desc.Par3 = p.Results.startPhase; 
                   desc.Par4 = p.Results.Attenuation;
                otherwise
@@ -321,6 +321,8 @@ classdef rz6_unircx_tasklist < handle
         end
 
         function desc = parse_mux(this,p,varargin)
+
+%% TODO: aanpassen: muxbyte = channelnr + devicenr SHL 4 + set SHL 6 + reset SHL 7
            desc = this.newdesc();
            desc.TaskType = this.set_mux;
 
