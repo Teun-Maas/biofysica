@@ -44,6 +44,7 @@ function samples = psifit(x,y,s,varargin)
 % - determine guess rate from #alternatives
 % - bias in guessing
 % - JND (X>=0)
+% predFlag		= keyval('showPred',varargin,false); % show posterior predictive
 
 
 

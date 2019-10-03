@@ -21,7 +21,7 @@ F		= filesep;
 dirname = ['C:' F 'DATA' F];
 if ~exist(dirname,'dir')
 % 	dirname = ['E:' F 'DATA' F];
-	dirname = ['/Users/marcw/DATA'];
+	dirname = '/Users/marcw/Dropbox/DATA';
 end
 if nargin>0
 	dirname = [dirname expname];

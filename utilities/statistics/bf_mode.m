@@ -12,6 +12,18 @@ function [omega,l] = bf_mode(x)
 %
 % see also KSDENSITY, MODE
 
-[f,xi]		= ksdensity(x);
-[l,indx]	= max(f);
-omega		= xi(indx);
+[m,n] = size(x);
+if any([m n]==1)
+	[f,xi]		= ksdensity(x);
+	[l,indx]	= max(f);
+	omega		= xi(indx);
+elseif n>1	
+	omega		= NaN(1,n);
+	l			= omega;
+	for ii = 1:n
+		X = x(:,ii);
+		[omega(ii),l(ii)] = bf_mode(X);
+	end
+else
+	disp('uh-oh');
+end

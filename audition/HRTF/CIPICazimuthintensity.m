@@ -183,3 +183,46 @@ figure(1)
 % savegraph('HS','png');
 savegraph('HS','eps');
 % savegraph('HS','pdf');
+
+%%
+figure(4)
+clf
+% 	contourf(F,A,ILD,20);
+dILD = ILD-ILD(1,:);
+% dILD = AL-AL(1,:);
+
+plot(F,dILD)
+		x = [500 1000 2000 4000 6000 8000 10000 12000 16000];
+	set(gca,'Xtick',x,'XTickLabel',x/1000,'XScale','log');
+	axis square;
+	nicegraph
+xlabel('Frequency (kHz)');
+ylabel('\Delta ILD_{re -90\circ} (dB)');
+xlim([700 12000]);
+grid off
+
+savegraph('deltaild','png');
+
+%%
+figure(5)
+clf
+hold on
+% dILD = ILD-ILD(1,:);
+dILD = AL;
+naz = size(dILD,2);
+	cmap			= cbrewer('seq','YlGnBu',naz,'pchip'); % colorbrewer rules!
+for ii = 1:naz
+plot(F,dILD(:,ii),'Color',cmap(ii,:))
+end
+		x = [500 1000 2000 4000 6000 8000 10000 12000 16000];
+	set(gca,'Xtick',x,'XTickLabel',x/1000,'XScale','log');
+	axis square;
+	nicegraph
+xlabel('Frequency (kHz)');
+ylabel('HRTF_{left ear} (dB)');
+xlim([700 12000]);
+grid off
+savegraph('headshadow','png');
+
+
+
