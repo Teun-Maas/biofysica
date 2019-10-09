@@ -15,14 +15,17 @@ classdef rz6_unircx_tasklist < handle
         start_stop_sound_a = 1;
         start_stop_sound_b = 2;
         set_mux = 3;
-        set_signaling_byte = 4;    %% TODO: nu hold_inp ?
+        hold_input = 4; 
         start_stop_moving_sounds = 5;
         start_stop_daq = 6;
         set_digital_out = 7;
         output_trigger = 8;
-        reset_stm = 9;
-        stm_ready = 10;
-        hold_input = 11;
+        reset_tsk = 9;
+        tsk_ready = 10;
+        ptna_config = 11;
+        ptnb_config = 12;
+        att_a = 13;
+        att_b = 14;
 
 
         stop_sound = 0;
@@ -35,7 +38,7 @@ classdef rz6_unircx_tasklist < handle
     end
 
     methods
-        function this = rz6_unircx_tasklist.m(rz6_module)
+        function this = rz6_unircx_tasklist(rz6_module)
             this.module = rz6_module;
             this.tag_name = 'wherethedatagoes';
         end
@@ -68,7 +71,7 @@ classdef rz6_unircx_tasklist < handle
 
         function desc = parse_command(this, varargin)
             funcName='rz6_unircx_tasklist.m/add_task';
-            validCommands = { 'WaitForTrigger', 'SoundA','SoundB','Mux','Signaling',...
+            validCommands = { 'WaitForTrigger', 'SoundA','SoundB','Mux','HoldInput',...
                'SoundMov','Daq','SetDIO','TrigOut','Reset','Ready','HoldInp'};
 
             validCommand = @(x) any(validatestring(x,validCommands));
@@ -96,8 +99,8 @@ classdef rz6_unircx_tasklist < handle
                 case 'signaling'
                     desc = this.parse_signaling_byte(p,varargin{:});
 
-                case 'setsignalingbyte'
-                    desc = this.parse_setsignalingbyte(p,varargin{:});
+                case 'holdinput'
+                    desc = this.parse_holdinput(p,varargin{:});
 
                 case 'soundmov'
                     desc = this.parse_soundmov(p,varargin{:});
@@ -117,8 +120,17 @@ classdef rz6_unircx_tasklist < handle
                 case 'ready'
                     desc = this.parse_ready(p,varargin{:});
 
-                case 'holdinp'
-                    desc = this.parse_holdinp(p,varargin{:});
+                case 'ptna_config'
+                    desc = this.parse_ptna_config(p,varargin{:});
+
+                case 'ptnb_config'
+                    desc = this.parse_ptnb_config(p,varargin{:});
+
+                case 'atta'
+                    desc = this.parse_atta(p,varargin{:});
+
+                case 'attb'
+                    desc = this.parse_attb(p,varargin{:});
 
             otherwise
                 error('unknown task, this is a bug');
@@ -321,16 +333,19 @@ classdef rz6_unircx_tasklist < handle
         end
 
         function desc = parse_mux(this,p,varargin)
-
-%% TODO: aanpassen: muxbyte = channelnr + devicenr SHL 4 + set SHL 6 + reset SHL 7
            desc = this.newdesc();
            desc.TaskType = this.set_mux;
 
-           validByte = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','nonnegative','<',256});
-           p.addRequired('MuxByte', @(x) validByte(x));
+           validChan = @(x) validateattributes(x, {'numeric'}, {'scalar','nonnegative','<=',15});
+           validDevice = @(x) validateattributes(x, {'numeric'}, {'scalar','nonnegative','<=',3});
+           validSet = @(x) validateattributes(x, {'numeric'}, {'scalar','nonnegative','<=',1});
+           validReset = @(x) validateattributes(x, {'numeric'}, {'scalar','nonnegative','<=',1});
+           p.addRequired('Channel', @(x) validChan(x));
+           p.addRequired('Device', @(x) validDevice(x));
+           p.addRequired('Set', @(x) validSet(x));
+           p.addRequired('Reset', @(x) validReset(x));
            p.parse(varargin{:});
-           desc.Par1 = p.Results.MuxByte;
+           desc.Par1 = p.Results.Channel + 16*p.Results.Device + 64*p.Results.Set + 128*p.Results.Reset;
         end
 
         function desc = parse_signaling_byte(this,p,varargin)
@@ -435,17 +450,17 @@ classdef rz6_unircx_tasklist < handle
 
         function desc = parse_reset(this,p,varargin)
            desc = this.newdesc();
-           desc.TaskType = this.reset_stm;
+           desc.TaskType = this.reset_tsk;
            p.parse(varargin{:});
         end
 
         function desc = parse_ready(this,p,varargin)
            desc = this.newdesc();
-           desc.TaskType = this.stm_ready;
+           desc.TaskType = this.tsk_ready;
            p.parse(varargin{:});
         end
 
-        function desc = parse_holdinp(this,p,varargin)
+        function desc = parse_holdinput(this,p,varargin)
            desc = this.newdesc();
            desc.TaskType = this.hold_input;
 
@@ -470,6 +485,50 @@ classdef rz6_unircx_tasklist < handle
 
         end
 
+
+        function desc = parse_ptn_config(this,tasktype,p,varargin)
+           validIndex = @(x) validateattributes(x,{'numeric'},{'scalar','positive','<=',4});
+           validFrequency = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
+           validPhase = @(x) validateattributes(x,{'numeric'},{'scalar','>=',-180,'<=',180});
+           validAmplitude = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
+
+           desc = this.newdesc();
+           desc.TaskType = tasktype;
+           p.addRequired('Index', validIndex);
+           p.addRequired('Frequency', validFrequency);
+           p.addRequired('Phase', validPhase);
+           p.addRequired('Amplitude', validAmplitude);
+           p.parse(varargin{:});
+           desc.Par1 = p.Results.Index;
+           desc.Par2 = p.Results.Frequency;
+           desc.Par3 = p.Results.Phase;
+           desc.Par4 = p.Results.Amplitude;
+        end
+
+        function desc = parse_ptna_config(this,p,varargin)
+            desc = this.parse_ptn_config(this.ptna_config, p, varargin{:});
+        end
+
+        function desc = parse_ptnb_config(this,p,varargin)
+            desc = this.parse_ptn_config(this.ptnb_config, p, varargin{:});
+        end
+
+        function desc = parse_att(this,tasktype,p,varargin)
+           validAttenuation = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
+           desc = this.newdesc();
+           desc.TaskType = tasktype;
+           p.addRequired('Attenuation', validAttenuation);
+           p.parse(varargin{:});
+           desc.Par1 = p.Results.Attenuation; % att
+        end
+
+        function desc = parse_atta(this,p,varargin)
+            desc = this.parse_att(this.att_a,p,varargin{:});
+        end
+
+        function desc = parse_attb(this,p,varargin)
+            desc = this.parse_att(this.att_b,p,varargin{:});
+        end
 
     end
 
