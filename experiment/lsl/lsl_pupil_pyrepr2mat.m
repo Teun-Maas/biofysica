@@ -17,7 +17,8 @@ function result=lsl_pupil_pyrepr2mat(srepr)
     end
     
     if ischar(srepr)
-        dictvar=biofpy.eval_srepr(srepr);
+        %dictvar=biofpy.eval_srepr(srepr);
+        dictvar=py.eval(srepr,py.dict);   % slightly faster than biofpy.eval_srepr()
         result=py_cast_recursive(dictvar);
     elseif iscell(srepr)
         result=convert_multi(srepr);
