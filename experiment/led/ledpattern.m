@@ -1,13 +1,16 @@
-classdef ledpattern < handle
+classdef ledpattern
     % LEDPATTERN
-    % Create a collection of stimulus patterns for the PA_LEDS
-    % class.
+    % Create a collection of stimulus patterns for the LEDCONTROLLER
+    % and LEDCONTROLLER_PI classses.
     % s = ledpattern creates a single pattern
     % s = ledpattern(n) creates a vector of n patterns
     % s = ledpattern(m,n) creates a mxn matrix of patterns
     %
     % See also INTENSITY, SET, CLEAR, CLEAR_ALL, GET_LEDS, DELETE,
     % DUMP.
+    
+    % 20191025 GW Changed: ledpattern is not a handle class anymore to
+    % enable by-value assigments
     properties (Access=protected)
         intensity_red = uint16(50);
         intensity_grn = uint16(50);
@@ -24,6 +27,10 @@ classdef ledpattern < handle
                 end
                 obj(m, n) = ledpattern; % Preallocate object array
             end
+        end
+        
+        function p=clone(this)
+           p =  
         end
 
         function intensity(this, color, value)
