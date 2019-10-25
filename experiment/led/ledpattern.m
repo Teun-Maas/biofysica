@@ -10,7 +10,8 @@ classdef ledpattern
     % DUMP.
     
     % 20191025 GW Changed: ledpattern is not a handle class anymore to
-    % enable by-value assigments
+    % enable by-value assigments.
+    
     properties (Access=protected)
         intensity_red = uint16(50);
         intensity_grn = uint16(50);
