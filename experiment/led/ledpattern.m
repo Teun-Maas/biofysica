@@ -30,9 +30,6 @@ classdef ledpattern
             end
         end
         
-        function p=clone(this)
-           p =  
-        end
 
         function intensity(this, color, value)
             % INTENSITY(color, value)
