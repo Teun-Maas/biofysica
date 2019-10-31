@@ -21,8 +21,8 @@ if any(selled)
 % 	n		= nled*2; % LEDs need to be turned on and off
 % 	s		= ledpattern(n);
 
-    [patterns, led, times] = makeOrderedLedPatterns(stim,cfg);
-    nled = length(patterns);
+    [patterns, led, pattern_times, pattern_events] = makeOrderedLedPatterns(stim,cfg);
+    nled = length(pattern_times);
 
 	%%
 	for ledIdx = 1:nled
@@ -30,9 +30,9 @@ if any(selled)
 		% Set timing information on LEDs
 		% Note that in RA16 circuit, event 1 = start of experiment
 		str1 = ['eventLED' num2str(ledIdx)];
-		cfg.RA16_1.SetTagVal(str1,led(ledIdx).trigger_event+1);
+		cfg.RA16_1.SetTagVal(str1,pattern_events(ledIdx)+1);
 		str1 = ['delayLED' num2str(ledIdx)];
-		cfg.RA16_1.SetTagVal(str1,led(ledIdx).trigger_delay+1);  %% WHY +1?
+		cfg.RA16_1.SetTagVal(str1,pattern_times(ledIdx)+1);  %% WHY +1?
     end
     ledbox = ledcontroller;
     ledbox.write(patterns);
