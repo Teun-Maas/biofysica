@@ -1,4 +1,4 @@
-classdef ledpattern
+classdef ledpattern < handle
     % LEDPATTERN
     % Create a collection of stimulus patterns for the LEDCONTROLLER
     % and LEDCONTROLLER_PI classses.
@@ -12,7 +12,7 @@ classdef ledpattern
     % 20191025 GW Changed: ledpattern is not a handle class anymore to
     % enable by-value assigments.
     
-    properties (Access=protected)
+    properties %(Access=protected)
         intensity_red = uint16(50);
         intensity_grn = uint16(50);
         leds_red = zeros(128, 1);
@@ -30,6 +30,12 @@ classdef ledpattern
             end
         end
         
+        function copyfrom(this,src)
+            this.intensity_red = src.intensity_red;
+            this.intensity_grn = src.intensity_grn;
+            this.leds_red = src.leds_red;
+            this.leds_grn = src.leds_grn; 
+        end
 
         function intensity(this, color, value)
             % INTENSITY(color, value)
@@ -99,10 +105,25 @@ classdef ledpattern
                 
         function dump(this)
             % DUMP - show the content of the internal variables
-            this.intensity_red
-            this.intensity_grn
-            this.leds_red' %#ok<NOPRT>
-            this.leds_grn' %#ok<NOPRT>
+            
+            fprintf('=== dump of ledpattern ===\n');
+            fprintf('red intensity:   %d\n', this.intensity_red);
+            fprintf('green intensity: %d\n', this.intensity_grn);
+
+            onr=find(this.leds_red);
+            ong=find(this.leds_grn);
+            if ~isempty(onr)
+                fprintf('red led %d is on\n', onr);
+            else
+                fprintf('no red leds are on\n');
+            end
+            if ~isempty(ong)
+                fprintf('green led %d is on\n', ong);
+            else
+                fprintf('no green leds are on\n');
+            end
+            fprintf('=== END ===\n');
+
         end
     end
 end
