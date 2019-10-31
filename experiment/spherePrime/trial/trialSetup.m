@@ -21,7 +21,7 @@ if any(selled)
 % 	n		= nled*2; % LEDs need to be turned on and off
 % 	s		= ledpattern(n);
 
-    [s, times] = makeOrderedLedPatterns_20191025(stim,cfg);
+    [s, times] = makeOrderedLedPatterns(stim,cfg);
     nled = length(s);
 
 	%%
