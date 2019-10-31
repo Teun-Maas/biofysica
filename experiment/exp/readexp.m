@@ -176,7 +176,7 @@ while ~feof(fid)
 			elseif	ismember(cfg.Lab,[2 3]) % sphere and sphereMinor with LED colours
 
 				sn								= sn+1;
-				par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d',[8,1]);
+				par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d%d',[8,1]);
 				trial(tn).stim(sn).modality		= 'LED';
 				trial(tn).stim(sn).X			= par(1);
 				trial(tn).stim(sn).Y			= par(2);
