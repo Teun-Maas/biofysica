@@ -1,4 +1,4 @@
-function [patterns, times] = makeOrderedLedPatterns(modalities, cfg)
+function [patterns, m_Ordered, times] = makeOrderedLedPatterns(modalities, cfg)
     
     
     m_Ordered = orderLedModalities(modalities);

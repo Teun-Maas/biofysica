@@ -77,7 +77,7 @@ classdef ledcontroller < handle
             % This allows for very short led flashes.
             % By default count=0, LED's stay on until changed by the
             % next stimulus. 
-            modbus_write_registers(this.hmodbus, this.stimttl, uit16(count));
+            modbus_write_registers(this.hmodbus, this.stimttl, uint16(count));
         end
 
         function trigger_enable(this, value)
