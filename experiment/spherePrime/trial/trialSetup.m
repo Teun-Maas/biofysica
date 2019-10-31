@@ -21,8 +21,8 @@ if any(selled)
 % 	n		= nled*2; % LEDs need to be turned on and off
 % 	s		= ledpattern(n);
 
-    [s, led, times] = makeOrderedLedPatterns(stim,cfg);
-    nled = length(s);
+    [patterns, led, times] = makeOrderedLedPatterns(stim,cfg);
+    nled = length(patterns);
 
 	%%
 	for ledIdx = 1:nled
@@ -33,9 +33,10 @@ if any(selled)
 		cfg.RA16_1.SetTagVal(str1,led(ledIdx).trigger_event+1);
 		str1 = ['delayLED' num2str(ledIdx)];
 		cfg.RA16_1.SetTagVal(str1,led(ledIdx).trigger_delay+1);  %% WHY +1?
-	end
-	stim(find(selled,1)).ledhandle = ledcontroller;
-	stim(find(selled,1)).ledhandle.write(s);
+    end
+    ledbox = ledcontroller;
+    ledbox.write(patterns);
+	stim(find(selled,1)).ledhandle = ledbox;
 	%%
 end
 
