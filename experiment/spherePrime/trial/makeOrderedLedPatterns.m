@@ -1,4 +1,4 @@
-function [patterns, m_Ordered, pattern_times, pattern_events] = makeOrderedLedPatterns(modalities, cfg)
+function [patterns, pattern_times, pattern_events] = makeOrderedLedPatterns(modalities, cfg)
     
     
     m_Ordered = orderLedModalities(modalities);
@@ -20,20 +20,24 @@ function [patterns, m_Ordered, pattern_times, pattern_events] = makeOrderedLedPa
         %handle changes to patterns, make it a copy of the previous one.
         if i_p > 1
             patterns(i_p).copyfrom(patterns(i_p-1));
-		end
+        end
         
-		current_event = m_Ordered(i_m).trigger_event;
-        while (i_m <= length(m_Ordered)) && (m_Ordered(i_m).trigger_delay==t)
-			if m_Ordered(i_m).trigger_event ~= current_event
+        m=m_Ordered(i_m);
+		current_event = m.trigger_event;
+        current_led = m.Z;  % use this for finding ambiguous descriptions in the exp file
+                            % where one led is turned on as well as turned
+                            % off at the same moment, on different lines
+        while m.trigger_delay==t
+			if m.trigger_event ~= current_event
 				% still the same trigger_delay, but because we are
 				% after the next trigger, we make a new pattern.
 				patterns(i_p+1).copyfrom(patterns(i_p));
     	        patterns(i_p).dump;
 				i_p = i_p+1;
-				current_event=m_Ordered(i_m).trigger_event;
-			end
+				current_event=m.trigger_event;
+            end
+
             % add this LED change to this pattern
-            m=m_Ordered(i_m);
             col=m.colour+1;   %% FIXME???
             onoff=m.trigger_action;
             patterns(i_p).set(m.Z,cfg.ledcolours{col},onoff);
@@ -41,6 +45,11 @@ function [patterns, m_Ordered, pattern_times, pattern_events] = makeOrderedLedPa
 			pattern_times(i_p)=m.trigger_delay; %#ok<AGROW>
 			pattern_events(i_p)=m.trigger_event; %#ok<AGROW>
             i_m = i_m+1;
+            if i_m <= length(m_Ordered)
+                m=m_Ordered(i_m);
+            else
+                break;
+            end
         end
         %%DEBUG 
         patterns(i_p).dump;
@@ -60,7 +69,8 @@ function m_Ordered=orderLedModalities(modalities)
     m_Ordered=[];
     for ev=events
         m_byEv = findModalitiesByField(m_split,'trigger_event',ev);
-        m_byDelay = sortModalitiesByField(m_byEv,'trigger_delay');
+        m_byAction = sortModalitiesByField(m_byEv,'trigger_action');
+        m_byDelay = sortModalitiesByField(m_byAction,'trigger_delay');
         m_Ordered=[m_Ordered, m_byDelay]; %#ok<AGROW>
     end
     

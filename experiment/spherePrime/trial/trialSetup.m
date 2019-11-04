@@ -10,29 +10,28 @@ selled		= strcmpi({stim.modality},'LED') |  strcmpi({stim.modality},'SKY') |  st
 selacq		= strcmpi({stim.modality},'data acquisition');
 % seltrg = strcmpi({stim.modality},'trigger');
 selsnd		= strcmpi({stim.modality},'sound');
-selsndacq	= strcmpi({stim.modality},'sound acquisition');
+% selsndacq	= strcmpi({stim.modality},'sound acquisition');
 
 
 %% LED
 if any(selled)
-	led		= stim(selled);
 % 	nled	= numel(led);
 % 	% 	nled = 2
 % 	n		= nled*2; % LEDs need to be turned on and off
 % 	s		= ledpattern(n);
 
-    [patterns, led, pattern_times, pattern_events] = makeOrderedLedPatterns(stim,cfg);
+    [patterns, pattern_times, pattern_events] = makeOrderedLedPatterns(stim,cfg);
     nled = length(pattern_times);
 
 	%%
-	for ledIdx = 1:nled
-		% TDT RA16
-		% Set timing information on LEDs
-		% Note that in RA16 circuit, event 1 = start of experiment
-		str1 = ['eventLED' num2str(ledIdx)];
-		cfg.RA16_1.SetTagVal(str1,pattern_events(ledIdx)+1);
-		str1 = ['delayLED' num2str(ledIdx)];
-		cfg.RA16_1.SetTagVal(str1,pattern_times(ledIdx)+1);  %% WHY +1?
+    for ii = 1:nled
+        % TDT RA16
+        % Set timing information on LEDs
+        % Note that in RA16 circuit, event 1 = start of experiment
+        str1 = ['eventLED' num2str(ii)];
+        cfg.RA16_1.SetTagVal(str1,pattern_events(ii)+1);
+        str1 = ['delayLED' num2str(ii)];
+        cfg.RA16_1.SetTagVal(str1,pattern_times(ii)+1);  %% WHY +1?
     end
     ledbox = ledcontroller;
     ledbox.write(patterns);
