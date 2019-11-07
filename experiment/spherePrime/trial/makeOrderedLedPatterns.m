@@ -2,19 +2,19 @@ function [patterns, pattern_times, pattern_events] = makeOrderedLedPatterns(moda
     
     
     m_Ordered = orderLedModalities(modalities);
-
+    
     times = findUniqueTimes(m_Ordered);
-	events = findUniqueEvents(modalities);
+    events = findUniqueEvents(modalities);
     
     i_m=1; % index to modalities
     i_p=1;  % index to LED patterns
-	nn=length(times)+length(events)-1; % this is not quite correct,
-	% we may end up with too many patterns, and this migth lead to errors when
-	% loading into the led controller (too many patterns)
+    nn=length(times)+length(events)-1; % this is not quite correct,
+    % we may end up with too many patterns, and this migth lead to errors when
+    % loading into the led controller (too many patterns)
     patterns=ledpattern(nn);
-	pattern_times=[];
-	pattern_events=[];
-	
+    pattern_times=[];
+    pattern_events=[];
+    
     for t=times
         %make a new LED pattern here; because we
         %handle changes to patterns, make it a copy of the previous one.
@@ -23,27 +23,26 @@ function [patterns, pattern_times, pattern_events] = makeOrderedLedPatterns(moda
         end
         
         m=m_Ordered(i_m);
-		current_event = m.trigger_event;
-        current_led = m.Z;  % use this for finding ambiguous descriptions in the exp file
-                            % where one led is turned on as well as turned
-                            % off at the same moment, on different lines
+        current_event = m.trigger_event;
+        
         while m.trigger_delay==t
-			if m.trigger_event ~= current_event
-				% still the same trigger_delay, but because we are
-				% after the next trigger, we make a new pattern.
-				patterns(i_p+1).copyfrom(patterns(i_p));
-    	        patterns(i_p).dump;
-				i_p = i_p+1;
-				current_event=m.trigger_event;
+            if m.trigger_event ~= current_event
+                % still the same trigger_delay, but because we are
+                % after the next trigger, we make a new pattern.
+                patterns(i_p+1).copyfrom(patterns(i_p));
+                %%DEBUG
+                %%patterns(i_p).dump;
+                i_p = i_p+1;
+                current_event=m.trigger_event;
             end
-
+            
             % add this LED change to this pattern
-            col=m.colour+1;   %% FIXME???
+            col=m.colour;
             onoff=m.trigger_action;
             patterns(i_p).set(m.Z,cfg.ledcolours{col},onoff);
             patterns(i_p).intensity(cfg.ledcolours{col},m.intensity); % hoop: range 0-255, sphere range 1-50
-			pattern_times(i_p)=m.trigger_delay; %#ok<AGROW>
-			pattern_events(i_p)=m.trigger_event; %#ok<AGROW>
+            pattern_times(i_p)=m.trigger_delay; %#ok<AGROW>
+            pattern_events(i_p)=m.trigger_event; %#ok<AGROW>
             i_m = i_m+1;
             if i_m <= length(m_Ordered)
                 m=m_Ordered(i_m);
@@ -51,12 +50,10 @@ function [patterns, pattern_times, pattern_events] = makeOrderedLedPatterns(moda
                 break;
             end
         end
-        %%DEBUG 
-        patterns(i_p).dump;
+        %%DEBUG
+        %%patterns(i_p).dump;
         i_p = i_p+1;
     end
-    %patterns = generateLedPatterns(m_Ordered);
-    
 end
 
 function m_Ordered=orderLedModalities(modalities)
