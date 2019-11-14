@@ -3,13 +3,18 @@ function update_biofysica
 %You need a working git command in your system PATH for this
 
    oldcwd = cd;
-   root = biofysica_root();
+   try
+       root = biofysica_root();
+   catch
+       % actually, we should never get here...
+       error('Sorry, I can''t find your biofysica toolbox...');
+   end
    cd(root);
   
    if strcmp(cd,root)
-       fprintf('I found your biofysica toolbox is in ''%s''\n',root);
-       input('press <enter> to continue, or <control-C> to interrupt:');
-       fprintf('executing git pull to update your biofysica toolbox from the gitlab repository\n');
+       fprintf('I found your biofysica toolbox is ''%s''\n',root);
+       input('Press <enter> to continue, or <control-C> to interrupt:');
+       fprintf('\nExecuting git pull to update your biofysica toolbox from the gitlab repository\n');
        status=system('git pull');
        cd(oldcwd);
        if status ~= 0
