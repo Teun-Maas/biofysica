@@ -13,8 +13,8 @@ function update_biofysica
   
    if strcmp(cd,root)
        fprintf('I found your biofysica toolbox is ''%s''\n',root);
-       input('Press <enter> to continue, or <control-C> to interrupt:');
-       fprintf('\nExecuting git pull to update your biofysica toolbox from the gitlab repository\n');
+       input('Press <enter> to update, or <control-C> to interrupt:');
+       fprintf('\nExecuting ''git pull'' to update your biofysica toolbox from the gitlab repository\n');
        status=system('git pull');
        cd(oldcwd);
        if status ~= 0
