@@ -1,4 +1,4 @@
-classdef zmqrpi_remote_control.m < handle
+classdef zmqrpi_remote_control < handle
     % ZMQ_RPI_REMOTE_CONTROL is a class to communicate with a zmqrpi remote trigger
     % program
     % See also: PUPIL_REMOTE_CONTROL, SEND
@@ -18,7 +18,7 @@ classdef zmqrpi_remote_control.m < handle
     end
     
     methods
-        function this = pupil_remote_control(hostname, port)
+        function this = zmqrpi_remote_control(hostname, port)
             % PUPIL_REMOTE_CONTROL class constructor
             % 
             % obj = pupil_remote_control('pupil-host.local');
@@ -67,7 +67,13 @@ classdef zmqrpi_remote_control.m < handle
             if telapsed > this.tmax
                 warning('pupil_remote_control: round trip time exceeded max, %2.1f>%2.1f ms', 1e3*telapsed, 1e3*this.tmax);
             end
+            % telapsed
             result=reshape(char(rbytes),1,[]);
+        end
+        
+        function result = beep(this)
+            % BEEP - play a beep on the raspberry
+            result = this.send('b');
         end
         
 %%% PupilLabs leftovers
