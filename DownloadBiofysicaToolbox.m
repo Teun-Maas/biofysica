@@ -1,5 +1,14 @@
 function DownloadBiofysicaToolbox(targetdirectory)
+% DOWNLOADBIOFYSICATOOLBOX - Download and install a copy of the Biofysica Toolbox
+% 
+%  DownloadBiofysicaToolbox - install in the default location, on MacOs and Windows
+%  systems this is in your personal MATLAB directory Documents->MATLAB->biofysica
+%  On other UNIX systems this may be in ~/MATLAB/biofysica
+%
+%  SEE ALSO: UpdateBiofysicaToolbox
     
+% GW/20191218 - initial version
+
     repository='https://gitlab.science.ru.nl/marcw/biofysica.git';
     
     if nargin < 1
