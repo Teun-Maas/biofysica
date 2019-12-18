@@ -1,5 +1,5 @@
-function update_biofysica
-%UPDATE_BIOFYSICA -- update the biofysica toolbox from the gitlab repository  
+function UpdateBiofysicaToolbox
+%UPDATEBIOFYSICATOOLBOX -- update the biofysica toolbox from the gitlab repository  
 %You need a working git command in your system PATH for this
 
    oldcwd = cd;
@@ -23,5 +23,5 @@ function update_biofysica
    else
        error('could not change directory to biofysica root ''%s''',root);
    end
-   fprintf('done\n');
+   fprintf('Done.\nYou may need to restart Matlab.\n');
 end
