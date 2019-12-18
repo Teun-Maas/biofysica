@@ -21,7 +21,7 @@ You can get this from www.python.org
 
 ### Installing
 
-Download the DownloadBiofysicaToolbox.m script here
+Download the [https://gitlab.science.ru.nl/marcw/biofysica/blob/master/DownloadBiofysicaToolbox.m] (DownloadBiofysicaToolbox.m) script here
 https://gitlab.science.ru.nl/marcw/biofysica/blob/master/DownloadBiofysicaToolbox.m
 
 Run DownloadBiofysicaToolbox from Matlab and follow the instructions, e.g.
