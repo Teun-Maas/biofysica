@@ -4,7 +4,7 @@
 
 ### Prerequisites
 
-* A working git command line client
+**A working git command line client**
 
 If you don't have one:
 
@@ -18,7 +18,7 @@ $ xcode-select --install
 
 On Unix/Linux systems use your package manager to install it.
 
-* A working Python 3 environment.
+**A working Python 3 environment.**
 
 You can get this from www.python.org
 
