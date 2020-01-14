@@ -1,9 +1,11 @@
-classdef rz6_unircx_1core_50kHz < rz6_unircx_client
+classdef biox_rz6_ruurd < biox_rz6_client
 
     methods
-        function this = rz6_unircx_1core_50kHz
-
-            this@rz6_unircx_client(1,'RCX_Uni_1C_50kHz_V2.13.rcx');
+        function this = biox_rz6_ruurd(rz6number)
+            if nargin < 1
+                rz6number=-1;  % use rz6_dummy for debugging
+            end
+            this@biox_rz6_client(rz6number, 'biox_rz6_3c_50khz_v1.00.rcx');
             
             MUX0=1*16;
             MUX1=2*16;

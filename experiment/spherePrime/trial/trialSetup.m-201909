@@ -3,39 +3,55 @@ function [stim,cfg] = trialSetup(cfg,stim)
 %
 % Set up experimental parameters
 
-% GW/20191030 Modifications for using LED patterns.
-
 %% Set TDT parameters
 selled		= strcmpi({stim.modality},'LED') |  strcmpi({stim.modality},'SKY') |  strcmpi({stim.modality},'LASER') | strcmpi({stim.modality},'IRLED') ;
 selacq		= strcmpi({stim.modality},'data acquisition');
 % seltrg = strcmpi({stim.modality},'trigger');
 selsnd		= strcmpi({stim.modality},'sound');
-% selsndacq	= strcmpi({stim.modality},'sound acquisition');
+selsndacq	= strcmpi({stim.modality},'sound acquisition');
 
 
 %% LED
 if any(selled)
-% 	nled	= numel(led);
-% 	% 	nled = 2
-% 	n		= nled*2; % LEDs need to be turned on and off
-% 	s		= ledpattern(n);
-
-    [patterns, pattern_times, pattern_events] = makeOrderedLedPatterns(stim,cfg);
-    nled = length(pattern_times);
+	led		= stim(selled);
+	nled	= numel(led);
+	% 	nled = 2
+	n		= nled*2; % LEDs need to be turned on and off
+	s		= ledpattern(n);
 
 	%%
-    for ii = 1:nled
-        % TDT RA16
-        % Set timing information on LEDs
-        % Note that in RA16 circuit, event 1 = start of experiment
-        str1 = ['eventLED' num2str(ii)];
-        cfg.RA16_1.SetTagVal(str1,pattern_events(ii)+1);
-        str1 = ['delayLED' num2str(ii)];
-        cfg.RA16_1.SetTagVal(str1,pattern_times(ii)+1);  %% WHY +1?
-    end
-    ledbox = ledcontroller;
-    ledbox.write(patterns);
-	stim(find(selled,1)).ledhandle = ledbox;
+	cnt		= 0;
+	for ledIdx = 1:nled
+		% TDT RA16
+		% Set timing information on LEDs
+		% Note that in RA16 circuit, event 1 = start of experiment
+		str1 = ['eventLED' num2str(2*ledIdx-1)];
+		str2 = ['eventLED' num2str(2*ledIdx)];
+		cfg.RA16_1.SetTagVal(str1,led(ledIdx).onevent+1);
+		cfg.RA16_1.SetTagVal(str2,led(ledIdx).offevent+1);
+		str1 = ['delayLED' num2str(2*ledIdx-1)];
+		str2 = ['delayLED' num2str(2*ledIdx)];
+		cfg.RA16_1.SetTagVal(str1,led(ledIdx).ondelay+1);
+		cfg.RA16_1.SetTagVal(str2,led(ledIdx).offdelay+1);
+		
+		% PLC
+		if isfield(led,'colour')
+			col = led(ledIdx).colour;
+		else
+			col = 1;
+		end
+		for ii	= 1:2
+			cnt = cnt+1;
+			if ii==1
+				s(cnt).set(led(ledIdx).Z,cfg.ledcolours{col},1);
+				s(cnt).intensity(cfg.ledcolours{col},led(ledIdx).intensity); % hoop: range 0-255, sphere range 1-50
+			else
+				s(cnt).set(led(ledIdx).Z,cfg.ledcolours{col},0);
+			end
+		end
+	end
+	stim(find(selled,1)).ledhandle = ledcontroller;
+	stim(find(selled,1)).ledhandle.write(s);
 	%%
 end
 

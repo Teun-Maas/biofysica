@@ -176,7 +176,12 @@ while ~feof(fid)
 			elseif	ismember(cfg.Lab,[2 3]) % sphere and sphereMinor with LED colours
 
 				sn								= sn+1;
-				par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d',[8,1]);
+				par	= sscanf(curLine(nchar+1:end),'%d%d%d%d%d%d%d%d',[8,1]);
+                if numel(par)==7 % Old style syntax without colour spec
+                    par(4:8)=par(3:7);
+                    par(3)=1;    % default is green (1)
+                end
+                                
 				trial(tn).stim(sn).modality		= 'LED';
 				trial(tn).stim(sn).X			= par(1);
 				trial(tn).stim(sn).Y			= par(2);

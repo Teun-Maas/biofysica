@@ -57,13 +57,13 @@ switch method
 		W = pa_aweight(f);
 		dba = dba-W;
 		a2hl = -[2.4 0.3 -0.1 0.5 -0.1 -0.3 -2.8 -4 -0.5 4.4];
-		ai		= interp1(freq,a2hl,f,'cubic','extrap');
+		ai		= interp1(freq,a2hl,f,'pchip','extrap');
 		dbhl3	= dba+ai;
 		dbhl = (dbhl1+dbhl2+dbhl3)/3;
 		return
 end
 
-ai		= interp1(freq,a2hl,f,'cubic','extrap');
+ai		= interp1(freq,a2hl,f,'pchip','extrap');
 dbhl	= dba+ai;
 
 %%

@@ -21,9 +21,18 @@ function corrected_timestamps=lsl_correct_pupil_timestamps(data)
     % LSL_SESSION, LSL_STREAM
     
     assert(isa(data,'lsl_data'),'type mismatch: expected lsl_pupil_data or derived class.');
-    assert(size(data.Data,1)>=5, 'data is probably not pupil_data');
-    nsamp=size(data.Data,2);
-    
+    if isstruct(data.Data)
+        assert(isfield(data.Data,'topic'));
+    elseif (iscell(data.Data) && (data.Data{1}(1)=='{'))
+        error('data may be pupil_data in Python string representation, convert using lsl_pupil_convert2soa first');
+    else
+        assert(size(data.Data,1)>=5, 'data is probably not pupil_data');
+    end
+    if isstruct(data.Data)
+        nsamp=size(data.Data.timestamp,1);
+    else
+        nsamp=size(data.Data,2);
+    end
     % find gaps in data, generate vector of indexes, so we can compute a vector
     % of x-axis times by  xt=indexes*deltat;
     % indexes holds the indexes of sample points that actually contain
@@ -53,7 +62,11 @@ function fitted_ts=estimate_timestamps_lsq(x,ts)
 end
 
 function [igap,ngap]=find_gaps(data)
-    pupil_timestamps=data.Data(3,:);
+    if isstruct(data.Data)
+        pupil_timestamps=data.Data.timestamp;
+    else
+        pupil_timestamps=data.Data(3,:);
+    end
     ts=pupil_timestamps-pupil_timestamps(1);
     diffs=diff(ts);
     deltat=median(diffs);

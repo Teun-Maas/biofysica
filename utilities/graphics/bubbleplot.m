@@ -1,4 +1,4 @@
-function [TOT,h] = bubbleplot(X,Y,varargin)
+function [TOT,s] = bubbleplot(X,Y,varargin)
 % BUBBLEPLOT(X,Y)
 %
 % Make a bubbleplot of Y vs X
@@ -50,7 +50,7 @@ for ii	= 1:length(uX)
 end
 
 %% Normalize
-TOT		= log10(TOT+1);
+% TOT		= log10(TOT+1);
 mxTOT	= nanmax(nanmax(TOT));
 mnTOT	= nanmin(nanmin(TOT));
 TOT		= (TOT-mnTOT)./(mxTOT-mnTOT);
@@ -67,10 +67,14 @@ y	= y(sel);
 
 SZ			= ceil(100*M);
 [~,~,idx]	= unique(M);
-col			= statcolor(max(idx),[],[],[],'def',def);
+try
+	col = cbrewer('seq','OrRd',max(idx),'pchip');
+catch
+	col			= statcolor(max(idx),[],[],[],'def',def);
+end
 C			= col(idx,:);
-h			= scatter(x,y,SZ,C,'filled');
-set(h,'MarkerEdgeColor','k');
+s			= scatter(x,y,SZ,C,'filled');
+set(s,'MarkerEdgeColor','k');
 
 
 

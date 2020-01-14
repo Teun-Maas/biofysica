@@ -1,7 +1,7 @@
 function r = mat2struct(m, fieldlist)
 % mat2struct Create a structure from a matrix
 % mat2struct(M,FIELDS) returns a structure with fieldnames
-% from the cell array FIELDS filled with the columns from matrix M
+% from the cell array FIELDS filled with the rows from matrix M
 % if FIELDS is a struct, it will be used as a template for the result.
     assert(ismatrix(m));    
 
@@ -11,15 +11,15 @@ function r = mat2struct(m, fieldlist)
     end
     assert(iscell(fieldlist));
     
-    ncol = size(m,2);
+    mrow = size(m,1);
     nfield = length(fieldlist);
-    assert(ncol>=nfield);
+    assert(mrow>=nfield);
     
-    if ncol > nfield
-        warning('discarding %d extra columns in input matrix',ncol-nfield);
+    if mrow > nfield
+        warning('discarding %d extra columns in input matrix',mrow-nfield);
     end
     r = struct();
     for ii = 1:nfield
-        r.(fieldlist{ii}) = m(:,ii);
+        r.(fieldlist{ii}) = m(ii,:);
     end
 end
