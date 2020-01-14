@@ -151,7 +151,7 @@ methods
         
        p1 = this.convert_profile(axis1);
        p2 = this.convert_profile(axis2);
-       
+       save('C:\Users\TDT-User\Documents\MATLAB\profile.mat','p1','p2');
        this.plc.IEC_write(this.varmap.Table_1A, p1);
        this.plc.IEC_write(this.varmap.Table_2A, p2);
        result = 0;
