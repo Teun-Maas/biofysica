@@ -48,6 +48,8 @@ classdef zmqrpi_remote_control < handle
             this.socket=this.context.socket(ZMQ.REQ);
             uri=sprintf('tcp://%s:%d',hostname,port);
             this.socket.connect(uri);
+            rt=this.socket.getReceiveTimeOut();
+rt
         end
         
         function delete(this)
