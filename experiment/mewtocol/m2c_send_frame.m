@@ -4,6 +4,11 @@ function nwritten = m2c_send_frame(handle, frame)
    if exist('m2c_debuglevel','var') & (m2c_debuglevel > 0)
        fprintf('> "%s"\n', frame);
    end
+
    pnet(handle, 'printf', '%s\r', frame);
+
+   if exist('m2c_debuglevel','var') & (m2c_debuglevel > 0)
+       fprintf('> done.\n');
+   end
 
 end
