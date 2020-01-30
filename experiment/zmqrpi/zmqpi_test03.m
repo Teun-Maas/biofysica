@@ -32,7 +32,7 @@ function [trigdata, evdata] = zmqpi_test03
 
   ses=lsl_session();
   ses.add_stream(trigstr);
-  addlistener(evstr,'DataAvailable',@triglistener);
+  addlistener(trigstr,'DataAvailable',@triglistener);
 
   ses.add_stream(evstr);
   addlistener(evstr,'DataAvailable',@evlistener);
