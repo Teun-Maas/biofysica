@@ -48,8 +48,7 @@ classdef zmqrpi_remote_control < handle
             this.socket=this.context.socket(ZMQ.REQ);
             uri=sprintf('tcp://%s:%d',hostname,port);
             this.socket.connect(uri);
-            rt=this.socket.getReceiveTimeOut();
-rt
+            this.socket.getReceiveTimeOut();
         end
         
         function delete(this)
@@ -63,7 +62,8 @@ rt
             % and returns the  message string returned from the remote
             % side.
             tstart=tic;
-            this.socket.send(msg);
+            this.socket.send(sprintf('%s\0',msg));
+
             rbytes=this.socket.recv();
             telapsed=toc(tstart);
             if telapsed > this.tmax
@@ -73,9 +73,21 @@ rt
             result=reshape(char(rbytes),1,[]);
         end
         
-        function result = beep(this)
+        function result = beep(this, freq, duration)
             % BEEP - play a beep on the raspberry
-            result = this.send('b');
+            % result = obj.beep(freq, duration);  
+            % result = obj.beep(880, 0.6); % plays a 880 Hz tone for 0.6
+            % seconds
+            % If freq or duration are omitted, default values are 500Hz and
+            % 1 second.
+            if nargin < 2
+                freq = 440;
+            end
+            if nargin < 3
+                duration = 0.5;
+            end
+            str = sprintf("B %d %d", freq, duration*1000);
+            result = this.send(str);
         end
         
 %%% PupilLabs leftovers
