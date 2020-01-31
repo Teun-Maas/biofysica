@@ -90,6 +90,12 @@ classdef zmqrpi_remote_control < handle
             result = this.send(str);
         end
         
+        function result = digitalout(this, value)
+            % DIGITALOUT - set digital output to high or low level
+            str = sprintf("D %d", value);
+            result = this.send(str);
+        end
+        
 %%% PupilLabs leftovers
         function result = start_recording(this,session_name)
             % START_RECORDING starts a recording session on remote
