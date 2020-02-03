@@ -1,8 +1,8 @@
 function [trigdata, evdata] = zmqpi_test03
 
-  trig=zmqrpi_remote_control('lsldert01.local',5555);
+  trig=zmqrpi_remote_control('lsldert02.local',5555);
 
-  info=lsl_resolver('type=''Digital Triggers @ lsldert01''');
+  info=lsl_resolver('type=''Digital Triggers @ lsldert02''');
   l=info.list();
   if isempty(l)
       error('no streams found');
@@ -16,7 +16,7 @@ function [trigdata, evdata] = zmqpi_test03
   
   trigstr=lsl_istream(info{n});
 
-  info=lsl_resolver('type=''Digital Events @ lsldert01''');
+  info=lsl_resolver('type=''Digital Events @ lsldert02''');
   l=info.list();
   if isempty(l)
       error('no streams found');

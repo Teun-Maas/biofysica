@@ -8,7 +8,7 @@ classdef biox_rz6_tasklist < handle
 
     properties (Constant)
         desclen = 7;
-
+        %RL: tasks numbers are OK
         task_waitfortrigger = 0;
         task_sound_a = 1;
         task_sound_b = 2;
@@ -19,12 +19,13 @@ classdef biox_rz6_tasklist < handle
         task_dioout = 7;
         task_trgout = 8;
         task_reset = 9;
-        tsk_ready = 10;
+        task_ready = 10;
         task_multiconfiga = 11;
         task_multiconfigb = 12;
         task_atta = 13;
         task_attb = 14;
-
+        
+        %RL: soundtypes numbers are OK
         soundtype_stop = 0;
         soundtype_tone = 1;
         soundtype_sweep = 2;
@@ -115,10 +116,10 @@ classdef biox_rz6_tasklist < handle
                 case 'ready'
                     desc = this.parse_ready(p,varargin{:});
 
-                case 'task_multiconfiga'
+                case 'multiconfiga' %RL: naam veranderd
                     desc = this.parse_multiconfiga(p,varargin{:});
 
-                case 'task_multiconfigb'
+                case 'multiconfigb' %RL: naam veranderd
                     desc = this.parse_multiconfigb(p,varargin{:});
 
                 case 'atta'
@@ -164,36 +165,56 @@ classdef biox_rz6_tasklist < handle
             desc = this.newdesc();
             desc.TaskType = this.task_waitfortrigger;
 
-            validExtTrig = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',8});
+            validExtTrig = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',256}); %aangpast RL 8-->256            
             
-            p.addRequired('Input', @(x) validInput(x));
+            % old version does not work
+%            function isValid = validInput(x)
+%               expectedStringInputs = { 'ZBusA', 'ZBusB', 'External', 'Soft1', 'Soft2', 'Soft3'};  %RL: extra opties toegevoegd
+%               if ischar(x)
+%                  isValid = any(validatestring(x,expectedStringInputs));
+%               else
+%                  %RL: op de volgende regel krijg ik een foutmelding
+%                  isValid = validateattributes(x, {'numeric'},{'scalar','nonnegative','<',64}); %RL: 8 veranderd in 64.
+%               end
+%            end                       
+%            
+%            p.addRequired('Input', @(x) validInput(x));
+            
+            % new version
+            expectedStringInputs = { 'ZBusA', 'ZBusB', 'External', 'Soft1', 'Soft2', 'Soft3'};  %RL: extra opties toegevoegd
+            if ischar(varargin{3})
+               isValid = @(x) any(validatestring(x,expectedStringInputs));               
+            else
+               isValid = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',64}); %RL: 8 veranderd in 64.
+            end;               
+            p.addRequired('Input', isValid);            
+            
             p.addOptional('ExternalTrigger', 0, @(x) validExtTrig(x));
             p.parse(varargin{:});
             
             desc.Par1 = input2num(p.Results.Input);
             desc.Par2 = p.Results.ExternalTrigger;
 
-            function isValid = validInput(x)
-               expectedStringInputs = { 'ZBusB', 'External', 'Soft1' };
-               if ischar(x)
-                  isValid = any(validatestring(x,expectedStringInputs));
-               else
-                  isValid = validateattributes(x, {'numeric'},{'scalar','nonnegative','<',8});
-               end
-            end
+           
 
-            function n = input2num(x)
-               % expectedStringInputs = { 'ZBusB', 'External', 'Soft1' };
-               if ischar(x)
-                  x = lower(x);
-                  if x(1) == 'z'
+            function n = input2num(x) 
+               % expectedStringInputs = {  'ZBusA', 'ZBusB', 'External', 'Soft1', 'Soft2', 'Soft3' };
+               if ischar(x)  
+                  x = lower(x); 
+                  if     x(5) == 'a'     %RL: extra opties toegevoegd
                      n = 1;
-                  elseif x(1) == 'e'
+                  elseif x(5) == 'b'
                      n = 2;
-                  elseif x(1) == 's'
+                  elseif x(1) == 'e'
                      n = 4;
+                  elseif x(5) == '1'
+                     n = 8;                     
+                  elseif x(5) == '2'
+                     n = 16;                                          
+                  elseif x(5) == '3'
+                     n = 32;                                                               
                   end
-               else
+               else % when x is a number
                   n = x;
                end
             end
@@ -221,7 +242,7 @@ classdef biox_rz6_tasklist < handle
             validPosNum = @(x) validateattributes(x,{'numeric'},{'scalar','positive'});
             valid01 = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',1});
             validStartPhase = @(x) validateattributes(x,{'numeric'},{'scalar','>=',-180,'<=',180});
-            expectedSounds = { 'None','Stop','Tone','Sweep','Noise','Ripple','Wav','B=A'};
+            expectedSounds = { 'Stop','Tone','Sweep','Noise','Ripple','WAV','B=A', 'MultiTone'}; %RL 'MultiTone' toegevoegd
 
             p.addRequired('SoundType', @(x) any(validatestring(x, expectedSounds)));
             p.parse(varargin{1:3});
@@ -237,17 +258,20 @@ classdef biox_rz6_tasklist < handle
             case 'tone'
                desc.SoundType = this.soundtype_tone;
                p.addRequired('ToneFreq', validFreq);
-               p.addRequired('ModFreq', validFreq);
-               p.addRequired('ModBW', validFreq);
+               p.addOptional('ModFreq', 0, validFreq); %RL optional van gemaakt
+               p.addOptional('ModBW', 0, validFreq);   %RL optional van gemaakt
                p.parse(varargin{:});
                desc.Par1 = p.Results.ToneFreq;
                desc.Par2 = p.Results.ModFreq;
                desc.Par3 = p.Results.ModBW;
+               
+            case 'multitone'
+               desc.SoundType = this.soundtype_multitone;
+               p.parse(varargin{:});               
 
             case 'sweep'
                desc.SoundType = this.soundtype_sweep;
                p.addRequired('StartFreq', validFreq);
-%TODO change in manual, NrOctaves vs. no_octaves
                p.addRequired('NrOctaves', validPosNum);
                p.addRequired('Period', validPosNum);
                p.parse(varargin{:});
@@ -275,7 +299,8 @@ classdef biox_rz6_tasklist < handle
 
             case 'wav'
                desc.SoundType = this.soundtype_wav;
-               p.addRequired('Reset', valid01);
+               %RL mischien 'Reset' als input ipv 1?
+               p.addOptional('Reset', 0, valid01); %RL optional ipv Required
                p.parse(varargin{:});
                desc.Par1 = p.Results.Reset;
 
@@ -287,26 +312,26 @@ classdef biox_rz6_tasklist < handle
                assert(desc.TaskType == this.task_sound_b,...
                   'SoundType ''b=a'' is only valid for taskType ''SoundB''');
                desc.SoundType = this.soundtype_ba;
-               expectedMovTypes = { 'None','Linear','Sine' };
+               expectedMovTypes = { 'B=A','Linear','Sine' };
                p.addRequired('movType', @(x) any(validatestring(x, expectedMovTypes)));
                p.parse(varargin{1:4});
                movType=lower(validatestring(p.Results.movType,expectedMovTypes));
                switch lower(movType)
-               case 'none'
+               case 'b=a'
                   p.parse(varargin{:});
-                  desc.Par1 = 0;
+                  desc.Par1 = 1; %aangepast RL
                case 'sine'
                   p.addRequired('Period', validPosNum);
                   p.addRequired('Phase', validStartPhase);
                   p.parse(varargin{:});
-                  desc.Par1 = 1;
+                  desc.Par1 = 2; %aangepast RL
                   desc.Par2 = p.Results.Period; % msec
                   desc.Par3 = p.Results.Phase; 
                case 'linear'
                   p.addRequired('Period', validPosNum);
                   p.addRequired('Phase', validStartPhase);
                   p.parse(varargin{:});
-                  desc.Par1 = 2;
+                  desc.Par1 = 3;  %aangepast RL
                   desc.Par2 = p.Results.Period; % msec
                   desc.Par3 = p.Results.Phase; 
                otherwise
@@ -399,18 +424,16 @@ classdef biox_rz6_tasklist < handle
         function desc = parse_daq(this,p,varargin)
            desc = this.newdesc();
            desc.TaskType = this.task_daq;
-
            validChannelSelection = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','nonnegative'});
+               {'numeric'}, {'vector','nonnegative'});
            validDivisor = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','positive'});
            validStartStop = @(x) any(validatestring(x,{'Start','Stop'}));
-
-           p.addRequired('ChannelSelection', validChannelSelection);
-           p.addRequired('Divisor', validDivisor);
+         
            p.addRequired('StartStop', validStartStop);
+           p.addRequired('ChannelSelection', validChannelSelection);           
+           p.addOptional('Divisor', 1, validDivisor);
 
-% % TODO new version, always have three parameters
            p.parse(varargin{:});
            switch lower(p.Results.StartStop)
            case 'stop'
@@ -420,26 +443,12 @@ classdef biox_rz6_tasklist < handle
            otherwise
                error('unexcpected error, this is a bug');
            end
-           desc.Par2 = p.Results.ChannelSelection;
+          
+           ChannelList = p.Results.ChannelSelection; % RL
+           ChannelListInt = sum(2.^ChannelList); %RL: convert to integer 
+           
+           desc.Par2 = ChannelListInt;
            desc.Par3 = p.Results.Divisor;
-
-% % TODO This is the previous version. Delete if above is correct           
-% %            p.addRequired('StartStop', validStartStop);
-% %            p.parse(varargin{1:3});
-% %            switch lower(p.Results.StartStop)
-% %            case 'stop'
-% %                p.parse(varargin{:});
-% %                desc.Par1 = 0;
-% %            case 'start'
-% %                desc.Par1 = 1;
-% %                p.addRequired('ChannelSelection', validChannelSelection);
-% %                p.addOptional('Divisor', 1, validDivisor);
-% %                p.parse(varargin{:});
-% %                desc.Par2 = p.Results.ChannelSelection;
-% %                desc.Par3 = p.Results.Divisor;
-% %            otherwise
-% %                error('unexcpected error, this is a bug');
-% %            end
         end
 
         function desc = parse_setdio(this,p,varargin)
@@ -461,14 +470,12 @@ classdef biox_rz6_tasklist < handle
            validByte = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','nonnegative','<',256});
            validDTInterval = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','>',100});
+              {'numeric'}, {'scalar','>=',40}); %RL: changed to >= 40
 
-
-           p.addRequired('OutputByte', validByte);
-%TODO change in manual: DoubleDelay vs DelayTime
-           p.addOptional('DoubleDelay',0, validDTInterval);
-           p.parse(varargin{:});
-           desc.Par1 = p.Results.OutputByte;
+           p.addRequired('OutputByte', validByte);                     
+           p.addOptional('DoubleDelay',0, validDTInterval);           
+           p.parse(varargin{:});           
+           desc.Par1 = p.Results.OutputByte;          
            desc.Par2 = p.Results.DoubleDelay;
         end
 
@@ -480,7 +487,7 @@ classdef biox_rz6_tasklist < handle
 
         function desc = parse_ready(this,p,varargin)
            desc = this.newdesc();
-           desc.TaskType = this.tsk_ready;
+           desc.TaskType = this.task_ready;
            p.parse(varargin{:});
         end
 
@@ -488,8 +495,7 @@ classdef biox_rz6_tasklist < handle
            validIndex = @(x) validateattributes(x,{'numeric'},{'scalar','positive','<=',4});
            validFrequency = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
            validPhase = @(x) validateattributes(x,{'numeric'},{'scalar','>=',-180,'<=',180});
-%TODO check manual if 0 <= amplitude <=1 is correct
-           validAmplitude = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',1});
+           validAmplitude = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',1000}); %RL bereik veranderd 0...1000%
 
            desc = this.newdesc();
            desc.TaskType = tasktype;
@@ -508,7 +514,7 @@ classdef biox_rz6_tasklist < handle
             desc = this.parse_multiconfig(this.task_multiconfiga, p, varargin{:});
         end
 
-        function desc = parse_multiconfig_b(this,p,varargin)
+        function desc = parse_multiconfigb(this,p,varargin)
             desc = this.parse_multiconfig(this.task_multiconfigb, p, varargin{:});
         end
 
