@@ -68,10 +68,12 @@ function DownloadBiofysicaToolbox(targetdirectory)
         end
         error('Git client is missing. Please install it.');
         
-    else
-        gitcmd = strip(result);
     end
-    
+   
+    gitcmd = strip(result);
+    if ispc
+        gitcmd = ['"' gitcmd '"'];
+    end
     
     % prerequisites
     % 2. Python 3
