@@ -48,7 +48,7 @@ function DownloadBiofysicaToolbox(targetdirectory)
     
     % prerequisites
     % 1. Git
-    if IsWin
+    if ispc
         [status,result] = system('where git');
     else % UNIX
         [status,result] = system('which git');
@@ -57,7 +57,7 @@ function DownloadBiofysicaToolbox(targetdirectory)
         fprintf('To download the biofysica toolbox you need a working git client\n');
         fprintf('The ''git'' command is not in not in your system PATH.\n');
         fprintf('Please download and install a recent git client.\n');
-        if IsWin
+        if ispc
             fprintf('For Windows download and install the git client from\n');
             fprintf('https://git-scm.com/download/win and then run %s again.\n', mfilename);
         elseif ismac
@@ -82,7 +82,7 @@ function DownloadBiofysicaToolbox(targetdirectory)
         fprintf('Matlab currently uses:\n');
         pyversion;
         fprintf('\nFinding python versions installed on your system...\n\n');
-        if IsWin
+        if ispc
             [r,str]=system('where /R "C:\Program Files" python');
         else
             [r,str]=system('bash -c ''type -ap python3 python''');
@@ -145,7 +145,7 @@ function DownloadBiofysicaToolbox(targetdirectory)
 end
 
 function m = get_matlabdir
-    if IsWin || ismac
+    if ispc || ismac
         m = fullfile(get_homedir,'Documents','MATLAB');
     else
         m = fullfile(get_homedir,'MATLAB');
@@ -157,7 +157,7 @@ function m = get_matlabdir
 end
 
 function h = get_homedir
-    if IsWin
+    if ispc
         h=strcat(getenv('HOMEDRIVE'),'\',getenv('HOMEPATH'));
     else
         h=getenv('HOME');
