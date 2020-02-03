@@ -69,11 +69,7 @@ function DownloadBiofysicaToolbox(targetdirectory)
         error('Git client is missing. Please install it.');
         
     end
-   
-    gitcmd = strip(result);
-    if ispc
-        gitcmd = ['"' gitcmd '"'];
-    end
+    gitcmd = 'git';
     
     % prerequisites
     % 2. Python 3
@@ -97,7 +93,11 @@ function DownloadBiofysicaToolbox(targetdirectory)
             end
             str=strsplit(str,'\n');
             for p=str
-                [~,ver]=system(sprintf('%s -V',p{1}));
+                if ispc
+                    [~,ver]=system(sprintf('"%s" -V',p{1}));
+                else
+                    [~,ver]=system(sprintf('%s -V',p{1}));
+                end
                 if isspace(ver(end)), ver=ver(1:end-1); end
                 
                 fprintf('%s is %s\n',p{1}, ver);
