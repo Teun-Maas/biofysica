@@ -51,6 +51,7 @@ classdef lsl_session < handle
             this.flush_streams();
             this.open_streams();
             start(this.tmr);
+            pause(0.1); 
         end
         
         function stop(this)
