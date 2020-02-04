@@ -73,7 +73,7 @@ classdef zmqrpi_remote_control < handle
             result=reshape(char(rbytes),1,[]);
         end
         
-        function result = beep(this, freq, duration)
+        function result = beep(this, freq, duration, marker)
             % BEEP - play a beep on the raspberry
             % result = obj.beep(freq, duration);  
             % result = obj.beep(880, 0.6); % plays a 880 Hz tone for 0.6
@@ -86,13 +86,19 @@ classdef zmqrpi_remote_control < handle
             if nargin < 3
                 duration = 0.5;
             end
-            str = sprintf("B %d %d", freq, duration*1000);
+            if nargin < 4
+                marker = sprintf("BEEP_%d",freq);
+            end
+            str = sprintf("B %d %d %s", freq, duration*1000, marker);
             result = this.send(str);
         end
         
-        function result = digitalout(this, value)
+        function result = digitalout(this, value, marker)
             % DIGITALOUT - set digital output to high or low level
-            str = sprintf("D %d", value);
+            if nargin < 3
+                marker = sprintf("DOUT_%d", value);
+            end
+            str = sprintf("D %d %s", value, marker);
             result = this.send(str);
         end
         
