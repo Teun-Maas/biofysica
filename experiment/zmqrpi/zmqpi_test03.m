@@ -16,19 +16,19 @@ function [trigdata, evdata] = zmqpi_test03
     
     trigstr=lsl_istream(info{n});
     
-    info=lsl_resolver('type=''Digital Events @ lsldert01''');
-    l=info.list();
-    if isempty(l)
-        error('no streams found');
-    end
-    
-    for i=1:numel(l)
-        fprintf('%d: name: ''%s'' type: ''%s''\n',i,l(i).name,l(i).type);
-    end
-    
-    n=1 ; %=input('enter stream number to acquire: ');
-    
-    evstr=lsl_istream(info{n});
+%     info=lsl_resolver('type=''Digital Events @ lsldert01''');
+%     l=info.list();
+%     if isempty(l)
+%         error('no streams found');
+%     end
+%     
+%     for i=1:numel(l)
+%         fprintf('%d: name: ''%s'' type: ''%s''\n',i,l(i).name,l(i).type);
+%     end
+%     
+%     n=1 ; %=input('enter stream number to acquire: ');
+%     
+%     evstr=lsl_istream(info{n});
     
     ses=lsl_session();
     
@@ -38,8 +38,8 @@ function [trigdata, evdata] = zmqpi_test03
         ses.add_stream(trigstr);
         addlistener(trigstr,'DataAvailable',@triglistener);
         
-        ses.add_stream(evstr);
-        addlistener(evstr,'DataAvailable',@evlistener);
+       % ses.add_stream(evstr);
+%         addlistener(evstr,'DataAvailable',@evlistener);
         
         input('press enter to start');
         
@@ -69,7 +69,7 @@ function [trigdata, evdata] = zmqpi_test03
         delete(trig);
         ses.stop();
         trigdata=trigstr.read();
-        evdata=evstr.read();
+%         evdata=evstr.read();
         
     catch
         fprintf('\ncaught exeption\n');
@@ -90,7 +90,7 @@ function [trigdata, evdata] = zmqpi_test03
     function cleanupFun()
         delete(ses);
         delete(trigstr);
-        delete(evstr);
+%         delete(evstr);
         delete(info);
     end
 end
