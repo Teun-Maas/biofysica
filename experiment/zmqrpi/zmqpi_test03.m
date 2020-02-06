@@ -52,6 +52,7 @@ function [trigdata, evdata] = zmqpi_test03
         %      trig.beep();
         %   end
         %  pause(3);
+        trig.set_digitalin_marker('DRUKKNOP');
         trig.beep(1760, 1);
         trig.digitalout(1);
         doutval=1;

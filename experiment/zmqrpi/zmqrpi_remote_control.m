@@ -102,6 +102,12 @@ classdef zmqrpi_remote_control < handle
             result = this.send(str);
         end
         
+        function set_digitalin_marker(this, marker)
+            % SET_DIGITALIN_MARKER - set the marker name that is sent on digital in events
+            str = sprintf("M %s", marker);
+            result = this.send(str);
+        end
+
 %%% PupilLabs leftovers
         function result = start_recording(this,session_name)
             % START_RECORDING starts a recording session on remote
