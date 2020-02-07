@@ -9,7 +9,7 @@ classdef lsldert_client < lsldert_abstract_client
     end
     
     methods
-        function this = lsldert_client(varargin)
+        function this = lsldert_client(hostname,port)
             % LSLDERT_CLIENT class constructor
             %
             % obj = lsldert_client('lslsdert-host.local');
