@@ -26,21 +26,24 @@ classdef lsldert_cluster < lsldert_abstract_client
            request=sprintf('%s\0',msg);
            
            % send request to all clients
-           %t1=tic;
+           t1=tic;
            ii=1;
            while ii <= n
                this.clients{ii}.socket.send(request);
                ii=ii+1; 
            end
-           %telapsed=1e3*toc(t1)
+           telapsed_SEND=1e3*toc(t1)
 
            % collect responses from all clients
+           t1=tic;
            ii=1;
            while ii <= n
                rbytes=this.clients{ii}.socket.recv();
                result{ii}=reshape(char(rbytes),1,[]);
                ii=ii+1;
            end   
+           telapsed_RECV=1e3*toc(t1)
+
        end
    end    
 end
