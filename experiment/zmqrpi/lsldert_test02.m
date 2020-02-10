@@ -2,7 +2,7 @@ function trigdata = lsldert_test01
     
     trigc=cell(1);
     trigc{1}=lsldert_client('lsldert01.local',5555);
-    trigc{2}=lsldert_client('lsldert04.local',5555);
+    trigc{2}=lsldert_client('lsldert03.local',5555);
 
     trig = lsldert_cluster;
     %trig.add_client(trigc{1});
@@ -17,7 +17,7 @@ function trigdata = lsldert_test01
     fprintf('%d: name: ''%s'' type: ''%s''\n',1,l(1).name,l(1).type);
     trigstr1=lsl_istream(info{1});  
     
-    info=lsl_resolver('type=''Digital Triggers @ lsldert04''');
+    info=lsl_resolver('type=''Digital Triggers @ lsldert03''');
     l=info.list();
     if isempty(l)
         error('no streams found');
@@ -51,14 +51,15 @@ function trigdata = lsldert_test01
         trig.beep(1760, 1);
         trig.digitalout(1);
         doutval=1;
-        for jj=1:2
+        for jj=1:100
             for ii=1:10
-                trig.beep(440,0.5,'PIEP');
                 trig.digitalout(doutval,'AU');
+                trig.beep(440,0.05,'PIEP');
+
                 doutval=1-doutval;
-                pause(0.02);
+                pause(0.1);
             end
-            pause(0.27);
+            %pause(0.27);
         end
         
         input('press enter to stop');
