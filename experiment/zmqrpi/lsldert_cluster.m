@@ -32,7 +32,7 @@ classdef lsldert_cluster < lsldert_abstract_client
                this.clients{ii}.socket.send(request);
                ii=ii+1; 
            end
-           telapsed_SEND=1e3*toc(t1)
+          % telapsed_SEND=1e3*toc(t1)
 
            % collect responses from all clients
            t1=tic;
@@ -42,7 +42,7 @@ classdef lsldert_cluster < lsldert_abstract_client
                result{ii}=reshape(char(rbytes),1,[]);
                ii=ii+1;
            end   
-           telapsed_RECV=1e3*toc(t1)
+          % telapsed_RECV=1e3*toc(t1)
 
        end
    end    
