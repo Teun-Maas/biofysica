@@ -39,9 +39,7 @@ classdef  biox_abstract_client
                 sizetag=sprintf('WAV%d_Size',chan); %RL: Naam aangepast 
                 datatag=sprintf('WAV%d_Data',chan); %RL: Naam aangepast 
                 this.write(sizetag,nsamp);
- 
-                this.writeF(datatag,data(i,:)); %RL 'chan' verander naar 'i'
-                %this.writeF(datatag,data(chan,:)); 
+                this.write(datatag,data(i,:)); %RL 'chan' verander naar 'i'                
             end
         end
         
