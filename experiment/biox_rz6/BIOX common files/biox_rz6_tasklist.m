@@ -491,7 +491,7 @@ classdef biox_rz6_tasklist < handle
            validByte = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','nonnegative','<',256});
            validDTInterval = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','>=',40}); %RL: changed to >= 40
+              {'numeric'}, {'scalar','>=',0.000040}); %RL: changed to >= 0.000040
 
            p.addRequired('OutputByte', validByte);                     
            p.addOptional('DoubleDelay',0, validDTInterval);           
