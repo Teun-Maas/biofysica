@@ -298,8 +298,13 @@ classdef biox_rz6_tasklist < handle
                p.addRequired('HpFreq', validFreq);
                p.addRequired('LpFreq', validFreq);
                p.parse(varargin{:});
-               desc.Par1 = p.Results.HpFreq;
-               desc.Par2 = p.Results.LpFreq;
+               HpFreq = p.Results.HpFreq;
+               LpFreq = p.Results.LpFreq;
+               if HpFreq >= LpFreq
+                 error('LpFreq must be greater than HpFreq');  
+               end    
+               desc.Par1 = HpFreq;
+               desc.Par2 = LpFreq;
 
             case 'ripple'
                desc.SoundType = this.soundtype_ripple;
