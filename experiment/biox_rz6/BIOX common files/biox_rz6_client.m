@@ -17,7 +17,7 @@ classdef biox_rz6_client < biox_abstract_client
             end
             
             this.rz6.reset();
-
+            pause(0.05); %RCX file needs time to reset            
             if ~this.rz6.LoadCOF(circuit)
                error('LoadCOF');
             end

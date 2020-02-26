@@ -321,9 +321,17 @@ classdef biox_rz6_tasklist < handle
             case 'wav'
                desc.SoundType = this.soundtype_wav;
                %RL mischien 'Reset' als input ipv 1?
-               p.addOptional('Reset', 0, valid01); %RL optional ipv Required
+               expectedPar1 = { 'Reset', 'Continue' }
+               p.addOptional('Reset', 'Reset', @(x) any(validatestring(x, expectedPar1))); %RL optional ipv Required
                p.parse(varargin{:});
-               desc.Par1 = p.Results.Reset;
+               switch lower(p.Results.Reset)
+               case 'reset'
+                  desc.Par1 = 1;
+               case 'continue'
+                  desc.Par1 = 0;  
+               otherwise
+                 error('invalid parameter for WAV-sound, this is a bug');                      
+               end  
 
             case 'multitone'
                desc.SoundType = this.soundtype.multitone;
@@ -333,12 +341,12 @@ classdef biox_rz6_tasklist < handle
                assert(desc.TaskType == this.task_sound_b,...
                   'SoundType ''b=a'' is only valid for taskType ''SoundB''');
                desc.SoundType = this.soundtype_ba;
-               expectedMovTypes = { 'B=A','Linear','Sine' };
+               expectedMovTypes = { 'Fixed','Linear','Sine' };
                p.addRequired('movType', @(x) any(validatestring(x, expectedMovTypes)));
                p.parse(varargin{1:4});
                movType=lower(validatestring(p.Results.movType,expectedMovTypes));
                switch lower(movType)
-               case 'b=a'
+               case 'fixed'
                   p.parse(varargin{:});
                   desc.Par1 = 1; %aangepast RL
                case 'sine'
