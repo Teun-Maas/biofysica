@@ -1,6 +1,3 @@
-% RL: This code is for any RZ6 3DSP
-% RL: This code works with 'RCX_Uni_3C_50kHz_V3.10.rcx' and above
-
 classdef biox_rz6_3c < biox_rz6_client
 
     methods

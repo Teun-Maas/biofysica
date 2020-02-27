@@ -1,5 +1,4 @@
 % RL: This code is for RZ6 ID #3960 (3DSP) in the Patient lab
-% RL: This code works with 'RCX_Uni_3C_50kHz_V3.14.rcx' alone
 
 classdef biox_PAT_LAB < biox_rz6_3c
 

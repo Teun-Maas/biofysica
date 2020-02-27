@@ -1,5 +1,4 @@
 % RL: This code is for RZ6 ID #3681 (4DSP) in the Vestibular Chair lab
-% RL: This code works with 'RCX_Uni_4C_50kHz_MOV_V3.14.rcx' alone
 
 classdef biox_VST_CHR < biox_rz6_4c_mov
 
@@ -8,25 +7,30 @@ classdef biox_VST_CHR < biox_rz6_4c_mov
             this@biox_rz6_4c_mov(rz6number)
             % create a list of [mux_id mux_index] for the speaker array.
             % sp_list must have odd nr of rows and a maximum of 21 rows
-            sp_list = [2 3
-                       3 3
-                       2 4
-                       3 5
-                       2 6
-                       3 7
-                       2 8 
-                       3 9
-                       2 10
-                       3 11
-                       2 12
-                       3 13
-                       2 14
-                       3 15
-                       2 0
-                       3 1
-                       2 2];
-            this.mov_spm_dac('OUT-A');     % connect middle speaker to the DAC 'OUT-A'
-            this.mov_sp_list(sp_list);     % upload speaker list
+            sp_list = [ 0 0
+                        1 0
+                        0 1
+                        1 1
+                        0 2
+                        1 2
+                        0 3
+                        1 3
+                        0 4
+                        1 4
+                        0 5
+                        1 5
+                        0 6 
+                        1 6
+                        0 7
+                        1 7
+                        0 8
+                        1 8
+                        0 9
+                        1 9
+                        0 10];
+                    
+            this.mov_spm_dac('OUT-A');% connect middle speaker to the DAC 'OUT-A'
+            this.mov_sp_list(sp_list);% upload speaker list
             
             %RL: gemeten offsets van de DACs in [Volt]
             Offsets_A(1) = ; %RL: offset DAC-A bij 0  dB AttA

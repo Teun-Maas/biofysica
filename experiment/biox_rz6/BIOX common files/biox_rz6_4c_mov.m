@@ -16,7 +16,7 @@ classdef biox_rz6_4c_mov < biox_rz6_client
                 this.write('MOV_sp0_is_A', 1);
             case  'out-b' 
                 this.write('MOV_sp0_is_A', 0);                        
-          end;    
+          end    
         end
         
         %RL: variable 'MOV_Sp_Array' op de RZ6 accepteert alleen een array van lengte 21 
@@ -46,6 +46,6 @@ classdef biox_rz6_4c_mov < biox_rz6_client
             end
             
             this.write('MOV_Sp_Array', data_out);
-        end;
+        end
     end
 end

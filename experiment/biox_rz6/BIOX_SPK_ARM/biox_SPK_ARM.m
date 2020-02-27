@@ -1,5 +1,5 @@
 % RL: This code is for RZ6 ID #4407 (4DSP) in the Speaker Arm lab
-% RL: This code works with 'RCX_Uni_3C_50kHz_V3.14.rcx' alone
+
 
 classdef biox_SPK_ARM < biox_rz6_4c
 
