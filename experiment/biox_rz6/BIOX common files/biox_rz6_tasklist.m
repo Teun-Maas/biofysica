@@ -549,11 +549,14 @@ classdef biox_rz6_tasklist < handle
 
         function desc = parse_att(this,tasktype,p,varargin)
            validAttenuation = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',80});
+           validScaleFactor = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',1000});
            desc = this.newdesc();
            desc.TaskType = tasktype;
            p.addRequired('Attenuation', validAttenuation);
+           p.addOptional('ScaleFactor', 1, validScaleFactor);
            p.parse(varargin{:});
            desc.Par1 = p.Results.Attenuation;
+           desc.Par2 = p.Results.ScaleFactor;
         end
 
         function desc = parse_atta(this,p,varargin)
