@@ -78,6 +78,10 @@ classdef  biox_abstract_client
             r=this.read('STM_Ready'); %RL: Naam OK 
         end
         
+        function r=read_timer(this)
+            r=this.read('Timer'); %RL: Naam OK 
+        end
+        
         function r=read_samplerate(this)
             r=this.read('SYS_SampleRate'); %RL: Naam OK 
         end
@@ -109,8 +113,8 @@ classdef  biox_abstract_client
         end;
         
         %RL: method toegevoegd.
-        function r=read_STM_currentindex(this)
-            r = this.read('STM_CurInd')/7;
+        function r=read_taskindex(this)
+            r = 1 + this.read('STM_CurInd')/7;
         end;
                                       
     end
