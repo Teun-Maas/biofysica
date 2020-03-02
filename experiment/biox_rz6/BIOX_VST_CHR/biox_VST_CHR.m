@@ -3,8 +3,8 @@
 classdef biox_VST_CHR < biox_rz6_4c_mov
 
     methods
-        function this = biox_VST_CHR(rz6number)
-            this@biox_rz6_4c_mov(rz6number)
+        function this = biox_VST_CHR
+            this@biox_rz6_4c_mov(1)
             % create a list of [mux_id mux_index] for the speaker array.
             % sp_list must have odd nr of rows and a maximum of 21 rows
             sp_list = [ 0 0

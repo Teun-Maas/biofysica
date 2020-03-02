@@ -3,8 +3,8 @@
 classdef biox_PAT_LAB < biox_rz6_3c
 
     methods
-        function this = biox_PAT_LAB(rz6number)
-            this@biox_rz6_3c(rz6number)
+        function this = biox_PAT_LAB
+            this@biox_rz6_3c(1)
             %RL: gemeten offsets van de DACs in [Volt]
             Offsets_A(1) = -0.0001; %RL: offset DAC-A bij 0  dB AttA
             Offsets_A(2) = -0.0040; %RL: offset DAC-A bij 20 dB AttA

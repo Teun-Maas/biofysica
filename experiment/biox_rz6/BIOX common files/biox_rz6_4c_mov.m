@@ -6,8 +6,7 @@ classdef biox_rz6_4c_mov < biox_rz6_client
                 rz6number=-1;  % use rz6_dummy for debugging
             end
             f = which('BIOX_4C_50kHz_MOV.rcx');
-            this@biox_rz6_client(rz6number, f);            
-            
+            this@biox_rz6_client(rz6number, f);                        
         end
         
         function mov_spm_dac(this, dac)

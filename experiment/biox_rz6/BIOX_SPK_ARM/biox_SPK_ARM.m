@@ -4,8 +4,8 @@
 classdef biox_SPK_ARM < biox_rz6_4c
 
     methods
-        function this = biox_SPK_ARM(rz6number)
-            this@biox_rz6_4c(rz6number)
+        function this = biox_SPK_ARM
+            this@biox_rz6_4c(1)
             %RL: gemeten offsets van de DACs in [Volt]
             Offsets_A(1) = -0.0248; %RL: offset DAC-A bij 0  dB AttA
             Offsets_A(2) =  0.0099; %RL: offset DAC-A bij 20 dB AttA

@@ -7,4 +7,5 @@ New in this version:
 
 Function rz6.read_STM_currentindex() renamed to rz6.read_taskindex()
 Function rz6.read_timer() added
+Creation of the rz6 class without parameter
 
