@@ -1,0 +1,15 @@
+model {
+    # Likelihood:
+    for(i in 1:N){
+      y[i] 	~ dnorm(mu[i],tau[i])
+      mu[i] 	<- muOfClust[ clust[i] ]
+      tau[i] 	<- tauOfClust[ clust[i] ]
+      clust[i] 	~ dcat( pClust[1:Nclust] )
+    }
+    # Prior:
+    for (clustIdx in 1:Nclust){
+      	muOfClust[clustIdx] 	~ dnorm( 0 , 1.0E-10 )
+    	tauOfClust[clustIdx] 	~ dgamma( 0.01 , 0.01 )
+    }
+    pClust[1:Nclust] ~ ddirch( onesRepNclust )
+}

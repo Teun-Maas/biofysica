@@ -23,6 +23,21 @@ if nargin<3
     x   = 1:length(data);
 end
 
+dx		= diff(x);
+udx		= unique(dx);
+
+% if numel(udx)>1
+% 	dxstep = bf_mode(dx);
+% 	disp(['interpolating in ' num2str(dxstep) '-s steps'] );
+% 	xi = min(x):dx:max(x);
+% 	
+% 	yi = interp1(x,data,xi,'linear');
+% 
+% 	
+% 	x		= xi;
+% 	data	= yi;
+% end
+
 %% Find Running Average by Filter-method
 % This function uses FILTER instead of a FOR-loop,
 % and thus should be a lot faster.
@@ -30,6 +45,7 @@ avg     = filtfilt(ones(1,windowSize)/windowSize,1,data);
 
 %% Correct the independent variable
 xavg    = x-(windowSize./2).*mean(diff(x));
+xavg	= x;
 
 %% Some graphics if there is no other output
 if nargout<1
@@ -39,4 +55,6 @@ if nargout<1
     h2 = plot(xavg,avg,'r-'); set(h2,'LineWidth',3);
     xlabel('Sample Number');
     ylabel('Amplitude');
+	
+	clear avg xavg
 end

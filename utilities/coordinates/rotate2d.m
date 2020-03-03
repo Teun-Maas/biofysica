@@ -1,9 +1,9 @@
 function [PostRotAZ,PostRotEL] = rotate2d(azimuth,elevation,Beta)
-% [XR,YR] = PA_2DROTATE(X,Y,BETA);
+% [XR,YR] = 2DROTATE(X,Y,BETA);
 
 % Rotate matrices X x Y by BETA deg.
 %
-% See also: PA_ROTATE, PA_ROLL
+% See also: ROTATE, PA_ROLL
 
 % (c) 2012 Marc van Wanrooij
 % e-mail: marcvanwanrooij@neural-code.com

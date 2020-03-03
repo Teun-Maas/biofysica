@@ -5,11 +5,9 @@ function how2reciprobit
 % e: marcvanwanrooij@neural-code.com
 
 close all
-clear all
+clearvars
 clc
 
-pa_datadir;
-load('reactiontime')
 
 
 %% Histogram
@@ -30,7 +28,7 @@ ylabel('Probability (%)');
 xlim([0 1000]);
 
 % optional, save figure
-print('-depsc','-painter',[mfilename '1']);
+savegraph([mfilename '1'],'eps');
 
 %% Inverse reaction time
 rtinv	= 1./rt; % inverse reaction time / promptness (ms-1)
@@ -61,7 +59,7 @@ y	= y./sum(y)*100;
 plot(x*1000,y,'ks-','LineWidth',2,'MarkerFaceColor','w');
 
 % optional, save figure
-print('-depsc','-painter',[mfilename '2']);
+savegraph([mfilename '2'],'eps');
 
 % And test it with a one-sample kolmogorov-smirnov test
 % Since this test compares with the normal distribution, we have to
@@ -108,7 +106,7 @@ xlim([0 8]);
 legend(h,'Quantiles','Location','SE');
 
 % optional, save figure
-print('-depsc','-painter',[mfilename '3']);
+savegraph([mfilename '3'],'eps');
 
 
 
@@ -117,23 +115,23 @@ figure(4)
 % raw data
 x = -1./sort((rt)); % multiply by -1 to mirror abscissa
 n = numel(rtinv); % number of data points
-y = pa_probit((1:n)./n); % cumulative probability for every data point converted to probit scale
+y = probit((1:n)./n); % cumulative probability for every data point converted to probit scale
 plot(x,y,'k.');
 hold on
 
 % quantiles
 p		= [1 2 5 10:10:90 95 98 99]/100;
-probit	= pa_probit(p);
+prbt	= probit(p);
 q		= quantile(rt,p);
 q		= -1./q;
-xtick	= sort(-1./(150+[0 pa_oct2bw(50,-1:5)])); % some arbitrary xticks
+xtick	= sort(-1./(150+[0 oct2bw(50,-1:5)])); % some arbitrary xticks
 
-plot(q,probit,'ko','Color','k','MarkerFaceColor','r','LineWidth',2);
+plot(q,prbt,'ko','Color','k','MarkerFaceColor','r','LineWidth',2);
 hold on
 set(gca,'XTick',xtick,'XTickLabel',-1./xtick);
 xlim([min(xtick) max(xtick)]);
-set(gca,'YTick',probit,'YTickLabel',p*100);
-ylim([pa_probit(0.1/100) pa_probit(99.9/100)]);
+set(gca,'YTick',prbt,'YTickLabel',p*100);
+ylim([prbt(0.1/100) prbt(99.9/100)]);
 axis square;
 box off
 xlabel('Reaction time (ms)');
@@ -142,12 +140,12 @@ title('Probit ordinate');
 
 % this should be a straight line
 x = q;
-y = probit;
+y = prbt;
 b = regstats(y,x);
-h = pa_regline(b.beta,'k-');
+h = regline(b.beta,'k-');
 set(h,'Color','r','LineWidth',2);
 
 
 % optional, save figure
-print('-depsc','-painter',[mfilename '4']);
+savegraph([mfilename '4'],'eps');
 

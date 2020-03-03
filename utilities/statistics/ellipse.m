@@ -38,7 +38,7 @@ if ~isempty(out)
 	
 	%% Eigen-values for covariance-matrix
 	[Veig,Deig]     = eig(cov(x,y)); % Veig gives main axes
-	A               = bf_rad2deg(atan2(Veig(2),Veig(1))); % angle
+	A               = rad2deg(atan2(Veig(2),Veig(1))); % angle
 end
 
 %% diagonal Deig = variance in the 2 main axes
