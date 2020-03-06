@@ -1,8 +1,8 @@
 function trigdata = lsldert_test01
     
-    trig=lsldert_client('lsldert01.local',5555);
+    trig=lsldert_client('raspi4.local',5555);
     
-    info=lsl_resolver('type=''Digital Triggers @ lsldert01''');
+    info=lsl_resolver('type=''Digital Triggers @ raspi4''');
     l=info.list();
     if isempty(l)
         error('no streams found');
@@ -41,7 +41,7 @@ function trigdata = lsldert_test01
         doutval=1;
         for jj=1:5
             for ii=1:10
-                trig.beep(440,0.5,'PIEP');
+              %  trig.beep(440,0.5,'PIEP');
                 trig.digitalout(doutval,'AU');
                 doutval=1-doutval;
                 pause(0.02);
