@@ -4,11 +4,9 @@ function result=compare_timestamps(data)
    
    for ii=1:n
        ts{ii} = lsl_correct_lsl_timestamps(data{ii});
+     %  ts{ii} = data{ii}.Timestamps;
    end
-   offset=ts{1}(1);
-   for ii=1:n
-       ts{ii} = (ts{ii}-offset);
-   end
+
    
    m=numel(ts{1});
    result=zeros(m,n);
@@ -16,4 +14,17 @@ function result=compare_timestamps(data)
        result(:,ii) = ts{ii};
    end   
    
+   offset=min(result(1,:));
+   result=result-offset;
+end
+
+function dingetjes
+    ts=compare_timestamps(data);
+    
+    dts=1000*(ts - ts(:,1));
+    plot(dts(:,1))
+    plot(ts(:,1),'.')
+    plot(data{1}.TCindex,data{1}.TimeCorrection,'.')
+    plot(data{1}.Timestamps,'.')
+    tc=lsl_estimate_timecorrection(data{2})
 end

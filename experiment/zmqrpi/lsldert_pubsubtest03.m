@@ -1,12 +1,16 @@
-function trigdata = lsldert_pubsubtest02
+function trigdata = lsldert_pubsubtest03
     
-    proxy=lsldert_pubclient();
+    proxy=lsldert_cluster();
     ses=lsl_session();
+    trigc=cell(1);
+
  
-    lslclients = { 'lsldert00', 'raspi4', 'raspi5', 'raspi6'};
+    lslclients = { 'raspi4', 'raspi5', 'raspi6'};
     numclients = numel(lslclients);
     
     for ii=1:numclients
+        trigc{ii}=lsldert_client(sprintf('%s.local',lslclients{ii}),5555);
+
         info=lsl_resolver(sprintf('type=''Digital Triggers @ %s''', lslclients{ii}));
         l=info.list();
         if isempty(l)
@@ -21,6 +25,7 @@ function trigdata = lsldert_pubsubtest02
         ses.add_stream(trigstr(ii));
 
     end
+    proxy.add_client(trigc);
     
     %cleanupObj=onCleanup(@()cleanupFun);
     
