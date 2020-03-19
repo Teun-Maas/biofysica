@@ -23,7 +23,7 @@ if nargin<1
 	spl = 60;
 end
 if nargin<2
-	f = 3000;
+	f = 5000;
 end
 
 fname = 'spl2phon.mat';

@@ -15,7 +15,7 @@ function [postSummary,histInfo,h] = plotpost(paramSampleVec, varargin)
 % xlab		= keyval('xlab', varargin,'Parameter'); 
 % xl			= keyval('xlim', varargin,minmax([compVal; paramSampleVec]')); 
 % main		= keyval('main', varargin);
-% col			= keyval('col', varargin,[.6 .6 1]);
+% col			= keyval('Color', varargin,[.6 .6 1]);
 % breaks		= keyval('breaks', varargin);
 %
 % Original in R:	Kruschke, J. K. (2011). Doing Bayesian Data Analysis:
@@ -39,7 +39,7 @@ ylab		= keyval('ylab', varargin);
 xlab		= keyval('xlab', varargin,'Parameter'); 
 xl			= keyval('xlim', varargin,minmax([compVal; paramSampleVec]')); 
 main		= keyval('main', varargin);
-col			= keyval('col', varargin,[.6 .6 1]);
+col			= keyval('Color', varargin,[.6 .6 1]);
 breaks		= keyval('breaks', varargin);
 nbreaks		= keyval('nbreaks', varargin,18);
 
