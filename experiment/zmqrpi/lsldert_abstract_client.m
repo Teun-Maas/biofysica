@@ -40,4 +40,27 @@ classdef (Abstract) lsldert_abstract_client < handle
             result = this.send(str);
         end       
     end   
+    
+    methods (Static)
+        function zmq_write_multi(socket, cmd, varargin)
+            import org.zeromq.*;
+
+            % send command string followed by any data frames in varagin
+            msg=ZMsg;
+            msg.addString(sprintf('%s\0',cmd));
+            ii=1;
+            while ii <= numel(varargin)
+                % transform the input data into a row-major 
+                % (lexicographical) ordered vector. This is the common
+                % ordering for programming languages like C, C++,
+                % Python (NumPy) and Pascal.
+                data=reshape(transpose(varargin{ii}),1,[]);
+                bytes=typecast(data,'uint8');
+                frame=ZFrame(bytes);
+                msg.add(frame);
+                ii=ii+1;
+            end
+          %  msg.send(socket);
+        end
+    end
 end

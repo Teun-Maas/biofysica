@@ -1,6 +1,6 @@
 classdef lsldert_testclient < lsldert_abstract_client
     properties
-        default_port = 5556;
+        default_port = 5555;
         default_hostname = 'lsldert00.local';
         context;
         socket;
@@ -36,15 +36,18 @@ classdef lsldert_testclient < lsldert_abstract_client
                 ME = MException('pupil_remote_control:connect_error',...
                     'cannot connect to tcp://%s:%d, check hostname, port number and/or port number in pupil-capture remote control plugin',...
                     hostname, port);
+
                 throw(ME);
             end
             pnet(con,'close');
             
             this.context=ZMQ.context(1);
-            this.socket=this.context.socket(ZMQ.PUB);
+            this.socket=this.context.socket(ZMQ.REQ);
             uri=sprintf('tcp://%s:%d',hostname,port);
             this.socket.connect(uri);
-            this.socket.getReceiveTimeOut();
+            this.socket.getReceiveTimeOut()
+            this.socket.setReceiveTimeOut(5000);
+            this.socket.getReceiveTimeOut()
         end
         
         function result=send(this, msg)
@@ -55,26 +58,29 @@ classdef lsldert_testclient < lsldert_abstract_client
             import org.zeromq.*;
 
             tstart=tic;
-            m=ZMsg;
             key='aaaa';
-            %m=ZMQ.message('aaa');
-            frame1=ZFrame(int8(key));
-            frame1.size
-            m.add(frame1);
-            m.add(msg);
-            m.send(this.socket);
-           % this.socket.sendMore(sprintf('%s\0',key));
-            %this.socket.send(sprintf('%s\0',msg));
+            disp 1
+%             %m=ZMQ.message('aaa');
+%             frame1=ZFrame(int8(key));
+%             frame1.size
+%             m.add(frame1);
+%             m.add(msg);
+%             m.send(this.socket);
+disp 2
+            this.socket.sendMore(sprintf('%s\0',key));
+            disp 3
+            this.socket.send(sprintf('%s\0',msg));
+            disp 4
             %this.socket.send(int8(msg),3);
             
-            %rbytes=this.socket.recv();
+            rbytes=this.socket.recv();
+            disp 5
             telapsed=toc(tstart);
             if telapsed > this.tmax
                 warning('lsldert_client.send: round trip time exceeded max, %2.1f>%2.1f ms', 1e3*telapsed, 1e3*this.tmax);
             end
-            % telapsed
-            result='';
+             telapsed
+            result=reshape(char(rbytes),1,[]);
         end
-        
     end
 end
