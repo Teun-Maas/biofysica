@@ -42,20 +42,24 @@ classdef lsldert_client < lsldert_abstract_client
             this.socket.getReceiveTimeOut();
         end
         
-        function result=send(this, msg)
-            % SEND send a message string to an lsldert server
-            % result = obj.SEND(msg) sends  message string str to lsldert
+        function [result,telapsed]=send(this, msg, varargin)
+            % SEND send a message string to an lsldert client
+            % result = obj.SEND(msg) sends  message string msg to lsldert
             % and returns the  message string returned from the remote
             % side.
+            % The extra arguments can be text or numeric.
+            % All numeric data is sent as a row-major (lexicographically)
+            % ordered vector. This is the common
+            % ordering for programming languages like C, C++,
+            % Python (NumPy) and Pascal.
+            import org.zeromq.*;
             tstart=tic;
-            this.socket.send(sprintf('%s\0',msg));
-            
+            this.zmq_write_multi(this.socket, msg, varargin{:});
             rbytes=this.socket.recv();
             telapsed=toc(tstart);
             if telapsed > this.tmax
                 warning('lsldert_client.send: round trip time exceeded max, %2.1f>%2.1f ms', 1e3*telapsed, 1e3*this.tmax);
             end
-            % telapsed
             result=reshape(char(rbytes),1,[]);
         end
         
