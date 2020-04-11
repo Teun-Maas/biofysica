@@ -1,0 +1,37 @@
+# Specify the model for standardized data:
+model {
+	for ( i in 1:Ntotal ) {
+		# Bernouilli distributed trials
+		 y[i] ~ dbern(mu[i])
+		 mu[i]	<-  (1-lambda[s[i]]) * ((1-gamma) * (ilogit( (2*log(1/alpha-1))/omega[s[i]] * (x[i]-theta[s[i]]-e[i]*dtheta[s[i]]) )) + gamma ) + (gamma*lambda[s[i]])
+	}
+	for ( j in 1:Nsubj ) {
+		# Priors vague on standardized scale:
+		 lambda[j]	~ dbeta(alambda,blambda)  
+		 omega[j]	~ dgamma(somega,romega)  
+		 theta[j]	~ dnorm(mutheta,sigmatheta)
+		 dtheta[j]	~ dnorm(mudtheta,sigmadtheta)
+	}
+	# constant/default width at F-1(ALPHA) and F-1(1-ALPHA) 
+	 alpha			<- 0.1 
+	 gamma			<- 0  
+	# lapse rate/lambda hyperprior 
+	 alambda		<- mulambda*kappalambda 
+	 blambda		<- (1.0-mulambda) * kappalambda  
+	 mulambda		~ dbeta(2.0,2.0)  
+	 kappalambda	~ dgamma(Skappa,Rkappa)  
+	# constants for all dgamma hyperprior 
+	 Skappa			<- pow(10,2)/pow(10,2) # constant 
+	 Rkappa			<- 10/pow(10,2) # constant 
+	# threshold/theta hyperprior 
+	 mutheta			~ dnorm(0,1/(10)^2)
+	 sigmatheta		~ dunif(1.0E-3,1000)
+	# dthreshold/theta hyperprior 
+	 mudtheta			~ dnorm(0,1/(10)^2)
+	 sigmadtheta		~ dunif(1.0E-3,1000)
+	# width/omega hyperprior 
+	 somega			<- pow(muomega,2)/pow(sigmaomega,2) # shape 
+	 romega			<- muomega/pow(sigmaomega,2) # rate 
+	 muomega				~ dgamma(1,0.25)
+	 sigmaomega				~ dgamma(1,0.5) 
+}

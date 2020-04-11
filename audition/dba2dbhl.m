@@ -1,4 +1,4 @@
-function dbhl = pa_dba2dbhl(dba,f,method)
+function dbhl = dba2dbhl(dba,f,method)
 % DBHL = PA_DBA2DBHL(DBA)
 %
 % Convert dBA to dBHL
@@ -37,7 +37,7 @@ switch method
 		% 3) http://thebsa.org.uk/docs/Guidelines/soundfieldguidelinesfeb2008.pdf
 		% for this method we need to convert dBA to dB SPL first
 		freq = [250 500 750 1000 1500 2000 3000 4000 6000 8000];
-		W = pa_aweight(f);
+		W = aweight(f);
 		dba = dba-W;
 		a2hl = -[2.4 0.3 -0.1 0.5 -0.1 -0.3 -2.8 -4 -0.5 4.4];
 	case 4
@@ -54,7 +54,7 @@ switch method
 		
 		% for this method we need to convert dBA to dB SPL first
 		freq = [250 500 750 1000 1500 2000 3000 4000 6000 8000];
-		W = pa_aweight(f);
+		W = aweight(f);
 		dba = dba-W;
 		a2hl = -[2.4 0.3 -0.1 0.5 -0.1 -0.3 -2.8 -4 -0.5 4.4];
 		ai		= interp1(freq,a2hl,f,'cubic','extrap');

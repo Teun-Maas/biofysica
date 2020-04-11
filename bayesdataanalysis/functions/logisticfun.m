@@ -11,4 +11,4 @@ if nargin<4
 	alpha = 0.1;
 end
 z = 2*log(1/alpha-1);
-p = 1./(1+exp(-z./omega*(x-theta)));
+p = 1./(1+exp(-z./omega.*(x-theta)));

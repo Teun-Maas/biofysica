@@ -282,7 +282,7 @@ function [samples,stats] = jags_expfit(x,y,s,varargin)
 fun				= keyval('function',varargin,@expfun); % logistic, probit, gumbell, inversegumbell,  weibull, inverseweibull + fun
 alpha			= keyval('alpha',varargin,'infer'); % 0.5 = 2AFC, 'infer' = estimate from data, 'single' = infer 1 alpha for all subjects/conditions
 % modelname		= fullfile(pwd, 'jags_exp_model.txt');
-modelname = '/Users/marcw/Dropbox/Manuscript/Luuk van de Rijt/#4 SPIN AV CI/matlab/exp_model.txt';
+modelname = '/Users/marcw/Dropbox/Manuscript/Luuk van de Rijt/#3 SPIN AV CI/matlab/exp_model.txt';
 %% MCMC parameters
 chain_globals;
 numSavedSteps	= keyval('numSavedSteps',varargin,10000); % number of saved MCMC samples. How many you need depend on autocorrelation (effective sample size>10000), convergence (shrink factor<1.1), etc

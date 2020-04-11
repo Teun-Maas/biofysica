@@ -1,0 +1,33 @@
+# Specify the model for standardized data:
+model {
+	for ( i in 1:Ntotal ) {
+		# Bernouilli distributed trials
+		 y[i] ~ dbern(mu[i])
+
+	
+		mu[i]	<-  ( alpha[s[i]] ) * exp( -1/pow( (lambda[s[i]] +e[i]*dlambda[s[i]]),2)*pow(x[i],2)) 
+	}
+	for ( j in 1:Nsubj ) {
+		# Priors vague on standardized scale:
+		 alpha[j]	~ dbeta(aalpha,balpha)  
+		 lambda[j]	~ dnorm(mulambda,sigmalambda)
+		 dlambda[j]	~ dnorm(mudlambda,sigmadlambda)
+	}
+
+	# guess rate / alpha hyperprior 
+	 aalpha			<- mualpha*kappaalpha 
+	 balpha			<- (1.0-mualpha) * kappaalpha  
+	 mualpha		~ dbeta(2.0,2.0)  
+	 kappaalpha		~ dgamma(Skappa,Rkappa)  
+
+	# constants for all dalpha hyperprior 
+	 Skappa			<- pow(10,2)/pow(10,2) # constant 
+	 Rkappa			<- 10/pow(10,2) # constant 
+	# threshold/theta hyperprior 
+	 mulambda			~ dnorm(0,1/(10)^2)
+	 sigmalambda		~ dunif(1.0E-3,1000)
+	# threshold/theta hyperprior 
+	 mudlambda			~ dnorm(0,1/(10)^2)
+	 sigmadlambda		~ dunif(1.0E-3,1000)
+
+}

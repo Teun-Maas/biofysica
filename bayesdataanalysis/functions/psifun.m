@@ -19,7 +19,7 @@ sel		= strcmp(strfun(1:end-3),{'logistic','probit','gumbel','revgumbel','weibull
 
 
 if any(sel)
-	p = (1-lambda)*( (1-gamma)*hfun(x,theta,omega,alpha)+gamma ) + gamma*lambda;
+	p = (1-lambda).*( (1-gamma).*hfun(x,theta,omega,alpha)+gamma ) + gamma.*lambda;
 else 
 	error([upper(strfun) ' does not exist: choose another psi function']);
 end

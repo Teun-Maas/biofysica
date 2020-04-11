@@ -14,7 +14,7 @@ function y = gsmooth(x,fs,sd,sdextra)
 % e-mail: m.vanwanrooij@neural-code.com
 
 %% Initialization
-if nargin<4, sdextra=5; end;
+if nargin<4, sdextra=5; end
 
 
 % Switch to column vector
@@ -27,7 +27,7 @@ nx          = length(x);
 nfft        = nx+2*nextra;
 
 %% determine frequency for each point
-if rem(nfft,2),    % nfft odd
+if rem(nfft,2)    % nfft odd
     frq     = [0:(nfft-1)/2 (nfft-1)/2:-1:1];
 else
     frq     = [0:nfft/2 nfft/2-1:-1:1];

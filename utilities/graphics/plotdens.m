@@ -5,14 +5,16 @@ function [F,X1,X2] = plotdens(x,y,varargin)
 %
 % See also KSDENSITY, CONTOURF
 
-dep				= keyval('dependent',varargin,false); % logistic, probit, gumbell, inversegumbell,  weibull, inverseweibull + fun
-BW				= keyval('Bandwidth',varargin); % logistic, probit, gumbell, inversegumbell,  weibull, inverseweibull + fun
-graph			= keyval('plot',varargin,true); % logistic, probit, gumbell, inversegumbell,  weibull, inverseweibull + fun
+dep				= keyval('dependent',varargin,false); % scale y for each x
+BW				= keyval('Bandwidth',varargin); % bandwidth for ksdensity
+graph			= keyval('plot',varargin,true); % make plot
+lim				= keyval('limits',varargin,[min(x) max(x) min(y) max(y)]); % make plot
+
 
 X		= [x y];
 % if dep
-gridx1	= linspace(min(x),max(x),100);
-gridx2	= linspace(min(y),max(y),100);
+gridx1	= linspace(lim(1),lim(2),100);
+gridx2	= linspace(lim(3),lim(4),100);
 
 % else
 % gridx1	= linspace(prctile(x,5),prctile(x,95),100);
@@ -39,7 +41,11 @@ end
 X1		= reshape(XI(:,1),m,n);
 X2		= reshape(XI(:,2),m,n);
 if graph
-	cmap	= statcolor(64,[],[],[],'def',6);
+	if exist('cbrewer.m','file')
+			cmap	= cbrewer('seq','Reds',64,'pchip');
+	else
+		cmap	= statcolor(64,[],[],[],'def',6);
+	end
 	[~,h] = contourf(X1,X2,F,0:0.01:1);
 	h.EdgeColor = 'none';
 	hold on
