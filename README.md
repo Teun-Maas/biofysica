@@ -35,6 +35,10 @@ or
 ```
 DownloadBiofysicaToolbox.m('/Users/YOU/Documents/MATLAB/myspeciallocation')
 ```
+The script is still in testing phase. If it should fail open a terminal window, cd to the Documents/MATLAB directory and execute
+```
+git clone https://gitlab.science.ru.nl/marcw/biofysica.git
+```
 
 Add the following two lines to your startup.m file:
 ```
