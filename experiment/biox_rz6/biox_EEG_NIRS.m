@@ -1,6 +1,6 @@
 % RL: This code is for RZ6 ID #2170 (3DSP) in the EEG/NIRS lab
 
-classdef biox_EEG_NIRS < biox_rz6_3c
+classdef biox_eeg_nirs < biox_rz6_3c
 
     methods
         function this = biox_EEG_NIRS             

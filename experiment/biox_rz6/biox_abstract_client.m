@@ -1,4 +1,4 @@
-classdef  biox_abstract_client
+classdef  biox_abstract_client < handle
 
     properties (Access=protected)
         % scalefactors for acq channels

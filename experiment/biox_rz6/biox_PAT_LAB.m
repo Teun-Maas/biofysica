@@ -1,6 +1,6 @@
 % RL: This code is for RZ6 ID #3960 (3DSP) in the Patient lab
 
-classdef biox_PAT_LAB < biox_rz6_3c
+classdef biox_pat_lab < biox_rz6_3c
 
     methods
         function this = biox_PAT_LAB

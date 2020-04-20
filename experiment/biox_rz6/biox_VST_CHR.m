@@ -1,6 +1,6 @@
 % RL: This code is for RZ6 ID #3681 (4DSP) in the Vestibular Chair lab
 
-classdef biox_VST_CHR < biox_rz6_4c_mov
+classdef biox_vst_chr < biox_rz6_4c_mov
 
     methods
         function this = biox_VST_CHR

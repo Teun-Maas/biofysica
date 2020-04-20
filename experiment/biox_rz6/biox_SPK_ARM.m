@@ -1,7 +1,7 @@
 % RL: This code is for RZ6 ID #4407 (4DSP) in the Speaker Arm lab
 
 
-classdef biox_SPK_ARM < biox_rz6_4c
+classdef biox_spk_arm < biox_rz6_4c
 
     methods
         function this = biox_SPK_ARM
