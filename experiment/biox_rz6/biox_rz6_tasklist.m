@@ -202,7 +202,7 @@ classdef biox_rz6_tasklist < handle
                isValid = @(x) any(validatestring(x,expectedStringInputs));               
             else
                isValid = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',64}); %RL: 8 veranderd in 64.
-            end;               
+            end            
             p.addRequired('Input', isValid);            
             
             p.addOptional('ExternalTrigger', 0, @(x) validExtTrig(x));
@@ -323,7 +323,7 @@ classdef biox_rz6_tasklist < handle
             case 'wav'
                desc.SoundType = this.soundtype_wav;
                %RL mischien 'Reset' als input ipv 1?
-               expectedPar1 = { 'Reset', 'Continue' }
+               expectedPar1 = { 'Reset', 'Continue' };
                p.addOptional('Reset', 'Reset', @(x) any(validatestring(x, expectedPar1))); %RL optional ipv Required
                p.parse(varargin{:});
                switch lower(p.Results.Reset)
@@ -334,10 +334,6 @@ classdef biox_rz6_tasklist < handle
                otherwise
                  error('invalid parameter for WAV-sound, this is a bug');                      
                end  
-
-            case 'multitone'
-               desc.SoundType = this.soundtype.multitone;
-               p.parse(varargin{:});
 
             case 'b=a'
                assert(desc.TaskType == this.task_sound_b,...

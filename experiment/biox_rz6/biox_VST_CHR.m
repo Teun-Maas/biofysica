@@ -3,7 +3,7 @@
 classdef biox_vst_chr < biox_rz6_4c_mov
 
     methods
-        function this = biox_VST_CHR
+        function this = biox_vst_chr
             this@biox_rz6_4c_mov(1)
             % create a list of [mux_id mux_index] for the speaker array.
             % sp_list must have odd nr of rows and a maximum of 21 rows
@@ -33,12 +33,13 @@ classdef biox_vst_chr < biox_rz6_4c_mov
             this.mov_sp_list(sp_list);% upload speaker list
             
             %RL: gemeten offsets van de DACs in [Volt]
-            Offsets_A(1) = ; %RL: offset DAC-A bij 0  dB AttA
-            Offsets_A(2) = ; %RL: offset DAC-A bij 20 dB AttA
-            Offsets_A(3) = ; %RL: offset DAC-A bij 40 dB AttA
-            Offsets_B(1) = ; %RL: offset DAC-B bij 0  dB AttB
-            Offsets_B(2) = ; %RL: offset DAC-B bij 20 dB AttB
-            Offsets_B(3) = ; %RL: offset DAC-B bij 40 dB AttB
+            warning('real DACoffsets are not provided, assuming 0');
+            Offsets_A(1) = 0; %RL: offset DAC-A bij 0  dB AttA
+            Offsets_A(2) = 0; %RL: offset DAC-A bij 20 dB AttA
+            Offsets_A(3) = 0; %RL: offset DAC-A bij 40 dB AttA
+            Offsets_B(1) = 0; %RL: offset DAC-B bij 0  dB AttB
+            Offsets_B(2) = 0; %RL: offset DAC-B bij 20 dB AttB
+            Offsets_B(3) = 0; %RL: offset DAC-B bij 40 dB AttB
             this.write_DACoffsets(Offsets_A, Offsets_B);                        
         end
     end

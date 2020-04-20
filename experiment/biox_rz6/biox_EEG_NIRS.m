@@ -3,7 +3,7 @@
 classdef biox_eeg_nirs < biox_rz6_3c
 
     methods
-        function this = biox_EEG_NIRS             
+        function this = biox_eeg_nirs             
             this@biox_rz6_3c(1)
             %RL: gemeten offsets van de DACs in [Volt]
             Offsets_A(1) = -0.0119; %RL: offset DAC-A bij 0  dB AttA
