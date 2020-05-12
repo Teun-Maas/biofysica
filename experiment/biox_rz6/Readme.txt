@@ -1,3 +1,4 @@
+Version 3.18
 
 parent class: biox_abstract_client
 1st child class : biox_rz6_client
