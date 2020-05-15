@@ -30,14 +30,24 @@ classdef  biox_abstract_client < handle
             this.write('OFS_DAC-B3',Offsets_B(3));
         end
         
-        function write_wavdata(this, data, chanlist)
+        function write_wavdata(this, data, chanlist)             
+            if (size(data,2) < 3)
+              mydata = transpose(data);
+            else
+              mydata = data;
+            end
+            
+            if (size(mydata,1) ~= length(chanlist))
+               error('Dimensions of WAVdata and chanlist are different'); 
+            end   
+            
             for i=1:length(chanlist)
                 chan=chanlist(i);
-                nsamp=size(data,2);
+                nsamp=size(mydata,2);
                 sizetag=sprintf('WAV%d_Size',chan);
                 datatag=sprintf('WAV%d_Data',chan); 
                 this.write(sizetag,nsamp);
-                this.write(datatag,data(i,:));            
+                this.write(datatag,mydata(i,:));            
             end
         end
         
@@ -74,6 +84,11 @@ classdef  biox_abstract_client < handle
         
         function r=read_trialready(this)
             r=this.read('STM_Ready'); 
+        end
+        
+        function r=read_version(this)
+            version=this.read('Version'); 
+            r = 'BIOX V3.' + string(version);
         end
         
         function r=read_timer(this)

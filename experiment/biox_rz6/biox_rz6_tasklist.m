@@ -299,14 +299,20 @@ classdef biox_rz6_tasklist < handle
                desc.SoundType = this.soundtype_noise;
                p.addRequired('HpFreq', validFreq);
                p.addRequired('LpFreq', validFreq);
+               p.addOptional('ComSrc', 0, valid01);
+               p.addOptional('ITD'   , 0, validPosNum);
                p.parse(varargin{:});
                HpFreq = p.Results.HpFreq;
                LpFreq = p.Results.LpFreq;
+               
                if HpFreq >= LpFreq
                  error('LpFreq must be greater than HpFreq');  
                end    
+               
                desc.Par1 = HpFreq;
                desc.Par2 = LpFreq;
+               desc.Par3 = p.Results.ComSrc;
+               desc.Par4 = p.Results.ITD;
 
             case 'ripple'
                desc.SoundType = this.soundtype_ripple;
