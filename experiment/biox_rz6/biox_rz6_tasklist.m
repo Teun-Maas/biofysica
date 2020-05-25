@@ -254,17 +254,30 @@ classdef biox_rz6_tasklist < handle
                error('expected channel to be 1 or 2, this is a bug');
             end
 
-            validFreq = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
-            validPosNum = @(x) validateattributes(x,{'numeric'},{'scalar','positive'});            
-            valid01 = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',1});
-            validStartPhase = @(x) validateattributes(x,{'numeric'},{'scalar','>=',-180,'<=',180});
             expectedSounds = {'Stop','Tone','Sweep','Noise','Ripple','WAV','B=A','MultiTone'}; %RL 'MultiTone' toegevoegd
 
-            p.addRequired('SoundType', @(x) any(validatestring(x, expectedSounds)));
+            validSound      = @(x) any(validatestring(x, expectedSounds));            
+            validFreq       = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
+            validPosNum     = @(x) validateattributes(x,{'numeric'},{'scalar','positive'});            
+            valid01         = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',1});
+            validStartPhase = @(x) validateattributes(x,{'numeric'},{'scalar','>=',-180,'<=',180});
+
+            p.addRequired('SoundType', validSound);
             p.parse(varargin{1:3});
 
             % Expand partially matched SoundType strings, and convert to lowercase
             SoundType=lower(validatestring(p.Results.SoundType, expectedSounds));
+            
+            function n = input2bool(x)   %RL: for use in 'noise' case
+               if ischar(x)  
+                  x = lower(x); 
+                  if     x(1) == 's'   
+                     n = 0;
+                  elseif x(1) == 'c'
+                     n = 1;
+                  end
+               end
+            end   
 
             switch SoundType
             case 'stop'
@@ -296,10 +309,12 @@ classdef biox_rz6_tasklist < handle
                desc.Par3 = p.Results.Period; % Period in msec
 
             case 'noise'
+               expectedComSrc = {'SepSrc', 'ComSrc'};
+               validComSrc = @(x) any(validatestring(x, expectedComSrc));                
                desc.SoundType = this.soundtype_noise;
                p.addRequired('HpFreq', validFreq);
                p.addRequired('LpFreq', validFreq);
-               p.addOptional('ComSrc', 0, valid01);
+               p.addOptional('ComSrc', 'SepSrc', validComSrc);
                p.addOptional('ITD'   , 0, validPosNum);
                p.parse(varargin{:});
                HpFreq = p.Results.HpFreq;
@@ -307,11 +322,11 @@ classdef biox_rz6_tasklist < handle
                
                if HpFreq >= LpFreq
                  error('LpFreq must be greater than HpFreq');  
-               end    
+               end 
                
                desc.Par1 = HpFreq;
                desc.Par2 = LpFreq;
-               desc.Par3 = p.Results.ComSrc;
+               desc.Par3 = input2bool(p.Results.ComSrc);
                desc.Par4 = p.Results.ITD;
 
             case 'ripple'
@@ -383,15 +398,12 @@ classdef biox_rz6_tasklist < handle
 
            validChan = @(x) validateattributes(x, {'numeric'}, {'scalar','nonnegative','<=',15});
            validDevice = @(x) validateattributes(x, {'numeric'}, {'scalar','nonnegative','<=',3});
-           % validSet = @(x) validateattributes(x, {'numeric'}, {'scalar','nonnegative','<=',1});
-           % validReset = @(x) validateattributes(x, {'numeric'}, {'scalar','nonnegative','<=',1});
+
            expectedActions = { 'Set','Reset' };
            p.addRequired('Device', @(x) validDevice(x));
            p.addRequired('Action', @(x) any(validatestring(x, expectedActions)));
            p.addOptional('Channel', [], @(x) validChan(x));
 
-           % p.addRequired('Set', @(x) validSet(x));
-           % p.addRequired('Reset', @(x) validReset(x));
            p.parse(varargin{:});
 
            if strcmpi(p.Results.Action,'Set')
