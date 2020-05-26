@@ -4,6 +4,8 @@ function trigdata = lsldert_pubsubtest02
     ses=lsl_session();
  
     lslclients = { 'lsldert00', 'raspi4', 'raspi5', 'raspi6'};
+    lslclients = { 'lsldert00', 'lsldert01'};
+
     numclients = numel(lslclients);
     
     for ii=1:numclients

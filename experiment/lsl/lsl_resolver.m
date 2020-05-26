@@ -1,4 +1,3 @@
-
 classdef lsl_resolver < handle
     properties
         infos
@@ -18,6 +17,10 @@ classdef lsl_resolver < handle
 
         function l=list(this)
             n=length(this.infos);
+            if n==0
+                l=[];
+                return
+            end
             l=struct();
             for i=1:n
                 l(i).name=this.infos{i}.name;
