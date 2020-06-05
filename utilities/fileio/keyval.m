@@ -1,15 +1,15 @@
 function [val, remaining] = keyval(key, varargin)
 
-% PA_KEYVAL returns the value that corresponds to the requested key in a
+% KEYVAL returns the value that corresponds to the requested key in a
 % key-value pair list of variable input arguments
 %
 % Use as
-%   [val] = pa_keyval(key, varargin)
+%   [val] = keyval(key, varargin)
 %
 % See also VARARGIN
 
 % Undocumented option
-%   [val] = pa_keyval(key, varargin, default)
+%   [val] = keyval(key, varargin, default)
 
 % Copyright (C) 2005-2007, Robert Oostenveld
 %

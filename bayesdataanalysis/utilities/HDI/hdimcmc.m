@@ -1,4 +1,4 @@
-function HDIlim = hdimcmc(sampleVec,credMass)
+function HDIlim = hdimcmc(sampleVec,credMass,varargin)
 % Computes highest density interval from a sample of representative values,
 %   estimated as shortest credible interval.
 % Arguments:
@@ -19,7 +19,14 @@ function HDIlim = hdimcmc(sampleVec,credMass)
 if nargin<2
 	credMass = 0.95;
 end
+method = keyval('method',varargin,'percentile');
 
+switch method
+	case 'percentile'
+		p = (100-credMass*100)/2;
+		p = [p 100-p];
+		HDIlim	= prctile(sampleVec,p);
+	otherwise
 %%
 sortedPts	= sort(sampleVec);
 ciIdxInc	= floor(credMass*length(sortedPts)); % number of samples included in CI
@@ -32,3 +39,4 @@ end
 HDImin		= sortedPts(indx);
 HDImax		= sortedPts(indx+ciIdxInc);
 HDIlim		= [HDImin , HDImax];
+end

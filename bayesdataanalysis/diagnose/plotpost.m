@@ -68,6 +68,7 @@ N					= histc(paramSampleVec,breaks);
 db					= mean(diff(breaks));
 histInfo.N			= N;
 histInfo.density	= N./db/sum(N);
+histInfo.breaks		= breaks;
 if ~showCurve
 	h = bar(breaks,histInfo.density,'histc');
 	delete(findobj('marker','*')); % Matlab bug?

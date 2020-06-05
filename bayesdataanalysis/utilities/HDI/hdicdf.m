@@ -1,4 +1,4 @@
-function HDI = HDIofICDF(ICDFname,credMass,tol,varargin)
+function HDI = hdicdf(ICDFname,credMass,tol,varargin)
 % HDI = HDIofCDF(ICDFNAME,CREDMASS,TOL)
 %
 % Arguments:

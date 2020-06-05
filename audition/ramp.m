@@ -28,5 +28,5 @@ else
 	for i = 1:size(X,2)
 		X(head,i) = RampOn'.*X(head,i);
 		X(tail,i) = RampOff'.*X(tail,i);
-	end;
-end;
+    end
+end

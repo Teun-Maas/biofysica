@@ -76,31 +76,39 @@ for ii = 1:nid
 	
 	figure(1)
 	clf
-	subplot(231);
+	subplot(131);
 	contourf(F,A,AL',20)
 	hold on
 	x = [500 1000 2000 4000 6000 8000 10000 12000 16000];
 	set(gca,'Xtick',x,'XTickLabel',x/1000,'XScale','log');
 	axis square;
-	
-	
-	subplot(232);
+	xlabel('Frequency (kHz)');
+	ylabel('Azimuth (deg)');
+		title('Head Shadow Left Ear (dB)');
+
+	subplot(132);
 	contourf(F,A,AR',20);
 	hold on;
 	x = [500 1000 2000 4000 6000 8000 10000 12000 16000];
 	set(gca,'Xtick',x,'XTickLabel',x/1000,'XScale','log');
 	axis square;
-	
+	xlabel('Frequency (kHz)');
+	ylabel('Azimuth (deg)');
+	title('Head Shadow Right Ear (dB)');
+
 	ILD = AR'-AL';
 % 	ILD = (AR'+fliplr(AL'))/2;
 % 	ILD = AR';
-	subplot(233);
+	subplot(133);
 	contourf(F,A,ILD,20);
 	hold on;
 	x = [500 1000 2000 4000 6000 8000 10000 12000 16000];
 	set(gca,'Xtick',x,'XTickLabel',x/1000,'XScale','log');
 	axis square;
-	
+		xlabel('Frequency (kHz)');
+	ylabel('Azimuth (deg)');
+title('ILD (dB)');
+
 	%%
 	f = [500 1000 2000 4000 8000];
 	nf = numel(f);
