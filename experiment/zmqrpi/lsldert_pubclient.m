@@ -44,6 +44,24 @@ classdef lsldert_pubclient < lsldert_abstract_client
             uri=sprintf('tcp://%s:%d',hostname,port);
             this.socket.connect(uri);
             this.socket.getReceiveTimeOut();
+
+%           function wait_for_connection
+%              subsuri=sprintf('tcp://%s:%d',hostname,port+1);  % assume port+1
+%              subs=this.context.socket(ZMQ.SUB);
+%              subs.connect(subsuri);
+%              subs.setReceiveTimeout(1000);
+%              topic='INIT';
+%              subs.subscribe(topic);
+%              for ii=1:10
+%                 str=sprintf('%s %d',topic, ii);
+%                 this.send(str);
+%                 result=subs.recv;
+%                 fprintf('received %s\n',result);
+%                 if strcmp(result,str)
+%                    return
+%                 end
+%              end
+%           end
         end
         
         function [result,telapsed]=send(this, msg, varargin)
