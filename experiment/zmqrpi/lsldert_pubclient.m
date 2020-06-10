@@ -45,23 +45,29 @@ classdef lsldert_pubclient < lsldert_abstract_client
             this.socket.connect(uri);
             this.socket.getReceiveTimeOut();
 
-%           function wait_for_connection
-%              subsuri=sprintf('tcp://%s:%d',hostname,port+1);  % assume port+1
-%              subs=this.context.socket(ZMQ.SUB);
-%              subs.connect(subsuri);
-%              subs.setReceiveTimeout(1000);
-%              topic='INIT';
-%              subs.subscribe(topic);
-%              for ii=1:10
-%                 str=sprintf('%s %d',topic, ii);
-%                 this.send(str);
-%                 result=subs.recv;
-%                 fprintf('received %s\n',result);
-%                 if strcmp(result,str)
-%                    return
-%                 end
-%              end
-%           end
+            wait_for_connection(60);
+            
+            function wait_for_connection(seconds)
+                subsuri=sprintf('tcp://%s:%d',hostname,port+1);  % assume port+1
+                subs=this.context.socket(ZMQ.SUB);
+                subs.connect(subsuri);
+                timeout=100;
+                subs.setReceiveTimeOut(timeout);
+                topic='INIT';
+                subs.subscribe(topic);
+                % try to get a INIT response back before proceeding
+                for ii=1:seconds*1000/timeout
+                    str=sprintf('%s %d',topic, ii);
+                    this.send(str);
+                    result=subs.recvStr();
+                    result=erase(char(result),char(0));
+                    if strcmp(result,str)
+                        return
+                    end
+                end
+                fprintf('received ''%s''\n',result);
+                error('no response from proxy %s\n', subsuri);
+            end
         end
         
         function [result,telapsed]=send(this, msg, varargin)
