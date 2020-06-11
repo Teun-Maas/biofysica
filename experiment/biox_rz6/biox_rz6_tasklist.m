@@ -258,6 +258,7 @@ classdef biox_rz6_tasklist < handle
 
             validSound      = @(x) any(validatestring(x, expectedSounds));            
             validFreq       = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
+            validITD        = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
             validPosNum     = @(x) validateattributes(x,{'numeric'},{'scalar','positive'});            
             valid01         = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',1});
             validStartPhase = @(x) validateattributes(x,{'numeric'},{'scalar','>=',-180,'<=',180});
@@ -315,7 +316,7 @@ classdef biox_rz6_tasklist < handle
                p.addRequired('HpFreq', validFreq);
                p.addRequired('LpFreq', validFreq);
                p.addOptional('ComSrc', 'SepSrc', validComSrc);
-               p.addOptional('ITD'   , 0, validPosNum);
+               p.addOptional('ITD'   , 0, validITD);
                p.parse(varargin{:});
                HpFreq = p.Results.HpFreq;
                LpFreq = p.Results.LpFreq;
