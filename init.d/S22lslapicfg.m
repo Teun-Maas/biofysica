@@ -1,8 +1,8 @@
 % print which lsl_api.cfg files we found
-if iswin
-  cfgs= { 'c:\etc\lsl_api\lsl_api.cfg', [ getenv('HOMEPATH') '\lsl_api\lsl_api.cfg'], getenv('LSLAPICFG') }
+if IsWin
+  cfgs= { 'c:\etc\lsl_api\lsl_api.cfg', [ getenv('HOMEPATH') '\lsl_api\lsl_api.cfg'], getenv('LSLAPICFG') };
 else
-  cfgs= { '/etc/lsl_api/lsl_api.cfg', [ getenv('HOME') '/lsl_api/lsl_api.cfg'], getenv('LSLAPICFG') }
+  cfgs= { '/etc/lsl_api/lsl_api.cfg', [ getenv('HOME') '/lsl_api/lsl_api.cfg'], getenv('LSLAPICFG') };
 end
 
 for ff=cfgs
