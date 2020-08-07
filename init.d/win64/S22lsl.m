@@ -1,6 +1,6 @@
-% Set up matlab path for the biofysica toolbox
+% Set up matlab path for the labstreaminglayer library
 pathdirs = { ...
-   biofysica_root
+   [ biofysica_root '/liblsl/win64' ]
    };
 
 for i = 1:size(pathdirs,1)
