@@ -1,9 +1,10 @@
 classdef  biox_abstract_client < handle
 
     properties (Access=protected)
+        my_version = 23;
         % scale factors for acq channels
         % ch5-ch10 are from RA8GA; they need about 1750x in order to volts.
-       acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1 1 1 1]; %14 channels    
+       acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1 1 1 1]; %14 channels        
     end
     
      
@@ -86,9 +87,13 @@ classdef  biox_abstract_client < handle
             r=this.read('STM_Ready'); 
         end
         
-        function r=read_version(this)
+        function r=read_rcx_version(this)
             version=this.read('Version'); 
-            r = 'BIOX V3.' + string(version);
+            r = 'BIOX RCX V3.' + string(version);
+        end
+        
+        function r=read_biox_version(this)            
+            r = 'BIOX Matlab V3.' + string(this.my_version);
         end
         
         function r=read_timer(this)
@@ -118,13 +123,13 @@ classdef  biox_abstract_client < handle
         function r=read_tasklist(this, tl)  
             r=[];
             for i = 1:tl.nr_of_tasks()
-              r(i,:) = this.read('STM_Matrix',7*(i-1), 7,1); %#ok<AGROW>
+              r(i,:) = this.read('STM_Matrix',7*(i-1), 7,1);
             end  
         end
         
         function r=read_taskindex(this)
             r = 1 + this.read('STM_CurInd')/7;
-        end
+        end         
                                       
     end
 end

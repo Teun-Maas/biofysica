@@ -12,9 +12,11 @@ classdef biox_rz6_tasklist < handle
     
     properties (Constant)
         desclen = 7;
+        
         task_waitfortrigger = 0;
         task_sound_a = 1;
         task_sound_b = 2;
+        task_sound_ab = 16;
         task_mux = 3;
         task_holdinput = 4; 
         task_soundmov = 5;
@@ -25,13 +27,10 @@ classdef biox_rz6_tasklist < handle
         task_ready = 10;
         task_multiconfiga = 11;
         task_multiconfigb = 12;
-        task_atta = 13;
-        task_attb = 14;
+        task_att = 13;
+        task_itd = 14;
         task_mix  = 15;
-
-
         
-        %RL: soundtypes numbers are OK
         soundtype_stop = 0;
         soundtype_tone = 1;
         soundtype_sweep = 2;
@@ -79,7 +78,7 @@ classdef biox_rz6_tasklist < handle
             funcName='biox_rz6_tasklist.m/add_task';
             validCommands = { 'WaitForTrigger', 'SoundA','SoundB','Mux','HoldInput',...
                'SoundMov','Daq','DaqEx','SetDIO','TrigOut','Reset','Ready',...
-               'MultiConfigA','MultiConfigB','AttA','AttB','Mix'};
+               'MultiConfigA','MultiConfigB','Att','ITD','Mix','SoundAB'};
 
             validCommand = @(x) any(validatestring(x,validCommands));
             validDelayTime = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
@@ -97,10 +96,13 @@ classdef biox_rz6_tasklist < handle
                     desc = this.parse_waitfortrigger(p,varargin{:});
 
                 case 'sounda'
-                    desc = this.parse_sounda(p,varargin{:});
+                    desc = this.parse_sound(this.task_sound_a,p,varargin{:});
 
                 case 'soundb'
-                    desc = this.parse_soundb(p,varargin{:});
+                    desc = this.parse_sound(this.task_sound_b,p,varargin{:});
+                    
+                case 'soundab'
+                    desc = this.parse_sound(this.task_sound_ab,p,varargin{:});
 
                 case 'mux'
                     desc = this.parse_mux(p,varargin{:});
@@ -135,11 +137,11 @@ classdef biox_rz6_tasklist < handle
                 case 'multiconfigb' %RL: naam veranderd
                     desc = this.parse_multiconfigb(p,varargin{:});
 
-                case 'atta'
-                    desc = this.parse_atta(p,varargin{:});
+                case 'att'
+                    desc = this.parse_att(p,varargin{:});
 
-                case 'attb'
-                    desc = this.parse_attb(p,varargin{:});
+                case 'itd'
+                    desc = this.parse_itd(p,varargin{:});
                     
                 case 'mix'  %RL: toegevoegd   
                     desc = this.parse_mix(p,varargin{:});
@@ -182,21 +184,7 @@ classdef biox_rz6_tasklist < handle
             desc.TaskType = this.task_waitfortrigger;
 
             validExtTrig = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',256}); %aangpast RL 8-->256            
-            
-            % old version does not work
-%            function isValid = validInput(x)
-%               expectedStringInputs = { 'ZBusA', 'ZBusB', 'External', 'Soft1', 'Soft2', 'Soft3'};  %RL: extra opties toegevoegd
-%               if ischar(x)
-%                  isValid = any(validatestring(x,expectedStringInputs));
-%               else
-%                  %RL: op de volgende regel krijg ik een foutmelding
-%                  isValid = validateattributes(x, {'numeric'},{'scalar','nonnegative','<',64}); %RL: 8 veranderd in 64.
-%               end
-%            end                       
-%            
-%            p.addRequired('Input', @(x) validInput(x));
-            
-            % new version
+                    
             expectedStringInputs = { 'ZBusA', 'ZBusB', 'External', 'Soft1', 'Soft2', 'Soft3'};  %RL: extra opties toegevoegd
             if ischar(varargin{3})
                isValid = @(x) any(validatestring(x,expectedStringInputs));               
@@ -236,28 +224,15 @@ classdef biox_rz6_tasklist < handle
             end
         end
 
-        function desc = parse_sounda(this,p,varargin)
-            desc = this.parse_sound(1,p,varargin{:});
-        end
-
-        function desc = parse_soundb(this,p,varargin)
-            desc = this.parse_sound(2,p,varargin{:});
-        end
-
-        function desc = parse_sound(this,channel,p,varargin)
+        function desc = parse_sound(this,tasktype,p,varargin)
             desc = this.newdesc();
-            if channel==1
-               desc.TaskType = this.task_sound_a;
-            elseif channel==2
-               desc.TaskType = this.task_sound_b;
-            else
-               error('expected channel to be 1 or 2, this is a bug');
-            end
+            
+            desc.TaskType = tasktype;
 
             expectedSounds = {'Stop','Tone','Sweep','Noise','Ripple','WAV','B=A','MultiTone'}; %RL 'MultiTone' toegevoegd
 
             validSound      = @(x) any(validatestring(x, expectedSounds));            
-            validFreq       = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
+            validFreq       = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',1e+006});
             validITD        = @(x) validateattributes(x,{'numeric'},{'scalar','nonnegative'});
             validPosNum     = @(x) validateattributes(x,{'numeric'},{'scalar','positive'});            
             valid01         = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',1});
@@ -309,26 +284,36 @@ classdef biox_rz6_tasklist < handle
                desc.Par2 = p.Results.NrOctaves;
                desc.Par3 = p.Results.Period; % Period in msec
 
-            case 'noise'
-               expectedComSrc = {'SepSrc', 'ComSrc'};
-               validComSrc = @(x) any(validatestring(x, expectedComSrc));                
+            case 'noise'               
                desc.SoundType = this.soundtype_noise;
-               p.addRequired('HpFreq', validFreq);
-               p.addRequired('LpFreq', validFreq);
-               p.addOptional('ComSrc', 'SepSrc', validComSrc);
-               p.addOptional('ITD'   , 0, validITD);
-               p.parse(varargin{:});
-               HpFreq = p.Results.HpFreq;
-               LpFreq = p.Results.LpFreq;
+               p.addRequired('HpFreq1', validFreq);
+               p.addRequired('LpFreq1', validFreq);
+              
+               p.parse(varargin{1:5});
                
-               if HpFreq >= LpFreq
+               HpFreq1 = p.Results.HpFreq1;
+               LpFreq1 = p.Results.LpFreq1;  
+                             
+               p.addOptional('HpFreq2', HpFreq1, validFreq);
+               p.addOptional('LpFreq2', LpFreq1, validFreq);
+               
+               p.parse(varargin{:});
+               
+               HpFreq2 = p.Results.HpFreq2;
+               LpFreq2 = p.Results.LpFreq2;                                 
+                   
+               if HpFreq1 >= LpFreq1
                  error('LpFreq must be greater than HpFreq');  
                end 
                
-               desc.Par1 = HpFreq;
-               desc.Par2 = LpFreq;
-               desc.Par3 = input2bool(p.Results.ComSrc);
-               desc.Par4 = p.Results.ITD;
+               if (HpFreq2 >= LpFreq2) && (HpFreq ~= 0)
+                 error('LpFreq must be greater than HpFreq');  
+               end 
+               
+               desc.Par1 = HpFreq1;
+               desc.Par2 = LpFreq1;
+               desc.Par3 = HpFreq2;
+               desc.Par4 = LpFreq2;
 
             case 'ripple'
                desc.SoundType = this.soundtype_ripple;
@@ -516,7 +501,7 @@ classdef biox_rz6_tasklist < handle
            validByte = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','nonnegative','<',256});
            validDTInterval = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','>=',0.000040}); %RL: changed to >= 0.000040
+              {'numeric'}, {'scalar','>=',0.000040}); %RL: changed to >= 0.000040 = two clock tics
 
            p.addRequired('OutputByte', validByte);                     
            p.addOptional('DoubleDelay',0, validDTInterval);           
@@ -564,26 +549,33 @@ classdef biox_rz6_tasklist < handle
             desc = this.parse_multiconfig(this.task_multiconfigb, p, varargin{:});
         end
 
-        function desc = parse_att(this,tasktype,p,varargin)
+        function desc = parse_att(this,p,varargin)
            validAttenuation = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',80});
            validScaleFactor = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',1000});
            desc = this.newdesc();
-           desc.TaskType = tasktype;
-           p.addRequired('Attenuation', validAttenuation);
-           p.addOptional('ScaleFactor', 1, validScaleFactor);
+           desc.TaskType = this.task_att;
+           p.addRequired('Attenuation1', validAttenuation);
+           p.addRequired('Attenuation2', validAttenuation);
+           p.addOptional('ScaleFactor1', 1, validScaleFactor);
+           p.addOptional('ScaleFactor2', 1, validScaleFactor);
            p.parse(varargin{:});
-           desc.Par1 = p.Results.Attenuation;
-           desc.Par2 = p.Results.ScaleFactor;
-        end
+           desc.Par1 = p.Results.Attenuation1;
+           desc.Par2 = p.Results.Attenuation2;
+           desc.Par3 = p.Results.ScaleFactor1;
+           desc.Par4 = p.Results.ScaleFactor2;
+        end 
 
-        function desc = parse_atta(this,p,varargin)
-            desc = this.parse_att(this.task_atta,p,varargin{:});
-        end
+        function desc = parse_itd(this,p,varargin)
+           validITD = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',0.01});           
+           desc = this.newdesc();
+           desc.TaskType = this.task_itd;
+           p.addRequired('ITD1', validITD);
+           p.addRequired('ITD2', validITD);
+           p.parse(varargin{:});
+           desc.Par1 = p.Results.ITD1;
+           desc.Par2 = p.Results.ITD2;
+        end         
 
-        function desc = parse_attb(this,p,varargin)
-            desc = this.parse_att(this.task_attb,p,varargin{:});
-        end
-        
          %RL functie parse_mix toegevoegd
         function desc = parse_mix(this,p,varargin)
            desc = this.newdesc();
