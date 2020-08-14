@@ -1,5 +1,5 @@
 % print which lsl_api.cfg files we found
-if IsWin
+if ispc
   cfgs= { 'c:\etc\lsl_api\lsl_api.cfg', [ getenv('HOMEPATH') '\lsl_api\lsl_api.cfg'], getenv('LSLAPICFG') };
 else
   cfgs= { '/etc/lsl_api/lsl_api.cfg', [ getenv('HOME') '/lsl_api/lsl_api.cfg'], getenv('LSLAPICFG') };
