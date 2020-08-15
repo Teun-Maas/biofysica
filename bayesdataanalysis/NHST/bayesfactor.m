@@ -1,14 +1,14 @@
 function BF = bayesfactor(samplesPost,samplesPrior,crit)
 % Quick and dirty code
 %
-% BF = PA_BAYESFACTOR(SAMPLESPOST,SAMPLESPRIOR)
+% BF = BAYESFACTOR(SAMPLESPOST,SAMPLESPRIOR)
 %
 % Determine Bayes factor for prior and posterior MCMC samples via the
 % Savage-Dickey method.
 %
 % Determine if posterior is significantly different from a critical value
 % CRIT:
-% BF = PA_BAYESFACTOR(SAMPLESPOST,SAMPLESPRIOR,CRIT)
+% BF = BAYESFACTOR(SAMPLESPOST,SAMPLESPRIOR,CRIT)
 % By default this will the null hypothesis.
 %
 % See also KSDENSITY

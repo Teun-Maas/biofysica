@@ -14,6 +14,6 @@ if (nargin==1 && size(x,2)==3)
   x=x(:,1);
 end
 
-azel = zeros(length(x),2);
-azel(:,1) = RTD * atan2 (y, sqrt (x.^2 + z.^2));
-azel(:,2) = RTD * atan2 (x, sqrt (y.^2 + z.^2));
+azel		= zeros(length(x),2);
+azel(:,1)	= RTD * atan2 (y, sqrt (x.^2 + z.^2));
+azel(:,2)	= RTD * atan2 (x, sqrt (y.^2 + z.^2));

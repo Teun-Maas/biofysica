@@ -1,4 +1,4 @@
-function HS = modelHeadshadow(theta,freq,varargin)
+function [HS,freq,theta] = modelHeadshadow(theta,freq,varargin)
 % HS = MODELHEADSHADOW(THETA,FREQ)
 %
 % Approximation of the acoustic head shadow at horizontal angle THETA (deg)
@@ -26,8 +26,8 @@ a			= keyval('a',varargin,0.0875); % radius of head (m)
 minAlpha	= keyval('minAlpha',varargin,0.1); % minimum
 minTheta	= keyval('minTheta',varargin,150); % minimum head shadow at minTheta, typically not at 180 deg due to summation of sounds coming from both sides
 method		= keyval('method',varargin,'brown'); % use default Brown and Duda's filter approximation
-method		= keyval('method',varargin,'rayleigh'); % use default Brown and Duda's filter approximation
-method		= keyval('method',varargin,'duda'); % use default Brown and Duda's filter approximation
+method		= keyval('method',varargin,'rayleigh'); % use Rayleigh's head shadow physical model
+method		= keyval('method',varargin,'duda'); % use Duda's description of Rayleigh's physical model
 
 threshold	= keyval('threshold',varargin,0.01); % threshold
 r			= keyval('r',varargin,1); % distance (m)
@@ -50,7 +50,7 @@ switch method
 		mu			= 2*pi*a*freq/c;
 		alpha		= (1+minAlpha/2)+(1-minAlpha/2).*cosd(theta./minTheta.*180);
 		HS			= (1+1j.*alpha.*o./(2*o0))./(1+1j*o./(2*o0));
-		HS			= 20*log10(abs(HS)); % head shadow in deciBel
+		HS			= 20*log10(abs(HS)); % head shadow in deciBe
 	case 'opstal'
 		%% fit sine through ILD data with square-root frequency dependency
 		% from: van Opstal A.J. 2016, The Auditory System and Human
@@ -63,7 +63,7 @@ switch method
 		[~,~,~,~,~,GI]	= getcipicavg;
 		HS				= GI(freq,theta);
 	case 'rayleigh'
-		getrayleigh;
+		HS = getrayleigh;
 		return
 	case 'duda'
 		 HS = sphere(theta, freq,'c',c,'a',a,'r',r);
@@ -202,7 +202,7 @@ else
 end
 
 
-function getrayleigh
+function L = getrayleigh
 %% Work In Progress
 
 %% General

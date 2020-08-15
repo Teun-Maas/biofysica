@@ -1,9 +1,13 @@
 function [TOT,s] = bubbleplot(X,Y,varargin)
 % BUBBLEPLOT(X,Y)
 %
-% Make a bubbleplot of Y vs X
+% Make a bubbleplot of Y vs X.
 %
 % BUBBLEPLOT(X,Y)
+%
+% - Xwidth
+% - Ywidth
+% - col
 
 % (c) 2011 Marc van Wanrooij
 % E-mail: marcvanwanrooij@gmail.com
@@ -33,7 +37,7 @@ uY			= unique(Y);
 % if numel(uY)==1
 % 	keyboard
 % end
-	
+
 %%
 x		= uY;
 
@@ -43,10 +47,10 @@ for ii	= 1:length(uX)
 	r			= Y(sel);
 	N			= hist(r,x);
 	if isscalar(x)
-	N			= histogram(r,[x-Xwidth x+Xwidth]);
+		N			= histogram(r,[x-Xwidth x+Xwidth]);
 	end
 	TOT(:,ii)	= N;
-
+	
 end
 
 %% Normalize
