@@ -11,3 +11,4 @@ for ff=cfgs
       fprintf('LSL: found api configuration in %s\n',f);
   end
 end
+clear f ff cfgs
