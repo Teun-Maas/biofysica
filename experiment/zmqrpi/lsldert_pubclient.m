@@ -5,6 +5,7 @@ classdef lsldert_pubclient < lsldert_abstract_client
         context;
         socket;
         hostname;
+        hostip;
         tmax = Inf;
         
     end
@@ -27,7 +28,12 @@ classdef lsldert_pubclient < lsldert_abstract_client
                 hostname = this.default_hostname;
             end
             this.hostname=hostname;
-            
+            this.hostip=gethostbyname(this.hostname);
+            if isempty(this.hostip)
+                ME = MException('lsldert_pubclient:hostname_lookup_failure',...
+                    'cannot resolve IP address for host %s ', hostname);
+                throw(ME);
+            end
             % zmq workaround to prevent infinite wait:
             % probe if hostname:port is available
             con=pnet('tcpconnect',hostname,port);
@@ -41,7 +47,7 @@ classdef lsldert_pubclient < lsldert_abstract_client
             
             this.context=ZMQ.context(1);
             this.socket=this.context.socket(ZMQ.PUB);
-            uri=sprintf('tcp://%s:%d',hostname,port);
+            uri=sprintf('tcp://%s:%d',this.hostip,port);
             this.socket.connect(uri);
             this.socket.getReceiveTimeOut();
 
