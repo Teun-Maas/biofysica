@@ -5,6 +5,7 @@ classdef lsldert_pubclient < lsldert_abstract_client
         context;
         socket;
         hostname;
+        hostip;
         tmax = Inf;
         
     end
@@ -27,28 +28,33 @@ classdef lsldert_pubclient < lsldert_abstract_client
                 hostname = this.default_hostname;
             end
             this.hostname=hostname;
-            
+            this.hostip=gethostbyname(this.hostname);
+            if isempty(this.hostip)
+                ME = MException('lsldert_pubclient:hostname_lookup_failure',...
+                    'cannot resolve IP address for host %s ', hostname);
+                throw(ME);
+            end
             % zmq workaround to prevent infinite wait:
             % probe if hostname:port is available
-            con=pnet('tcpconnect',hostname,port);
+            con=pnet('tcpconnect',this.hostip,port);
             if con < 0
                 ME = MException('pupil_remote_control:connect_error',...
                     'cannot connect to tcp://%s:%d, check hostname, port number and/or port number in pupil-capture remote control plugin',...
-                    hostname, port);
+                    this.hostip, port);
                 throw(ME);
             end
             pnet(con,'close');
             
             this.context=ZMQ.context(1);
             this.socket=this.context.socket(ZMQ.PUB);
-            uri=sprintf('tcp://%s:%d',hostname,port);
+            uri=sprintf('tcp://%s:%d',this.hostip,port);
             this.socket.connect(uri);
             this.socket.getReceiveTimeOut();
 
             wait_for_connection(60);
             
             function wait_for_connection(seconds)
-                subsuri=sprintf('tcp://%s:%d',hostname,port+1);  % assume port+1
+                subsuri=sprintf('tcp://%s:%d',this.hostip,port+1);  % assume port+1
                 subs=this.context.socket(ZMQ.SUB);
                 subs.connect(subsuri);
                 timeout=100;
