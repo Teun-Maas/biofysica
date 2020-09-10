@@ -24,6 +24,12 @@ classdef lslder_kbd_client < lsldert_zmq_subscriber
             key=ss{2};
             value=str2double(ss{3});
         end
+
+        function flush(this)
+            while ~isempty(this.getkey(1))
+               pause(0.01);
+            end
+        end
     end  
     
 end
