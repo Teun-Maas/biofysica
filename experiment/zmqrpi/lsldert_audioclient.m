@@ -23,6 +23,13 @@ classdef lsldert_audioclient < lsldert_pubclient
                 throw(ME);
             end
             [pcm_data,Fs]=audioread(varargin{:});
+            if ~(Fs==44100 || Fs==48000)
+                Fs2=48000;
+                fprintf('lsldert_audioclient: resampling data from %d to %d S/s\n',Fs,Fs2);
+                pcm_data2=resample(pcm_data,Fs2,Fs);
+                pcm_data=pcm_data2;
+                Fs=Fs2;
+            end
             nsamp=max(size(pcm_data));
             nchan=min(size(pcm_data));
             pcm_header=uint32([Fs, nchan, nsamp, 0, 0, 0]);

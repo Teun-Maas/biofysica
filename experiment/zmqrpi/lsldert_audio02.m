@@ -1,4 +1,4 @@
-client=lsldert_audioclient('raspi6');
+client=lsldert_audioclient('raspi5.local');
 for ii=1:10
     fnii=sprintf('%d.wav',ii);
     client.load(ii,fnii);
