@@ -15,14 +15,14 @@ classdef lsldert_audioclient < lsldert_pubclient
             this@lsldert_pubclient(varargin{:});
         end
         
-        function load(this,bufferno, filename)
+        function load(this,bufferno, varargin)
             if (bufferno < 0) || (bufferno > this.maxbuf)
                 ME = MException('lsldert_audioclient.load',...
                     'bufferno must be >=0 and <%d',...
                     this.maxbuf);
                 throw(ME);
             end
-            [pcm_data,Fs]=audioread(filename);
+            [pcm_data,Fs]=audioread(varargin{:});
             nsamp=max(size(pcm_data));
             nchan=min(size(pcm_data));
             pcm_header=uint32([Fs, nchan, nsamp, 0, 0, 0]);
