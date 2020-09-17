@@ -8,7 +8,11 @@ function S21python
         BIOFYSICA_PY_SYS.path.append(PYPATH);
         biofpy=py.eval('__import__(''biofpy'')',struct);
     else
-        warning('biofysica toolbox needs python version >= 3, you have %s',v);
+        if loaded
+            warning('biofysica toolbox needs python version >= 3, you have %s',v);
+        else
+            warning('could not load your python %s interpreter ''%s''',v,e);
+        end
     end
 
 end
