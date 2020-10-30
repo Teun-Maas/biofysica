@@ -19,8 +19,11 @@ function result=pldata2mat(datadir, topic ,matfile)
     py_pldata2mat=strcat(here,'/pldata2mat.py');
     if isunix()
         python='python3';
-        extrapath=':/usr/local/bin:/opt/bin';
-        cmd=['PATH=', getenv('PATH'), extrapath, ' ', python, ' ',...
+        %extrapath=':/usr/local/bin:/opt/bin';
+        %cmd=['PATH=', getenv('PATH'), extrapath, ' ', python, ' ',...
+        %    py_pldata2mat, ' ', datadir, ' ', topic, ' ', matfile];
+        extrapath='/usr/local/bin:/opt/bin:';
+        cmd=['PATH=', extrapath, getenv('PATH'), ' ', python, ' ',...
             py_pldata2mat, ' ', datadir, ' ', topic, ' ', matfile];
         result=unix(cmd);
     elseif ispc()
