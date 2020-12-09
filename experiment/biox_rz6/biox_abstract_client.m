@@ -1,13 +1,12 @@
 classdef  biox_abstract_client < handle
 
     properties (Access=protected)
-        my_version = 23;
+        my_version = 24;
         % scale factors for acq channels
-        % ch5-ch10 are from RA8GA; they need about 1750x in order to volts.
+        % ch5-ch10 are from RA8GA; they need about 1750x in order to translate to volts.
        acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1 1 1 1]; %14 channels        
     end
-    
-     
+         
     methods (Abstract)
         write(this, tagname, value, offset)
         data = read(this, tagname, offset, nWords, nChannels)   
@@ -50,9 +49,8 @@ classdef  biox_abstract_client < handle
                 this.write(sizetag,nsamp);
                 this.write(datatag,mydata(i,:));            
             end
-        end
+        end                     
         
-        % RL functie read_acqsize toegevoegd
         function r=read_acqsize(this, chanlist)
             r=zeros(1,length(chanlist));
             for i=1:length(chanlist)

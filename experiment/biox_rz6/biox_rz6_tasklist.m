@@ -330,14 +330,16 @@ classdef biox_rz6_tasklist < handle
             case 'wav'
                desc.SoundType = this.soundtype_wav;
                %RL mischien 'Reset' als input ipv 1?
-               expectedPar1 = { 'Reset', 'Continue' };
+               expectedPar1 = { 'Reset', 'Continue', 'Loop'};
                p.addOptional('Reset', 'Reset', @(x) any(validatestring(x, expectedPar1))); %RL optional ipv Required
                p.parse(varargin{:});
                switch lower(p.Results.Reset)
-               case 'reset'
-                  desc.Par1 = 1;
                case 'continue'
                   desc.Par1 = 0;  
+               case 'reset'
+                  desc.Par1 = 1;
+               case 'loop'   
+                  desc.Par1 = 2; 
                otherwise
                  error('invalid parameter for WAV-sound, this is a bug');                      
                end  
