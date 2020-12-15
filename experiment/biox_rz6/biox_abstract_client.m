@@ -1,4 +1,4 @@
-classdef  biox_abstract_client < handle
+ classdef  biox_abstract_client < handle
 
     properties (Access=protected)
         my_version = 24;
@@ -20,6 +20,29 @@ classdef  biox_abstract_client < handle
             this.write('STM_Matrix',x');  
             this.resetlist(); 
         end
+        
+        function write_buttonbox_echo(this, varargin)
+            p = biox_inputParser;
+            p.FunctionName = 'write_buttonbox_echo';
+            validOnOffs = { 'On', 'Off' };
+            validOnOff = @(x) any(validatestring(x, validOnOffs)); 
+            validDuration = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<=',10});
+            
+            p.addRequired('OnOff', validOnOff);
+            p.addOptional('Duration', 1, validDuration);
+            p.parse(varargin{:});
+            switch lower(p.Results.OnOff)
+                case 'on'
+                   onoff = true;
+                case 'off'   
+                   onoff = false;
+                otherwise
+                   error('invalid onoff type, this is a bug');   
+            end   
+            duration = p.Results.Duration;
+            this.write('bb_echo',onoff);           
+            this.write('bb_echo_dur', duration);
+        end    
         
         function write_DACoffsets(this, Offsets_A, Offsets_B)
             this.write('OFS_DAC-A1',Offsets_A(1));
