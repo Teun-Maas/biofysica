@@ -9,7 +9,8 @@ dep				= keyval('dependent',varargin,false); % scale y for each x
 BW				= keyval('Bandwidth',varargin); % bandwidth for ksdensity
 graph			= keyval('plot',varargin,true); % make plot
 lim				= keyval('limits',varargin,[min(x) max(x) min(y) max(y)]); % make plot
-
+ecol			= keyval('edgecolor',varargin,'k'); % scale y for each x
+% cmap			= keyval('cmap'
 
 X		= [x y];
 % if dep
@@ -42,13 +43,17 @@ X1		= reshape(XI(:,1),m,n);
 X2		= reshape(XI(:,2),m,n);
 if graph
 	if exist('cbrewer.m','file')
-			cmap	= cbrewer('seq','Reds',64,'pchip');
+% 		cmap	= cbrewer('seq','Reds',64,'pchip');
+		cmap	= flipud(cbrewer('div','RdBu',64,'pchip'));
+		
 	else
 		cmap	= statcolor(64,[],[],[],'def',6);
 	end
 	[~,h] = contourf(X1,X2,F,0:0.01:1);
 	h.EdgeColor = 'none';
 	hold on
+	[~,h] = contour(X1,X2,F,0:0.1:1);
+	h.EdgeColor = ecol;
 	colormap(cmap)
 	% colorbar
 	set(gca,'Ydir','normal');

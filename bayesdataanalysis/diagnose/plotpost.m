@@ -80,7 +80,7 @@ if showCurve
 end
 xlabel(xlab);
 ylabel(ylab);
-box off
+box off;
 xlim(xl);
 title(main);
 set(gca,'YTick',yaxt);

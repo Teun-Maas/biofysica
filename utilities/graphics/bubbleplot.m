@@ -8,6 +8,8 @@ function [TOT,s] = bubbleplot(X,Y,varargin)
 % - Xwidth
 % - Ywidth
 % - col
+% - dependent
+% - MarkerSizeFactor
 
 % (c) 2011 Marc van Wanrooij
 % E-mail: marcvanwanrooij@gmail.com
@@ -17,10 +19,12 @@ function [TOT,s] = bubbleplot(X,Y,varargin)
 %%
 [~,~,Xwidth,~] = binsize_scott(X);
 [~,~,Ywidth,~] = binsize_scott(Y);
-Xwidth = keyval('Xwidth',varargin,Xwidth);
-Ywidth = keyval('Ywidth',varargin,Ywidth);
+Xwidth			= keyval('Xwidth',varargin,Xwidth);
+Ywidth			= keyval('Ywidth',varargin,Ywidth);
 
-def = keyval('col',varargin,6);
+def				= keyval('col',varargin,6);
+dep				= keyval('dependent',varargin,false); % scale y for each x
+MSF				= keyval('MarkerSizeFactor',varargin,3); % scale y for each x
 
 %% Histogram
 X			= round(X/Xwidth)*Xwidth;
@@ -50,7 +54,12 @@ for ii	= 1:length(uX)
 		N			= histogram(r,[x-Xwidth x+Xwidth]);
 	end
 	TOT(:,ii)	= N;
-	
+end
+
+
+if dep
+	mu		= max(TOT);
+	TOT = TOT./mu;
 end
 
 %% Normalize
@@ -69,7 +78,7 @@ M	= M(sel);
 x	= x(sel);
 y	= y(sel);
 
-SZ			= ceil(100*M);
+SZ			= ceil(MSF*100*M);
 [~,~,idx]	= unique(M);
 try
 	col = cbrewer('seq','OrRd',max(idx),'pchip');
