@@ -6,7 +6,7 @@ classdef zmqrpi_remote_control < handle
     % ZMQ_RPI_REMOTE_CONTROL uses JeroMQ, a pure java implementation of
     % libzmq. https://github.com/zeromq/jeromq
 
-    % Version 1.0 GW/20191211-1
+    % Version 1.1 GW/20210106-1
     %
     
     properties (Access=protected)
@@ -71,6 +71,20 @@ classdef zmqrpi_remote_control < handle
             end
             % telapsed
             result=reshape(char(rbytes),1,[]);
+        end
+        
+        function result = pulseIR(this, mask, duration, marker)
+            if nargin < 2
+                mask = 3;
+            end
+            if nargin < 3
+                duration = 0.5;
+            end
+            if nargin < 4
+                marker = sprintf("PULSEIR_%d", mask);
+            end
+            str = sprintf("I %d %d %s", mask, duration*1000, marker);
+            result = this.send(str);
         end
         
         function result = beep(this, freq, duration, marker)

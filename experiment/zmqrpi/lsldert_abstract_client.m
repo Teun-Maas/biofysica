@@ -25,6 +25,21 @@ classdef (Abstract) lsldert_abstract_client < handle
             [result,telapsed] = this.send(str);
         end
         
+        function [result,telapsed] = pulseIR(this, mask, duration, marker)
+            % PULSEIR - pulse one or two IR LEDs for fNIRS synchronization
+            if nargin < 2
+                mask = 3;
+            end
+            if nargin < 3
+                duration = 0.5;
+            end
+            if nargin < 4
+                marker = sprintf("PULSEIR_%d", mask);
+            end
+            str = sprintf("I %d %d %s", mask, duration*1000, marker);
+            [result,telapsed] = this.send(str);
+        end
+        
         function [result,telapsed] = digitalout(this, value, marker)
             % DIGITALOUT - set digital output to high or low level
             if nargin < 3
