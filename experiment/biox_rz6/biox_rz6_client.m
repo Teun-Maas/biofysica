@@ -71,8 +71,8 @@ classdef biox_rz6_client < biox_abstract_client
                     this.rz6.SoftTrg(1);    
                 case 'soft2' 
                     this.rz6.SoftTrg(2);    
-                case 'soft3' 
-                    this.rz6.SoftTrg(3); 
+ %                case 'soft3' 
+ %                   this.rz6.SoftTrg(3); 
                 otherwise
                    error('unknown triggertype');            
             end

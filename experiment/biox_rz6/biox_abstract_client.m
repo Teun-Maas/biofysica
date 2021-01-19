@@ -1,7 +1,7 @@
  classdef  biox_abstract_client < handle
 
     properties (Access=protected)
-        my_version = 24;
+        my_version = 25;
         % scale factors for acq channels
         % ch5-ch10 are from RA8GA; they need about 1750x in order to translate to volts.
        acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1 1 1 1]; %14 channels        
@@ -18,7 +18,8 @@
         function write_tasklist(this, tasklist)
             x=tasklist.get();            
             this.write('STM_Matrix',x');  
-            this.resetlist(); 
+            this.resetlist();
+            pause(0.001);
         end
         
         function write_buttonbox_echo(this, varargin)
@@ -107,6 +108,10 @@
         function r=read_trialready(this)
             r=this.read('STM_Ready'); 
         end
+        
+        function r=read_tasktype(this)
+            r=this.read('Task_Type')
+        end    
         
         function r=read_rcx_version(this)
             version=this.read('Version'); 
