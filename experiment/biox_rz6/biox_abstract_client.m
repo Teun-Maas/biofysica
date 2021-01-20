@@ -18,6 +18,7 @@
         function write_tasklist(this, tasklist)
             x=tasklist.get();            
             this.write('STM_Matrix',x');  
+            pause(0.001);
             this.resetlist();
             pause(0.001);
         end
