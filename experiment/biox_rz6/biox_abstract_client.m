@@ -1,7 +1,8 @@
  classdef  biox_abstract_client < handle
 
     properties (Access=protected)
-        my_version = 25;
+        my_version = 26;
+        bb_version = ' ';
         % scale factors for acq channels
         % ch5-ch10 are from RA8GA; they need about 1750x in order to translate to volts.
        acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1 1 1 1]; %14 channels        
@@ -16,11 +17,11 @@
     
     methods
         function write_tasklist(this, tasklist)
-            x=tasklist.get();            
-            this.write('STM_Matrix',x');  
-            pause(0.001);
-            this.resetlist();
-            pause(0.001);
+            x=tasklist.get();
+            this.resetlist();            % resets the STM_Ready flag of the old list
+            this.write('STM_Matrix',x'); %write the new list to RZ6 
+            pause(0.001);                %give the RZ6 some time to be ready 
+            this.resetlist();            % resets the new list (not sure if this is necessary)            
         end
         
         function write_buttonbox_echo(this, varargin)
@@ -116,11 +117,11 @@
         
         function r=read_rcx_version(this)
             version=this.read('Version'); 
-            r = 'BIOX RCX V3.' + string(version);
+            r = 'BIOX RCX V3.' + string(version) + this.bb_version;
         end
         
         function r=read_biox_version(this)            
-            r = 'BIOX Matlab V3.' + string(this.my_version);
+            r = 'BIOX Matlab V3.' + string(this.my_version) + this.bb_version;
         end
         
         function r=read_timer(this)
@@ -132,8 +133,8 @@
         end
                 
         function write_signalbyte(this, b)
-            this.write('SGN_Byte',b'); 
-        end
+            this.write('SGN_Byte',b); 
+        end 
         
         function r=read_inputbyte(this)
             r=this.read('INP_Byte');          
