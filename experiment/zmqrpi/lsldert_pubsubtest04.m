@@ -1,10 +1,10 @@
 function trigdata = lsldert_pubsubtest04
     
-    proxy=lsldert_pubclient('raspi4');
+    proxy=lsldert_pubclient('lsldert00');
     ses=lsl_session();
  
     %lslclients = { 'lsldert00', 'raspi4', 'raspi5', 'raspi6'};
-    lslclients = { 'lsldert05', 'raspi4'};
+    lslclients = { 'lsldert05', 'lsldert00'};
 
     numclients = numel(lslclients);
     
