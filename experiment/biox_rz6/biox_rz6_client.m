@@ -46,7 +46,7 @@ classdef biox_rz6_client < biox_abstract_client
             end
         end                       
 
-        function data=read(this, tagname, offset, nWords, nChannels)
+        function data=read(this, tagname, offset, nWords, datatype, nChannels)
             if nargin < 3
                 offset = 0;
             end
@@ -54,10 +54,13 @@ classdef biox_rz6_client < biox_abstract_client
                 nWords = 1;
             end
             if nargin < 5
-                nChannels=1;
+                datatype = 'F32';
             end
+            if nargin < 6
+                nChannels=1;
+            end                    
             if nWords > 1
-              data=this.rz6.ReadTagVEX(tagname,offset,nWords,'F32','F32',nChannels);
+              data=this.rz6.ReadTagVEX(tagname,offset,nWords, datatype, datatype ,nChannels);
             else
               data=this.rz6.GetTagVal(tagname);
             end  
