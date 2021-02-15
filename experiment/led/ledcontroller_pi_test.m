@@ -29,7 +29,7 @@ classdef ledcontroller_pi_test < handle
     end
     
     methods
-        function this = ledcontroller_pi(varargin)
+        function this = ledcontroller_pi_test(varargin)
             % LEDCONTROLLER_PI(hostname [, hostname2 [,...])
             % Setup a connection to the ArduinoPI led driver at internet addresses or
             % hostnames specified
@@ -48,18 +48,19 @@ classdef ledcontroller_pi_test < handle
                 % zmq workaround to prevent infinite wait:
                 % probe if hostname:port is available
                 port = 5555;
-                con=pnet('tcpconnect',h,port);
+                hostname = h{1}
+                con=pnet('tcpconnect',hostname,port);
                 if con < 0
-                    ME = MException('pupil_remote_control:connect_error',...
+                    ME = MException('ledcontroller_pi_test:connect_error',...
                         'cannot connect to tcp://%s:%d, check hostname, port number and/or port number in pupil-capture remote control plugin',...
-                    h, port);
+                    hostname, port);
                     throw(ME);
                 end
                 pnet(con,'close');
 
 
                 this.sockets{i} = this.context.createSocket(ZMQ.REQ);
-                this.sockets{i}.connect(strcat('tcp://', h, ':5555'));
+                this.sockets{i}.connect(strcat('tcp://', hostname, ':5555'));
             %   TODO 
             %   this.sockets{i}.setSocketOpt(ZMQ.RCVTIMEO,1000); FIXME
                 i=i+1;
