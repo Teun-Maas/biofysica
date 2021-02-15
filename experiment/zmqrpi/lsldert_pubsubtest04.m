@@ -47,10 +47,10 @@ function trigdata = lsldert_pubsubtest04
         for jj=1:50
             %for ii=1:100
                 %  trig.beep(440,0.5,'PIEP');
-                proxy.pulseIR(3,0.1)
+                proxy.pulseIR(3,5)
              %   proxy.digitalout(doutval,'AU');
                 doutval=1-doutval;
-                pause(0.2);
+                pause(5.5);
             %end
             %pause(0.27);
         end
