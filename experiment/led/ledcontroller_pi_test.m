@@ -46,7 +46,7 @@ classdef ledcontroller_pi_test < handle
             for h=this.hostnames
 %% TEST 20200215 voor Ruurd
                 port = 5555;
-                hostname = h{1}
+                hostname = h{1};
                 % lookup IP address
                 hostip=gethostbyname(hostname);
                 if isempty(hostip)
