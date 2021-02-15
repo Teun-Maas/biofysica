@@ -21,6 +21,17 @@ On Unix/Linux systems use your package manager to install it.
 **A working Python 3 environment.**
 
 You can get this from www.python.org
+Install these python3 libraries:
+```
+pip3 install  msgpack numpy scipy
+```
+
+MacOS: install homebrew from brew.sh
+The installation of the libraries is slightly different:
+```
+brew install python3 numpy scipy
+pip3 install msgpack
+```
 
 ### Installing
 
