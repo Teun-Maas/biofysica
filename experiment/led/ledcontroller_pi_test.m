@@ -45,11 +45,19 @@ classdef ledcontroller_pi_test < handle
             i=1;
             for h=this.hostnames
 %% TEST 20200215 voor Ruurd
-                % zmq workaround to prevent infinite wait:
-                % probe if hostname:port is available
                 port = 5555;
                 hostname = h{1}
-                con=pnet('tcpconnect',hostname,port);
+                % lookup IP address
+                hostip=gethostbyname(hostname);
+                if isempty(hostip)
+                    ME = MException('ledcontroller_pi_test:hostname_lookup_failure',...
+                        'cannot resolve IP address for host %s ', hostname);
+                    throw(ME);
+                end
+
+                % zmq workaround to prevent infinite wait:
+                % probe if hostip:port is available
+                con=pnet('tcpconnect',hostip,port);
                 if con < 0
                     ME = MException('ledcontroller_pi_test:connect_error',...
                         'cannot connect to tcp://%s:%d, check hostname, port number and/or port number in pupil-capture remote control plugin',...
@@ -58,9 +66,9 @@ classdef ledcontroller_pi_test < handle
                 end
                 pnet(con,'close');
 
-
                 this.sockets{i} = this.context.createSocket(ZMQ.REQ);
-                this.sockets{i}.connect(strcat('tcp://', hostname, ':5555'));
+                uri=sprintf('tcp://%s:%d',hostip,port);
+                this.sockets{i}.connect(uri);
             %   TODO 
             %   this.sockets{i}.setSocketOpt(ZMQ.RCVTIMEO,1000); FIXME
                 i=i+1;
