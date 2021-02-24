@@ -11,6 +11,12 @@ function dst_data=recursive_copy_struct(s,srcpath)
     if ~exist('srcpath','var') || isempty(srcpath)
         srcpath={};
     end
+    % GW/20200224 - convert cell arrays to cell before proceeding
+    % this needs testing
+    if (iscell(s))   
+       s=cell2mat(s); 
+    end
+
     % use s(1).srcpath.... as a template for traversing the data
     src_data=getfield(s,{1},srcpath{:});
     dst_data=struct();
