@@ -3,7 +3,10 @@ classdef biox_rz6_tasklist < handle
         tq = [];        
         ip;
         nq = 0;
-        debugflag = false;
+        debugflag = false;        
+        stopearly = false; %makes WAV data tapered 10ms before the end        
+        t_early = 0;       %is 0 for all task but a 'stop'-task when playing a WAV-sound.     
+        playingWAV = false;
     end
     
     properties (Access=public)
@@ -12,6 +15,8 @@ classdef biox_rz6_tasklist < handle
     
     properties (Constant)
         desclen = 7;
+        
+        t_early_WAV = -0.01;  %makes WAV data tapered 10ms before the end;        
         
         task_waitfortrigger = 0;
         task_sound_a = 1;
@@ -42,7 +47,7 @@ classdef biox_rz6_tasklist < handle
     end
 
     methods
-        function this = biox_rz6_tasklist 
+        function this = biox_rz6_tasklist() 
         end
         
         function n = nr_of_tasks(this)
@@ -88,6 +93,7 @@ classdef biox_rz6_tasklist < handle
             p.addRequired('DelayTime', validDelayTime);
             p.addRequired('Command', validCommand);
             p.parse(varargin{1:2});
+                        
 
             % Expand partially matched commands 
             command = lower(validatestring(p.Results.Command,validCommands));
@@ -149,8 +155,15 @@ classdef biox_rz6_tasklist < handle
             otherwise
                 error('unknown task: %s', p.Results.Command);
             end
-
-            desc.DelayTime = p.Results.DelayTime;
+            
+            if this.stopearly
+                this.t_early = this.t_early_WAV;  %sound playing is WAV                 
+                this.stopearly = false;            
+            else
+                this.t_early = 0;                 %sound playing is not WAV
+            end
+            
+            desc.DelayTime = p.Results.DelayTime + this.t_early;
 
             if this.debugflag
                disp(['---',mfilename,' debug output---']);
@@ -181,28 +194,45 @@ classdef biox_rz6_tasklist < handle
 
         function desc = parse_waitfortrigger(this,p,varargin)
             desc = this.newdesc();
+            
             desc.TaskType = this.task_waitfortrigger;
 
             validExtTrig = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',256}); %aangpast RL 8-->256            
                     
-            expectedStringInputs = { 'ZBusA', 'ZBusB', 'External', 'Soft1', 'Soft2', 'Soft3'};  %RL: extra opties toegevoegd
-            if ischar(varargin{3})
-               isValid = @(x) any(validatestring(x,expectedStringInputs));               
-            else
-               isValid = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',64}); %RL: 8 veranderd in 64.
-            end            
-            p.addRequired('Input', isValid);            
+            validTriggerTypeInput = { 'ZBusA', 'ZBusB', 'External', 'Soft1', 'Soft2', 'Soft3'};  %RL: extra opties toegevoegd
             
-            p.addOptional('ExternalTrigger', 0, @(x) validExtTrig(x));
+            if ischar(varargin{3})
+               validTriggerType = @(x) any(validatestring(x,validTriggerTypeInput));               
+            else
+               validTriggerType = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',64}); %RL: 8 veranderd in 64.
+            end                                                    
+                        
+            validEdgeTypeInput = {'Falling', 'Rising'};  %RL: toegevoegd V3.28
+            
+            validEdgeType = @(x) any(validatestring(x,validEdgeTypeInput));     
+            
+            validnChecks = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',10000});   
+                        
+            p.addRequired('TriggerType', validTriggerType);            
+            
+            p.addOptional('ExternalTrigger', 0, validExtTrig);
+            
+            p.addOptional('EdgeType', 'Falling', validEdgeType); %default is 'Falling'
+            
+            p.addOptional('nChecks', 200, validnChecks);  %default is 200                          
+            
             p.parse(varargin{:});
             
-            desc.Par1 = input2num(p.Results.Input);
-            desc.Par2 = p.Results.ExternalTrigger;
+            desc.Par1 = TriggerType2num(p.Results.TriggerType);           
+            
+            desc.Par2 = p.Results.ExternalTrigger;            
 
-           
+            desc.Par3 = EdgeType2num(p.Results.EdgeType);
+            
+            desc.Par4 = max(2,p.Results.nChecks); %minimum value is 2          
 
-            function n = input2num(x) 
-               % expectedStringInputs = {  'ZBusA', 'ZBusB', 'External', 'Soft1', 'Soft2', 'Soft3' };
+            function n = TriggerType2num(x) 
+               % validTriggerTypesInput = {  'ZBusA', 'ZBusB', 'External', 'Soft1', 'Soft2', 'Soft3' };
                if ischar(x)  
                   x = lower(x); 
                   if     x(5) == 'a'     %RL: extra opties toegevoegd
@@ -222,6 +252,19 @@ classdef biox_rz6_tasklist < handle
                   n = x;
                end
             end
+            
+            function n = EdgeType2num(x) %RL: toegevoegd V3.28
+               % validEdgeTypeInput = {'Falling', 'Rising'};  
+               if ischar(x)  
+                  x = lower(x); 
+                  if     x(1) == 'r'     %RL: extra opties toegevoegd
+                     n = 0;
+                  elseif x(1) == 'f'
+                     n = 1;
+                  end
+               end
+            end   
+            
         end
 
         function desc = parse_sound(this,tasktype,p,varargin)
@@ -244,6 +287,7 @@ classdef biox_rz6_tasklist < handle
             % Expand partially matched SoundType strings, and convert to lowercase
             SoundType=lower(validatestring(p.Results.SoundType, expectedSounds));
             
+                        
             function n = input2bool(x)   %RL: for use in 'noise' case
                if ischar(x)  
                   x = lower(x); 
@@ -259,6 +303,10 @@ classdef biox_rz6_tasklist < handle
             case 'stop'
                desc.SoundType = this.soundtype_stop;
                p.parse(varargin{:});
+               if this.playingWAV
+                  this.stopearly = true;
+               end;
+               this.playingWAV = false;
 
             case 'tone'
                desc.SoundType = this.soundtype_tone;
@@ -329,6 +377,7 @@ classdef biox_rz6_tasklist < handle
 
             case 'wav'
                desc.SoundType = this.soundtype_wav;
+               this.playingWAV = true;  %sound playing is WAV 
                %RL mischien 'Reset' als input ipv 1?
                expectedPar1 = { 'Reset', 'Continue', 'Loop'};
                p.addOptional('Reset', 'Reset', @(x) any(validatestring(x, expectedPar1))); %RL optional ipv Required
@@ -343,6 +392,7 @@ classdef biox_rz6_tasklist < handle
                otherwise
                  error('invalid parameter for WAV-sound, this is a bug');                      
                end  
+               
 
             case 'b=a'
                assert(desc.TaskType == this.task_sound_b,...
@@ -416,10 +466,34 @@ classdef biox_rz6_tasklist < handle
 
            validInputMask = @(x) validateattributes(x, ...
               {'numeric'}, {'scalar','nonnegative', '<',256});
-
+          
+           validEdgeTypeInput = {'Falling', 'Rising'};              
+           validEdgeType = @(x) any(validatestring(x,validEdgeTypeInput));             
+           validnChecks = @(x) validateattributes(x, {'numeric'},{'scalar','nonnegative','<',10000});      
+           
            p.addRequired('InputMask', validInputMask);
+           p.addOptional('EdgeType', 'Falling', validEdgeType); %default = 'Falling'                     
+           p.addOptional('nChecks', 200, validnChecks);  %default is 200
+            
+           
+           
            p.parse(varargin{:});
+           
            desc.Par1 = p.Results.InputMask;
+           desc.Par2 = EdgeType2num(p.Results.EdgeType);
+           desc.Par3 = max(2, p.Results.nChecks); %minimum is 2
+           
+           function n = EdgeType2num(x) %RL: toegevoegd V3.28
+               % validEdgeTypeInput = {'Falling', 'Rising'};  
+               if ischar(x)  
+                  x = lower(x); 
+                  if     x(1) == 'f'     %RL: extra opties toegevoegd
+                     n = 0;
+                  elseif x(1) == 'r'
+                     n = 1;
+                  end
+               end
+            end
         end
 
         function desc = parse_soundmov(this,p,varargin)

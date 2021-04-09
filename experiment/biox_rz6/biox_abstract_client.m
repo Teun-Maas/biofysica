@@ -1,7 +1,7 @@
  classdef  biox_abstract_client < handle
 
     properties (Access=protected)
-        my_version = 27;
+        my_version = 28;
         % scale factors for acq channels
         % ch5-ch10 are from RA8GA; they need about 1750x in order to translate to volts.
        acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1]; %11 channels        
