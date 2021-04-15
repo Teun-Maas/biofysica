@@ -257,9 +257,9 @@ classdef biox_rz6_tasklist < handle
                % validEdgeTypeInput = {'Falling', 'Rising'};  
                if ischar(x)  
                   x = lower(x); 
-                  if     x(1) == 'r'     %RL: extra opties toegevoegd
+                  if     x(1) == 'f'     %RL: extra opties toegevoegd
                      n = 0;
-                  elseif x(1) == 'f'
+                  elseif x(1) == 'r'
                      n = 1;
                   end
                end
