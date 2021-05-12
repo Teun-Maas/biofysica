@@ -47,7 +47,7 @@ classdef biox_rz6_tasklist < handle
     end
 
     methods
-        function this = biox_rz6_tasklist() 
+        function this = biox_rz6_tasklist()        
         end
         
         function n = nr_of_tasks(this)
@@ -82,7 +82,7 @@ classdef biox_rz6_tasklist < handle
         function desc = parse_command(this, varargin)
             funcName='biox_rz6_tasklist.m/add_task';
             validCommands = { 'WaitForTrigger', 'SoundA','SoundB','Mux','HoldInput',...
-               'SoundMov','Daq','DaqEx','SetDIO','TrigOut','Reset','Ready',...
+               'SoundMov','Daq','SetDIO','TrigOut','Reset','Ready',...
                'MultiConfigA','MultiConfigB','Att','ITD','Mix','SoundAB'};
 
             validCommand = @(x) any(validatestring(x,validCommands));
@@ -121,10 +121,7 @@ classdef biox_rz6_tasklist < handle
 
                 case 'daq'
                     desc = this.parse_daq(p,varargin{:});
-                    
-                case 'daqex'    
-                    desc = this.parse_daqex(p,varargin{:});
-                    
+                                        
                 case 'setdio'
                     desc = this.parse_setdio(p,varargin{:});
 
@@ -534,7 +531,7 @@ classdef biox_rz6_tasklist < handle
            validChannelSelection = @(x) validateattributes(x, ...
                {'numeric'}, {'vector','nonnegative'});
            validDivisor = @(x) validateattributes(x, ...
-              {'numeric'}, {'scalar','positive'});
+              {'numeric'}, {'integer','positive'});
            validStartStop = @(x) any(validatestring(x,{'Start','Stop'}));
          
            p.addRequired('StartStop', validStartStop);

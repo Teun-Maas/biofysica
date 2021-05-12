@@ -1,21 +1,26 @@
- classdef  biox_abstract_client < handle
+%  biox_abstract_client  
+
+classdef  biox_abstract_client < handle
 
     properties (Access=protected)
-        my_version = 29;
+        my_version = 30;
         % scale factors for acq channels
         % ch5-ch10 are from RA8GA; they need about 1750x in order to translate to volts.
        acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1]; %11 channels        
     end
-         
+
     methods (Abstract)
         write(this, tagname, value, offset)
-        data = read(this, tagname, offset, nWords, datatype, nChannels)   
+        data = read(this, tagname, offset, nWords, datatype, nChannels)           
         trigger(this, type) 
         resetlist(this)
     end
     
     methods
         function write_tasklist(this, tasklist)
+        % WRITE_TASKLIST Adds a tasklist to the clientobject
+        %   this.write_tasklist(tl)
+        
             x=tasklist.get();            
             this.write('STM_Matrix',x');  
             pause(0.001);
@@ -181,7 +186,7 @@
             mask = uint8(p.Results.Mask);
             
             if strcmp(Channel, 'stm')
-                Bit8 = 0
+                Bit8 = 0;
             end
                        
             switch Channel(1)                
