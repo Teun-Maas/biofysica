@@ -25,10 +25,10 @@ function [snd,Fs] = genripple(vel,dens,md,durrip,durstat,varargin)
 
 %% Initialization
 if nargin<1
-	vel = -4; % (Hz)
+	vel = 1; % (Hz)
 end
 if nargin<2
-	dens = 0; % (cyc/oct)
+	dens = 2; % (cyc/oct)
 end
 if nargin<3
 	md = 100; % Percentage (0-100%)
@@ -41,7 +41,7 @@ if nargin<5
 end
 
 %% Optional arguments
-dspFlag       = keyval('display',varargin,false);
+dspFlag       = keyval('display',varargin,true);
 plee       = keyval('play',varargin,'n');
 Fs         = keyval('freq',varargin,48828.125);
 meth        = keyval('method',varargin,'time');
@@ -101,7 +101,7 @@ if dspFlag
 end
 
 %% Play
-if strcmpi(plee,'y');
+if strcmpi(plee,'y')
 	sndplay = ramp(snd',round(10*Fs/1000));
 	p		= audioplayer(sndplay,Fs);
 	playblocking(p);
@@ -116,6 +116,13 @@ ylabel('Amplitude (au)');
 ylabel('Time (ms)');
 xlim([min(t) max(t)]);
 hold on
+% h = abs(hilbert(snd));
+% plot(t,h,'b:')
+
+wl2 = 1000;
+[up2,lo2] = envelope(snd,wl2,'rms');
+plot(t,2*up2,'g-')
+plot(t,2*lo2,'g-')
 
 subplot(224)
 getpower(snd(nStat+1:end),Fs,'orientation','y');
