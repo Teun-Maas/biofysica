@@ -75,12 +75,14 @@ classdef biox_rz6_client < biox_abstract_client
                     this.rz6.SoftTrg(1);    
                 case 'soft2' 
                     this.rz6.SoftTrg(2);    
+                case 'soft3'
+                    this.rz6.SoftTrg(3); 
                 otherwise
-                   error('triggertype can be "Soft1" or "Soft2"');            
+                   error('triggertype can be "soft1", "soft2" or "soft3"');            
             end
         end
         
-        function resetlist(this)
+        function reset_list(this)
             %soft4 resets the tasklist
             this.rz6.SoftTrg(4); 
         end

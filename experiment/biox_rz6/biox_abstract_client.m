@@ -3,7 +3,7 @@
 classdef  biox_abstract_client < handle
 
     properties (Access=protected)
-        my_version = 30;
+        my_version = 31;
         % scale factors for acq channels
         % ch5-ch10 are from RA8GA; they need about 1750x in order to translate to volts.
        acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1]; %11 channels        
@@ -13,7 +13,7 @@ classdef  biox_abstract_client < handle
         write(this, tagname, value, offset)
         data = read(this, tagname, offset, nWords, datatype, nChannels)           
         trigger(this, type) 
-        resetlist(this)
+        reset_list(this)
     end
     
     methods
@@ -24,7 +24,7 @@ classdef  biox_abstract_client < handle
             x=tasklist.get();            
             this.write('STM_Matrix',x');  
             pause(0.001);
-            this.resetlist();
+            this.reset_list();
             pause(0.001);
         end
         
