@@ -1,10 +1,12 @@
+%
+
 classdef biox_rz6_client < biox_abstract_client
     
     properties (Access=protected)
         rz6;
     end
 
-    methods
+    methods (Access=public)
         function this = biox_rz6_client(number, circuit)
             if number == -1
                 this.rz6 = rz6_dummy;
@@ -65,27 +67,24 @@ classdef biox_rz6_client < biox_abstract_client
               data=this.rz6.GetTagVal(tagname);
             end  
         end
-        
-        %RL: method toegevoegd.
-        function trigger(this, type)  
+                
+        function trigger(this, type)            
             type = lower(type);
             switch type
                 case 'soft1' 
                     this.rz6.SoftTrg(1);    
                 case 'soft2' 
                     this.rz6.SoftTrg(2);    
- %                case 'soft3' 
- %                   this.rz6.SoftTrg(3); 
+                case 'soft3'
+                    this.rz6.SoftTrg(3); 
                 otherwise
-                   error('unknown triggertype');            
+                   error('triggertype can be "soft1", "soft2" or "soft3"');            
             end
         end
         
-        %RL: method startlist toegevoegd voor resetten van tasklist.
-        %RL: deze functie wordt gebruikt in de functie <write_tasklist> in biox_abstract_client
-        %RL: maar heb ik bewust ook public gemaakt.  
-        function resetlist(this)
-            this.rz6.SoftTrg(4); %soft4 resets the tasklist
+        function reset_list(this)
+            %soft4 resets the tasklist
+            this.rz6.SoftTrg(4); 
         end
     end
 end

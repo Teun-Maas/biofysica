@@ -1,25 +1,30 @@
- classdef  biox_abstract_client < handle
+%  biox_abstract_client  
+
+classdef  biox_abstract_client < handle
 
     properties (Access=protected)
-        my_version = 27;
+        my_version = 31;
         % scale factors for acq channels
         % ch5-ch10 are from RA8GA; they need about 1750x in order to translate to volts.
        acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1]; %11 channels        
     end
-         
+
     methods (Abstract)
         write(this, tagname, value, offset)
-        data = read(this, tagname, offset, nWords, datatype, nChannels)   
+        data = read(this, tagname, offset, nWords, datatype, nChannels)           
         trigger(this, type) 
-        resetlist(this)
+        reset_list(this)
     end
     
     methods
         function write_tasklist(this, tasklist)
+        % WRITE_TASKLIST Adds a tasklist to the clientobject
+        %   this.write_tasklist(tl)
+        
             x=tasklist.get();            
             this.write('STM_Matrix',x');  
             pause(0.001);
-            this.resetlist();
+            this.reset_list();
             pause(0.001);
         end
         
@@ -171,17 +176,20 @@
             expectedChannel = {'A', 'B', 'C', 'STM', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7'};
                                                
             validChannel = @(x) any(validatestring(x, expectedChannel));                        
+            validByte = @(x) validateattributes(x,{'numeric'},{'scalar','>=',0,'<',256});
             
             p.addRequired('Channel', validChannel);            
+            p.addOptional('Mask', 255, validByte);
             p.parse(varargin{:});
             
-            Channel = lower(p.Results.Channel);            
+            Channel = lower(p.Results.Channel);    
+            mask = uint8(p.Results.Mask);
             
             if strcmp(Channel, 'stm')
-                Bit8 = 0
+                Bit8 = 0;
             end
                        
-            switch Channel(1)
+            switch Channel(1)                
                 case 'a'
                     startBit = 0;
                 case 'b'
@@ -196,6 +204,7 @@
             
             if length(Channel) == 2
                 bit8 = str2num(Channel(2));
+                mask = 255;
             else
                 bit8 = -1;
             end    
@@ -211,12 +220,14 @@
             acqdata = this.read_acqdata([11]);
             acqdata11 = uint32(acqdata{1});                     
                            
-            for i = 1:length(acqdata11)                
-                data(i) = bitshift(bitshift(acqdata11(i), bitshiftL), bitshiftR);
-            end
+            for i = 1:length(acqdata11)
+                byte = uint8(bitshift(bitshift(acqdata11(i), bitshiftL), bitshiftR)); 
+                maskedbyte = bitand(byte, mask); 
+                data(i) = maskedbyte;
+            end                        
             
             if bit8 == -1
-              r = uint8(data);
+              r = data;
             else
               r = boolean(data);   
             end;  

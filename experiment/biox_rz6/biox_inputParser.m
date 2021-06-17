@@ -1,3 +1,5 @@
+%  biox_inputParser
+
 classdef biox_inputParser < inputParser
     % inputParser with slightly modified error handling
     methods

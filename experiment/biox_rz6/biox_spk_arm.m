@@ -1,11 +1,11 @@
 % RL: This code is for RZ6 ID #4407 (4DSP) in the Speaker Arm lab
 
 
-classdef biox_spk_arm < biox_rz6_4c
+classdef biox_spk_arm < biox_rz6_3c
 
     methods
-        function this = biox_SPK_ARM
-            this@biox_rz6_4c(1)
+        function this = biox_spk_arm            
+            this@biox_rz6_3c(1)
             %RL: gemeten offsets van de DACs in [Volt]
             Offsets_A(1) = -0.0248; %RL: offset DAC-A bij 0  dB AttA
             Offsets_A(2) =  0.0099; %RL: offset DAC-A bij 20 dB AttA
