@@ -80,11 +80,11 @@ y	= y(sel);
 
 SZ			= ceil(MSF*100*M);
 [~,~,idx]	= unique(M);
-try
-	col = cbrewer('seq','OrRd',max(idx),'pchip');
-catch
+% try
+% 	col = cbrewer('seq','OrRd',max(idx),'pchip');
+% catch
 	col			= statcolor(max(idx),[],[],[],'def',def);
-end
+% end
 C			= col(idx,:);
 s			= scatter(x,y,SZ,C,'filled');
 set(s,'MarkerEdgeColor','k');

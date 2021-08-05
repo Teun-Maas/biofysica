@@ -41,7 +41,7 @@ if nargin<5
 end
 
 %% Optional arguments
-dspFlag       = keyval('display',varargin,true);
+dspFlag       = keyval('display',varargin,false);
 plee       = keyval('play',varargin,'n');
 Fs         = keyval('freq',varargin,48828.125);
 meth        = keyval('method',varargin,'time');
