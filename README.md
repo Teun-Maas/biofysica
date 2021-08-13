@@ -37,7 +37,7 @@ pip3 install msgpack
 ```
 
 Find out where the currently installed python3 is located.
-Unix/MacOS
+Unix/MacOS: open a terminal window and run
 ```
 bash:~$ type -a python3
 python3 is /usr/local/bin/python3
@@ -46,7 +46,7 @@ python3 is /usr/bin/python3
 
 ```
 
-Windows: open a new CMD.EXE window and type
+Windows: open a new CMD.EXE window and run
 ```
 C:\> where python
 C:\Program Files\Python38\python.exe
@@ -102,7 +102,13 @@ Usually it is enough to open a (git) bash command window, navigate into the biof
 ```
 git pull
 ```
-This will update the contents of the directory tree. After restarting MATLAB everythin shoud be okay.
+This will update the contents of the directory tree. After restarting MATLAB everything shoud be okay.
 
 
+### Problems?
 
+You may run into trouble installing the toolbox or using it. Please let us know so we can fix things or help you. 
+
+Cheers, Günter
+
+gunter.windau@donders.ru.nl
