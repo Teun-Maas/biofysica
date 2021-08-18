@@ -6,19 +6,21 @@ methods (Access=protected)
     function set_enable(this, value)
         this.plc.IEC_write(this.varmap.Mch_Enable_Servo_1, value==1);
         this.plc.IEC_write(this.varmap.Mch_Enable_Servo_2, value==1);
+        this.plc.IEC_write(this.varmap.Mch_Enable_Servo_3, value==1);
     end
     
 end
 
 methods
     function this = sr_servo
-        this@panaservo('192.168.1.10', 'speakerrobot_PLC_global_variables.csv');
+        this@panaservo('192.168.1.5', 'speakerrobot_PLC_global_variables.xslx');
     end
 
     function r = is_enabled(this)
         r = ...
            this.plc.IEC_read(this.varmap.Mch_Enable_Servo_1) & ...
-           this.plc.IEC_read(this.varmap.Mch_Enable_Servo_2);
+           this.plc.IEC_read(this.varmap.Mch_Enable_Servo_2) & ...
+           this.plc.IEC_read(this.varmap.Mch_Enable_Servo_3);
     end
     
     function start(this)

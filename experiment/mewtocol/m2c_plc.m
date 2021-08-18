@@ -37,7 +37,7 @@ methods
     end
 
     function keepalive(this)
-        disp('sending keepalive message');
+        % disp('sending keepalive message');
         % send an abort message. This is the shortest possible 
         % command. It shouldn't hurt, because we only send keepalive
         % messages when the network connection is idle

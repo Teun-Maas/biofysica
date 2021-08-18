@@ -1,4 +1,4 @@
-Class;Identifier;FP_Address;IEC_Address;Type;Initial;Comment
+Class;Identifier;IEC_Address;FP_Address;Type;Initial;Comment
 VAR_GLOBAL;X_S1_Enc_A;%IX0.0;X0;BOOL;FALSE;
 VAR_GLOBAL;X_S1_Enc_B;%IX0.1;X1;BOOL;FALSE;
 VAR_GLOBAL;X_Spare_X2;%IX0.2;X2;BOOL;FALSE;

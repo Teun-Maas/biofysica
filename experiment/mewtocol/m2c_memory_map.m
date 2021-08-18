@@ -111,7 +111,7 @@ classdef m2c_memory_map < handle
          %     end
             otherwise
                error('Not a valid indexing expression')
-   end
+            end
 
         end
     end
