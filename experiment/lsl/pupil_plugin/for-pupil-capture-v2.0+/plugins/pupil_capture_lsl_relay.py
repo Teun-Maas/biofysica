@@ -6,6 +6,9 @@
  Distributed under the terms of the GNU Lesser General Public License (LGPL v3.0).
  License details are in the file license.txt, distributed as part of this software.
 ----------------------------------------------------------------------------------~(*)
+GW/Version 2.1 from github
+GW/20210825 Change outlet name and type to be more meaningful in a network
+hosting multiple LSL outlets
 """
 
 from time import sleep
@@ -18,11 +21,15 @@ import pylsl as lsl
 from plugin import Plugin
 from pyglui import ui
 
+import socket
+
 VERSION = '2.1'
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+OUTLET_NAME = 'Pupil Capture LSL Relay v2'
+OUTLET_TYPE = 'Pupil Gaze @ '+socket.gethostname()
 
 class Pupil_LSL_Relay(Plugin):
     """Plugin to relay Pupil Capture data to LSL"""
@@ -66,7 +73,7 @@ class Pupil_LSL_Relay(Plugin):
         """Initializes sidebar menu"""
         self.add_menu()
         self.menu.label = "Pupil LSL Relay"
-        self.menu.append(ui.Info_Text("LSL outlet name: `pupil_capture`"))
+        self.menu.append(ui.Info_Text("LSL outlet name: `{}`".format(OUTLET_NAME)))
         self.menu.append(
             ui.Info_Text(
                 "LSL outlet format: https://github.com/sccn/xdf/wiki/Gaze-Meta-Data"
@@ -93,8 +100,8 @@ class Pupil_LSL_Relay(Plugin):
     def construct_streaminfo(self):
         self.setup_channels()
         stream_info = lsl.StreamInfo(
-            name="pupil_capture",
-            type="Gaze",
+            name=OUTLET_NAME,
+            type=OUTLET_TYPE,
             channel_count=len(self.channels),
             channel_format=lsl.cf_double64,
             source_id=self.outlet_uuid,
