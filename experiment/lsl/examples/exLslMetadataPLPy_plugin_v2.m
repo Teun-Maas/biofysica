@@ -21,7 +21,6 @@ function [pldata, metadata] = exLslMetadataPLPy_plugin_v2
     plstr=lsl_istream(info{n});
     
     metadata = lsl_metadata_gaze(plstr);
-    %xml=metadata.as_xml()
     %fprintf([metadata.as_xml() '\n']);
     p=metadata.as_struct();
     
