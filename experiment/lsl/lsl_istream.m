@@ -33,6 +33,15 @@ classdef lsl_istream < handle
         function inlet_info=info(this)
             inlet_info = this.inlet.info();
         end
+        
+        function result=set_postprocessing(this, processing_flags)
+            % Set timestamp correction postprocessing flags. This should
+            % only be done in online scenarios. This option will destroy a
+            % stream's original, ground-truth timestamps.
+            % for more info see: 'help lsl_inlet.set_postprocessing'
+            result=this.inlet.set_postprocessing(processing_flags);
+        end
+
     end
     
     
