@@ -2,6 +2,13 @@ classdef lsl_metadata_gaze < lsl_metadata
     % lsl_metadata_gaze - simplified LSL meta data specific for pupil capture LSL
     % relay plugins >= v2.0
     % 
+    % metadata = lsl_metadata_gaze(an_lsl_istream);
+    % metadata has fields name, type, channel_count,
+    % pupil_lsl_relay_version and a cell array of structures describing
+    % each channel showing label, eye, type, unit and possibly
+    % coordinate_system.
+    % For a description of the fields see https://github.com/sccn/xdf/wiki/Gaze-Meta-Data
+   
     properties (SetAccess=immutable)
         % these are the most important properties read from the lsl streams
         % metadata, converted to a simpler structure than the original xml
