@@ -1,4 +1,4 @@
-function pldata = exLslReceivePLPy_plugin_v2
+function [pldata, metadata] = exLslReceivePLPy_v2
     %  info=lsl_resolver('type=''Digital Events @ clockpi'' and name=''Digital Events 0''');
     %  info=lsl_resolver('type=''Pupil Capture @ dcn-eyebrain'' and name=''Pupil Primitive Data - Eye 0''');
     
@@ -6,8 +6,7 @@ function pldata = exLslReceivePLPy_plugin_v2
     %
     % Select Pupil Labs event stream
     %
-%    info=lsl_resolver('name=''Pupil Python Representation - Eye 0''');
-    info=lsl_resolver('name=''pupil_capture''');
+    info=lsl_resolver('type=''Pupil Gaze @ LAPTOP-CBLJOAUJ''');
 
     l=info.list();
     if isempty(l)
@@ -20,6 +19,10 @@ function pldata = exLslReceivePLPy_plugin_v2
     
     n=input('enter pupil labs stream number to acquire: ');
     plstr=lsl_istream(info{n});
+    
+    metadata = lsl_metadata_gaze(plstr);
+    %fprintf([metadata.as_xml() '\n']);
+    p=metadata.as_struct(); %#ok<NASGU>
     
     ses=lsl_session();
     ses.add_stream(plstr);
@@ -34,11 +37,10 @@ function pldata = exLslReceivePLPy_plugin_v2
     pldata=plstr.read();
     delete(ses);
     delete(plstr);
-    delete(info)
-    
+    delete(info);    
 end
 
-function pl_listener(src, event)
+function pl_listener(src, event) %#ok<INUSL>
     disp('pl_listener called');
-    event
+    event %#ok<NOPRT>
 end
