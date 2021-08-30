@@ -1,4 +1,21 @@
 classdef lsl_session < handle
+    % LSL_SESSION - session class that handles incoming data from
+    % lsl_istream objects in the background.
+    %
+    % See also: ADD_STREAM, START, STOP
+    %
+    % LSL_SESSION uses a timer to periodically check attached lsl_istream
+    % objects for available data. On errors when the LSL_SESSION objects
+    % are not deleted, the timer keeps on running. When creating new
+    % sessions and attached streams this may cause unexpected results.
+    %
+    % Neat solution: perform exception handling in your code that cleans up
+    % after errors.
+    % Workaround: manually remove all timers running in the background
+    % using the command 'delete(timerfindall)'
+    % Todo: upon creation check if an LSL_SESSION is still running and act
+    % upon this.
+    
     properties
         tmr
         lsl_lib
@@ -8,6 +25,7 @@ classdef lsl_session < handle
     
     methods (Access=public)
         function this=lsl_session()
+            % Initialize the lsl_session
             this.lsl_lib=lsl_loadlib();
             this.setup_timer();
         end
@@ -18,6 +36,7 @@ classdef lsl_session < handle
         end        
         
         function add_stream(this,stream)
+            % add an lsl_istream object to this session
             this.nstreams=this.nstreams+1;
             this.streams{this.nstreams}=stream;
         end
@@ -45,6 +64,10 @@ classdef lsl_session < handle
         end
         
         function start(this,period)  % you can actually stop and restart the nested timer function at any time
+            % start() starts data collection from the attached lsl_istream
+            % objects.
+            % start(interval_seconds) starts data collection with the
+            % specified interval.
             if nargin>1
                 this.tmr.period=period;
             end

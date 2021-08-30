@@ -1,9 +1,29 @@
 classdef lsl_istream < handle
+    % LSL_ISTREAM - this class represents an lsl_inlet and provides a
+    % mechanism to easily collect data by using the LSL_SESION class.
+    %
+    % See also: LSL_SESSION, LSL_RESOLVER
+    %
+    % The lsl_session object collects data periodically and also notifies
+    % the LSL_ISTREAM objects by posting a DataAvailable event.
+    % Listen for these events using addlistener:
+    %
+    % addlistener(the_lsl_istream,'DataAvailable',@listener_fcn);
+    % function listener_fcn(src, event) %#ok<INUSL>
+    %     disp('listener_fcn called');
+    %     event %#ok<NOPRT>
+    % end
+    %  
+    % The 'event' passed to the listener_fcn will be an lsl_eventdata
+    % object, containing all the fields of the lsl_data class.
+    %
+    % See also: lsl_data, lsl_eventdata, notify, handle, handle.addlistener, event.EventData
+
     events
         DataAvailable
     end
     
-    properties % (Access=protected)
+    properties (Access=protected)
         isstring
         inlet
         databuffer
@@ -31,14 +51,19 @@ classdef lsl_istream < handle
         end
         
         function inlet_info=info(this)
+            % INFO - returns data provided by the associated inlet's
+            % inlet.info() function.
+            %
+            % See also: lsl_inlet.info
             inlet_info = this.inlet.info();
         end
         
         function result=set_postprocessing(this, processing_flags)
-            % Set timestamp correction postprocessing flags. This should
+            %SET_POSTPROCESSING - Set timestamp correction postprocessing flags. This should
             % only be done in online scenarios. This option will destroy a
             % stream's original, ground-truth timestamps.
-            % for more info see: 'help lsl_inlet.set_postprocessing'
+            %
+            % See also: lsl_inlet.set_postprocessing
             result=this.inlet.set_postprocessing(processing_flags);
         end
 
@@ -67,7 +92,7 @@ classdef lsl_istream < handle
                     ds{bufsz}=[];
                     ts{bufsz}=[];
                 end
-                ds{i}=d{1};
+                ds{i}=d{1}; %#ok<*AGROW>
                 ts{i}=t;
                 [d,t]=this.inlet.pull_sample(0);
             end
@@ -76,6 +101,7 @@ classdef lsl_istream < handle
         end
         
         function [data,timestamps]=pull_chunk(this)
+            % Wrapper to solve segfault problem mentioned above
             if this.isstring
                 [data,timestamps]=this.pull_string_chunk();
             else
@@ -87,6 +113,7 @@ classdef lsl_istream < handle
             % try to collect data
             % if data available pack into lsl_eventdata
             % and notify
+            % This is called periodically by an lsl_session object
             [data,timestamps]=this.pull_chunk();
             if ~isempty(data)
                 tc=this.inlet.time_correction();
@@ -97,19 +124,19 @@ classdef lsl_istream < handle
             end
         end
         
-        function open_stream(this)
+        function open_stream(this) %#ok<MANU>
         %    this.inlet.open_stream();
-        end;
+        end
 
-        function close_stream(this)
-       %     this.inlet.close_stream();
-        end;
+        function close_stream(this) %#ok<MANU>
+        %    this.inlet.close_stream();
+        end
 
         function flush_stream(this)
-            [data,timestamps]=this.pull_chunk();
+            [~,~]=this.pull_chunk();
             delete(this.databuffer);
             this.databuffer=lsl_databuffer();
-        end;
+        end
     end
     
 end

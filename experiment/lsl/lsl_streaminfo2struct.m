@@ -1,6 +1,6 @@
 function  outStruct  = lsl_streaminfo2struct(streaminfo)
 %LSL_STREAMINFO2STRUCT converts an lsl_streaminfo object into a MATLAB structure
-
+%(This is used by the lsl_metadata class)
 %Instead of writing our own node traversal routines to get the data from the
 %streaminfo object, we dump the xml content into a file and let a slightly
 %modified version of xml2struct() do the hard work.
