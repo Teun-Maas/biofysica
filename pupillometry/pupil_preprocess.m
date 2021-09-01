@@ -1,4 +1,153 @@
-function [data_out,data_in] = pupil_preprocess(data_in,varargin)
+
+function [time,data,Fs] = pupil_preprocess(time,data,Ti,varargin)
+% In this script blinks are removed and traces are smoothed. Traces
+% containing to many blinks are excluded. The output provides an average
+% trace that is baseline corrected.
+% The following processing steps are performed.
+% PREPROCESSING  Collects pupil traces from the raw data set and
+%                creates a list that codes for valid and invalid traces
+%                based on the percentage of blinks.
+% LINEAR INT     Fills in gaps created by blinks.
+%                Note that blinks will also create gaps in eye-movement
+%                data. This is not covered in this workshop.
+% MOVING AVE     Moving average filter for smoothing data.
+% BASELINE COR   Baseline correction is preferment for each trace.
+% AVERAGING      Average over all traces is calculated.
+
+
+ 
+rawFlag         = keyval('showRaw',varargin,false);
+interpFlag      = keyval('showInterp',varargin,false);
+smoothFlag      = keyval('showSmooth',varargin,false);
+baselineFlag    = keyval('showBaseline',varargin,false);
+avgFlag         = keyval('showAvg',varargin,false);
+timeFlag         = keyval('showTime',varargin,false);
+ 
+dispFlag         = keyval('disp',varargin,false);
+if ~dispFlag
+    rawFlag         = false;
+    interpFlag      = false;
+    smoothFlag      = false;
+     
+    timeFlag        = false;
+end
+ 
+%% Data
+ 
+% [~,ntrials]       = size(data);           % Calculate dataset size
+ 
+ 
+%% Timing
+t   = time; % sample time (s)
+dt  = diff(t); % time between samples (s)
+f   = 1./dt; % sample rate (Hz)
+ 
+% Fs = cellfun(@(x) x(1:nsamples),data,'UniformOutput',false)';
+if timeFlag
+    figure;
+    subplot(211)
+    plot(dt*1000,'ko-','MarkerFaceColor','w')
+    ylabel('\delta t (ms)');
+    xlabel('sample');
+     
+    subplot(223)
+    x = 0.8/120:1/12000:(1.5/120);
+    hist(dt,x)
+    xlabel('\delta t (s)');
+    ylabel('N');
+     
+    subplot(224)
+    x = 0:1:240;
+    hist(f,x)
+    xlabel('sample rate (Hz)');
+    ylabel('N');
+end
+%% Hard coded
+Fs                      = mean(f); % ~119 Hz
+ 
+%% Resample the data
+Fs = 120;
+
+[data,time] = resample(data,time,Fs);
+
+%% Preprocessing
+ 
+ 
+% data                  = data/10; % from pixels to mm, see pupillab manual/webpage/github wiki?
+data = data';
+[ntrials,nsamples]      = size(data) ;          % Calculate dataset size
+ 
+ 
+%% Selection and time
+ 
+% The data is transformed to a data set only containing the pupil traces
+% (~9 seconds long) of the trials of interest.
+ 
+if rawFlag, plotdata(data,time,101), title('Raw data');
+end
+ 
+%% Blink interpolation
+% Linear interpolation of blinks
+data = blinkinterp(data,time,ntrials);
+ 
+ 
+%% Spike removal
+% if exist('movart2clean','file')
+%   data = movart2clean(data);
+% end
+%
+if interpFlag, plotdata(data,time,102), title('Blinks removed');
+end
+% because not all blinks are removed
+ 
+%% Bandpass & smooth
+% 5-point moving average smoothing filter
+% remove noise
+% data        = movavg(data,5);
+ 
+for trlIdx = 1:ntrials
+    data(trlIdx,:) = highpass(data(trlIdx,:),'Fc',0.1,'Fs',Fs)'; % are these good settings??????? 0.1 Hz just means baseline removal
+    data(trlIdx,:) = lowpass(data(trlIdx,:),'Fc',20,'Fs',Fs)'; % this might be too strict bc response itself is slow. bc takes 4 sec for pupil to dilate (impulse response). 
+% 0.25 Hz (bc 4 s for max) so the data is slow. might set highpass to 0.01
+% Hz. something further away. you don't want to remove the data with this
+% filtering.
+end
+ 
+ 
+if smoothFlag 
+    plotdata(data,time,103), title('Smoothed');
+end
+
+data = interp1(time,data,Ti,'linear',NaN);
+time = Ti;
+
+
+
+function data = blinkinterp(data,time,ntrials)
+ 
+ 
+%%
+for trlIdx = 1:ntrials
+    trace               = data(trlIdx,:);
+    sel                 = double(trace==0);
+    sel                 = double(movavg(sel,8)>0);
+    trace               = interp1(time(~sel),trace(~sel),time,'linear','extrap');
+    data(trlIdx,:)      = trace;
+end
+
+
+ 
+function plotdata(data,time,fig)
+figure(fig)
+hold on
+plot (time,data)
+axis square;
+box off
+xlabel('Time (s)');
+ylabel('Pupil diameter (px)');
+
+
+function [data_out,data_in] = pupil_preprocess2(data_in,varargin)
 % In this script blinks are removed and traces are smoothed. Traces
 % containing to many blinks are excluded. The output provides an average
 % trace that is baseline corrected.

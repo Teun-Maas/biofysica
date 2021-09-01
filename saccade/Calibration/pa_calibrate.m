@@ -98,9 +98,9 @@ handles.NChan                       = expinfo(1,8);
 DAT                                 = pa_loaddat(handles.fname, handles.NChan, handles.Nsamples, handles.Ntrial);
 
 % Traces
-handles.hortrace                    = squeeze(DAT(:,:,1));
-handles.vertrace                    = squeeze(DAT(:,:,2));
-handles.fronttrace                  = squeeze(DAT(:,:,3));
+handles.hortrace                    = squeeze(DAT(:,:,3));
+handles.vertrace                    = squeeze(DAT(:,:,1));
+handles.fronttrace                  = squeeze(DAT(:,:,2));
 % Average of traces
 handles.H                           = mean(handles.hortrace);
 handles.V                           = mean(handles.vertrace);
@@ -115,6 +115,9 @@ sel                                 = ismember(S(:,2),mn);
 handles.TarAz                       = S(sel,4);
 handles.TarEl                       = S(sel,5);
 
+
+
+%%
 % Network Properties
 handles.NhiddenHor                  = 5;
 set(handles.edit_nhidden_hor,'Value',handles.NhiddenHor);

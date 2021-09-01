@@ -33,7 +33,7 @@ nfft			= keyval('nfft',varargin,2^(nextpow2(length(x))));
 NumUniquePts	= ceil((nfft+1)/2);
 
 maxnfft			= 2^(nextpow2(length(x))-1);
-nrep			= floor(maxnfft/nfft);
+nrep			= floor(maxnfft/nfft)
 if nrep>1
 	idx = (nfft*nrep);
 	x = x(1:idx);

@@ -3,6 +3,12 @@ function [F,X1,X2] = plotdens(x,y,varargin)
 %
 % Plot density
 %
+%
+% dep				= keyval('dependent',varargin,false); % scale y for each x
+% BW				= keyval('Bandwidth',varargin); % bandwidth for ksdensity
+% graph			= keyval('plot',varargin,true); % make plot
+% lim				= keyval('limits',varargin,[min(x) max(x) min(y) max(y)]); % make plot
+% ecol			= keyval('edgecolor',varargin,'k'); % scale y for each x
 % See also KSDENSITY, CONTOURF
 
 dep				= keyval('dependent',varargin,false); % scale y for each x
