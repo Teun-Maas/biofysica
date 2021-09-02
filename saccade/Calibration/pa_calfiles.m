@@ -39,9 +39,9 @@ if nargin<2
     CalFile                 = pa_fcheckexist(CalFile,'*.net');
 end
 
-Hchan                       = 1;
-Vchan                       = 2;
-Fchan                       = 3;
+Hchan                       = 3;
+Vchan                       = 1;
+Fchan                       = 2;
 S                           = load(CalFile,'-mat');
 
 %% Calibrate all DATfiles
