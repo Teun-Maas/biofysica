@@ -1,4 +1,4 @@
-function mixer = CreateMixerStrategy(s)
+function mixer = CreateMixerStrategy(s)   
 
     mixer.strategy = Strategy();    
     
