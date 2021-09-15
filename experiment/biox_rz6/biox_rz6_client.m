@@ -25,7 +25,8 @@ classdef biox_rz6_client < biox_abstract_client
             end
 
             this.rz6.Run();
-            pause(0.1); %RCX file needs time to start up            
+            pause(0.1); %RCX file needs time to start up                       
+            this.write('SYS_SampleRate',this.rz6.GetSFreq());
         end
 
         function delete(this)
@@ -86,5 +87,6 @@ classdef biox_rz6_client < biox_abstract_client
             %soft4 resets the tasklist
             this.rz6.SoftTrg(4); 
         end
+               
     end
 end

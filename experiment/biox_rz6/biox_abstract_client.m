@@ -3,10 +3,10 @@
 classdef  biox_abstract_client < handle
 
     properties (Access=protected)
-        my_version = 31;
+        my_version = 32;
         % scale factors for acq channels
         % ch5-ch10 are from RA8GA; they need about 1750x in order to translate to volts.
-       acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1]; %11 channels        
+        acq_multipliers = [1 1 1 1 1750 1750 1750 1750 1750 1750 1]; %11 channels        
     end
 
     methods (Abstract)
@@ -117,6 +117,15 @@ classdef  biox_abstract_client < handle
             end
         end
         
+        function r=read_wavready(this, chanlist)
+            r=zeros(1,length(chanlist));
+            for i=1:length(chanlist)
+                chan=chanlist(i);
+                readytag=sprintf('WAV%d_Ready',chan); 
+                r(i)=this.read(readytag); 
+            end
+        end    
+        
         function r=read_trialready(this)
             r=this.read('STM_Ready'); 
         end
@@ -137,13 +146,13 @@ classdef  biox_abstract_client < handle
         function r=read_timer(this)
             r=this.read('Timer'); 
         end
+                      
+        function write_signalbyte(this, b)
+            this.write('SGN_Byte',b'); 
+        end
         
         function r=read_samplerate(this)
             r=this.read('SYS_SampleRate');
-        end
-                
-        function write_signalbyte(this, b)
-            this.write('SGN_Byte',b'); 
         end
         
         function r=read_inputbyte(this)
