@@ -45,7 +45,7 @@ if nrep>1
 	for ii = 1:nrep
 		% 		[mx,ph] = getspectrum(x,nfft,NumUniquePts);
 		% Take fft, padding with zeros so that length(fftx) is equal to nfft
-		fftx			= fftx+fft(x,nfft);
+		fftx			= fftx+fft(x(:,ii),nfft);
 		% Calculate the number of unique points
 		% FFT is symmetric, throw away second half
 		% Take the magnitude of fft of x and scale the fft so that it is not a function of
