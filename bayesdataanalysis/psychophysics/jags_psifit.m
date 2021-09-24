@@ -147,7 +147,7 @@ psifun = func2str(fun);
 switch psifun
 	case 'logisticfun'
 		fun = 'ilogit'; % 1/(1+exp(x)), 
-		par = '(-2*log(1/alpha-1))/omega[s[i]] * (x[i]-theta[s[i]])';% eqn. 7 Kuss et al 2005
+		par = '(2*log(1/alpha-1))/omega[s[i]] * (x[i]-theta[s[i]])';% eqn. 7 Kuss et al 2005
 	case 'probitfun'
 		fun = 'phi';
 		par = '( (probit(1-alpha)-probit(alpha))/omega[s[i]] ) * (x[i]-theta[s[i]])';
@@ -267,10 +267,10 @@ end
 %% priors
 omegapriorstr =	'\t\t omega[j]\t~ dgamma(somega,romega)  \r\n';
 thetapriorstr =	'\t\t theta[j]\t~ dnorm(mutheta,sigmatheta)\r\n';
-	if strcmp(psifun,'weibullfun')
-		thetapriorstr =	'\t\t theta[j]\t~ dunif(mutheta,sigmatheta)\r\n';
-omegapriorstr =	'\t\t omega[j]\t~ dunif(somega,romega)  \r\n';
-	end
+if strcmp(psifun,'weibullfun')
+	thetapriorstr =	'\t\t theta[j]\t~ dunif(mutheta,sigmatheta)\r\n';
+	omegapriorstr =	'\t\t omega[j]\t~ dunif(somega,romega)  \r\n';
+end
 
 
 %% Model
