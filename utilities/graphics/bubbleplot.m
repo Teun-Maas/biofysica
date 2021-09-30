@@ -81,9 +81,12 @@ y	= y(sel);
 SZ			= ceil(MSF*100*M);
 [~,~,idx]	= unique(M);
 % try
-% 	col = cbrewer('seq','OrRd',max(idx),'pchip');
 % catch
+if isnumeric(def)
 	col			= statcolor(max(idx),[],[],[],'def',def);
+elseif ischar(def)
+	col = cbrewer('seq',def,max(idx),'pchip');
+end
 % end
 C			= col(idx,:);
 s			= scatter(x,y,SZ,C,'filled');
