@@ -104,6 +104,13 @@ git pull
 ```
 This will update the contents of the directory tree. After restarting MATLAB everything shoud be okay.
 
+### Problems with labstreaminglayer
+
+On linux systems you may have to install the labstreaminglayer libraries separately.
+Binary installatio packages are here:
+
+https://github.com/sccn/liblsl/releases
+
 
 ### Problems?
 
