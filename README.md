@@ -107,7 +107,7 @@ This will update the contents of the directory tree. After restarting MATLAB eve
 ### Problems with labstreaminglayer
 
 On linux systems you may have to install the labstreaminglayer libraries separately.
-Binary installatio packages are here:
+Binary installation packages are here:
 
 https://github.com/sccn/liblsl/releases
 
