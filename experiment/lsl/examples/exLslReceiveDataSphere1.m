@@ -5,8 +5,8 @@ function [evdata, pldata] = exLslReceiveDataSphere1
     %
     % Select digital events stream
     %
-    info=lsl_resolver('type=''Digital Events @ lslder00'' and name=''Digital Events 1''');
-    l=info.list();
+    info=lsl_resolver('type=''Digital Events @ lslder04'' and name=''Digital Events 1''');
+    l=info.infos();
     if isempty(l)
         error('no streams found');
     end
