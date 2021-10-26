@@ -74,16 +74,16 @@ methods
        p1 = this.convert_profile(axis1);
        p2 = this.convert_profile(axis2);
        p3 = this.convert_profile(axis3);
-       this.plc.IEC_write(this.varmap.Table_1A, p1);
-       this.plc.IEC_write(this.varmap.Table_2A, p2);
-       this.plc.IEC_write(this.varmap.Table_3A, p3);
+       this.plc.IEC_write(this.varmap.Profile_1A, p1);
+       this.plc.IEC_write(this.varmap.Profile_2A, p2);
+       this.plc.IEC_write(this.varmap.Profile_3A, p3);
        result = 0;
     end
 
     function [ax1, ax2, ax3] = read_profile_sv(this)
-       ax1=this.plc.IEC_read(this.varmap.Table_1A, 0, 2000);
-       ax2=this.plc.IEC_read(this.varmap.Table_2A, 0, 2000);
-       ax3=this.plc.IEC_read(this.varmap.Table_3A, 0, 2000);
+       ax1=this.plc.IEC_read(this.varmap.Profile_1A, 0, 2000);
+       ax2=this.plc.IEC_read(this.varmap.Profile_2A, 0, 2000);
+       ax3=this.plc.IEC_read(this.varmap.Profile_3A, 0, 2000);
        ax1=cumsum(double(ax1))/10.0;
        ax2=cumsum(double(ax2))/10.0;
        ax3=cumsum(double(ax3))/10.0;
