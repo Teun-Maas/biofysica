@@ -124,7 +124,7 @@ methods (Access = protected)
     function result = IEC_readQ(this, IEC_struct)
         switch IEC_struct.type_id
           case 'X'
-             result=this.readQX(IEC_struct);
+             result=this.IEC_readQX(IEC_struct);
           case 'W'
           case 'D'
        end
