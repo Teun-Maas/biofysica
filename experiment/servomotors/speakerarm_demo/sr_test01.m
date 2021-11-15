@@ -23,10 +23,12 @@ if ~strcmp(r, 'q')
     sr.stop();
     [pv_vert, pv_chair, pv_horiz]=sr.read_profile_pv();
     [sv_vert, sv_chair, sv_horiz]=sr.read_profile_sv();
-
-% FIXME!!! GW
-%     times=0:Tsamp:(Tend+10);
-%     range=1:length(times);
+    
+    times=0:Tsamp:(Tend+10);
+    range=1:length(times);
+    vert=zeropad(vert,length(times));
+    chair=zeropad(chair,length(times));
+    horiz=zeropad(horiz,length(times));
     
     %% Vertical
     figure('Name','Vert Axis');
