@@ -1,5 +1,7 @@
 function y = zeropad(x, d)
 % ZEROPAD(X,D) -- pad vector X with zeros so its length becomes D
+
+%GW 20211115
 assert(isvector(x),'Input argument x must be a vector');  
 
 [m,n] = size(x);

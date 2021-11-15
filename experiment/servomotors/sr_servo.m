@@ -106,10 +106,10 @@ classdef sr_servo < panaservo
             idata = int16([idata; zeros(npad, 1)]);
         end
         
-        function result = write_profile(this, axis1, axis2, axis3)
-            p1 = this.convert_profile(axis1);
-            p2 = this.convert_profile(axis2);
-            p3 = this.convert_profile(axis3);
+        function result = write_profile(this, main, speaker, chair)
+            p1 = this.convert_profile(main);
+            p2 = this.convert_profile(chair);
+            p3 = this.convert_profile(speaker);
             %             p1=axis1;
             %             p2=axis2;
             %             p3=axis3;
@@ -119,26 +119,26 @@ classdef sr_servo < panaservo
             result = 0;
         end
         
-        function [ax1, ax2, ax3] = read_profile_sv(this)
-            ax1=this.plc.IEC_read(this.varmap.Profile_1A, 0, 2000);
-            ax2=this.plc.IEC_read(this.varmap.Profile_2A, 0, 2000);
-            ax3=this.plc.IEC_read(this.varmap.Profile_3A, 0, 2000);
+        function [main, speaker, chair] = read_profile_sv(this)
+            main=this.plc.IEC_read(this.varmap.Profile_1A, 0, 2000);
+            chair=this.plc.IEC_read(this.varmap.Profile_2A, 0, 2000);
+            speaker=this.plc.IEC_read(this.varmap.Profile_3A, 0, 2000);
             % GW: workaround 2021-11-01
-            ax1=double(ax1)/10;
-            ax2=double(ax2)/10;
-            ax3=double(ax3)/10;
+            main=double(main)/10;
+            chair=double(chair)/10;
+            speaker=double(speaker)/10;
             %        ax1=cumsum(double(ax1))/10.0;
             %        ax2=cumsum(double(ax2))/10.0;
             %        ax3=cumsum(double(ax3))/10.0;
         end
         
-        function [ax1, ax2, ax3] = read_profile_pv(this)
-            ax1=this.plc.IEC_read(this.varmap.PV_Position_1A, 0, 2000);
-            ax2=this.plc.IEC_read(this.varmap.PV_Position_2A, 0, 2000);
-            ax3=this.plc.IEC_read(this.varmap.PV_Position_3A, 0, 2000);
-            ax1=double(ax1)/115;
-            ax2=double(ax2)/115;
-            ax3=double(ax3)/10;
+        function [main, speaker, chair] = read_profile_pv(this)
+            main=this.plc.IEC_read(this.varmap.PV_Position_1A, 0, 2000);
+            chair=this.plc.IEC_read(this.varmap.PV_Position_2A, 0, 2000);
+            speaker=this.plc.IEC_read(this.varmap.PV_Position_3A, 0, 2000);
+            main=double(main)/115;
+            chair=double(chair)/115;
+            speaker=double(speaker)/10;
         end
         
     end  % methods
