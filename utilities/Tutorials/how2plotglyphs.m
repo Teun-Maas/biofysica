@@ -25,8 +25,10 @@ listfonts
 % Webdings as the font, if you hover above the loudspeaker with 3 waves,
 % the unicode U+f055 is shown at the top. This code can be converted to
 % uint16 format with the function char.
-m			= char(0xF055); % loudspeaker
+m			= char(0xF055) % loudspeaker
+% m = char(	0x0001F508 )
 fontname	= 'Webdings';
+% fontname	= 'Zapfdings';
 
 
 %% Plot

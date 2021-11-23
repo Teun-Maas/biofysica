@@ -51,7 +51,7 @@ for ii = 1:2
 	[Azimuth,Elevation] = pa_fart2azel(Theta,Phi);
 	Azimuth         = round(Azimuth*2)/2; % We can round to integers
 	Elevation       = round(Elevation*2)/2;
-	[Mic,~,Azimuth,Elevation] = pa_sweep2mag(hrtf,wav,Azimuth,Elevation,CH,NFFT,Nsweep,Fs,nBegin,0);
+	[Mic,~,Azimuth,Elevation] = sweep2mag(hrtf,wav,Azimuth,Elevation,CH,NFFT,Nsweep,Fs,nBegin,0);
 	toc
 	MicAzimuth = Azimuth;
 	MicElevation = Elevation;

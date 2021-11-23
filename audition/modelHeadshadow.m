@@ -15,7 +15,7 @@ function [HS,freq,theta] = modelHeadshadow(theta,freq,varargin)
 %% Initialization
 % clearvars;
 if nargin<2
-	theta		= 0:15:180; % horizontal angle (deg)
+	theta		= 0:5:180; % horizontal angle (deg)
 % 	theta = [0 180];
 	freq		= linspace(0,12000,1000); % frequency (Hz)
 	[theta,freq] = meshgrid(theta,freq);
@@ -23,11 +23,14 @@ end
 
 c			= keyval('c',varargin,343); % speed of sound (m/s)
 a			= keyval('a',varargin,0.0875); % radius of head (m)
+a			= keyval('a',varargin,0.57/(2*pi*2)); % radius of head (m)
+
 minAlpha	= keyval('minAlpha',varargin,0.1); % minimum
 minTheta	= keyval('minTheta',varargin,150); % minimum head shadow at minTheta, typically not at 180 deg due to summation of sounds coming from both sides
 method		= keyval('method',varargin,'brown'); % use default Brown and Duda's filter approximation
 method		= keyval('method',varargin,'rayleigh'); % use Rayleigh's head shadow physical model
 method		= keyval('method',varargin,'duda'); % use Duda's description of Rayleigh's physical model
+% method		= keyval('method',varargin,'cipic'); % use Duda's description of Rayleigh's physical model
 
 threshold	= keyval('threshold',varargin,0.01); % threshold
 r			= keyval('r',varargin,1); % distance (m)
@@ -35,6 +38,13 @@ r			= keyval('r',varargin,1); % distance (m)
 graphFlag	= keyval('showPlot',varargin,false); % use default Brown and Duda's filter approximation
 if nargin<1
 graphFlag = true;
+end
+
+if exist('cbrewer','file')
+cmap = cbrewer('div','RdYlBu',64,'pchip');
+cmap = flipud(cmap);
+else
+	cmap = parula;
 end
 %% Reparametrization
 o			= 2*pi*freq; % angular frequency (Hz)
@@ -72,6 +82,7 @@ end
 %% Graphics
 if graphFlag
 close all
+colormap(cmap);
 	% figure(1)
 	% clf
 	% subplot(221)
@@ -88,7 +99,7 @@ close all
 	% nicegraph;
 	% ylim([-20 10]);
 	% xlim([0.1 100]);
-	subplot(121)
+	subplot(131)
 	semilogx(freq,HS,'-',...
 		'MarkerFaceColor','w','LineWidth',2);
 	xi	= oct2bw(1000,-2:4);
@@ -100,7 +111,7 @@ close all
 	ylabel('response (dB)');
 	xlabel('frequency (kHz)');
 	
-	subplot(122)
+	subplot(132)
 	plot(theta',HS','-',...
 		'MarkerFaceColor','w','LineWidth',2);
 	nicegraph;
@@ -111,6 +122,25 @@ close all
 	xi	= 0:30:180;
 	set(gca,'XTick',xi,'XTickLabel',xi)
 	
+	
+	x = freq(:,1)';
+	y = theta(1,:)'-90;
+	z = HS';
+		subplot(133)
+		imagesc(x,y,z);
+		hold on
+		[C,h] = contour(x,y,z,20,'w');
+
+		nicegraph;
+% 	plot(theta',HS','-',...
+% 		'MarkerFaceColor','w','LineWidth',2);
+% 	nicegraph;
+% 	ylim([-20 10]);
+% 	xlim([0 180]);
+% 	ylabel('response (dB)');
+% 	xlabel('azimuth (deg)');
+% 	xi	= 0:30:180;
+% 	set(gca,'XTick',xi,'XTickLabel',xi)
 	% subplot(224)
 	% contourf(freq(:,1),theta(1,:),HS',10);
 	% nicegraph;

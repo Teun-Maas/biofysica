@@ -14,21 +14,7 @@ function [val, remaining] = keyval(key, varargin)
 % Copyright (C) 2005-2007, Robert Oostenveld
 %
 % This file was part of FieldTrip, see http://www.ru.nl/neuroimaging/fieldtrip
-% for the documentation and details. It is now used for PandA, see
-% http://www.mbfys.ru.nl/~marcw/Spike/doku.php
-%
-%    PandA is free software: you can redistribute it and/or modify
-%    it under the terms of the GNU General Public License as published by
-%    the Free Software Foundation, either version 3 of the License, or
-%    (at your option) any later version.
-%
-%    PandA is distributed in the hope that it will be useful,
-%    but WITHOUT ANY WARRANTY; without even the implied warranty of
-%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%    GNU General Public License for more details.
-%
-%    You should have received a copy of the GNU General Public License
-%    along with PandA. If not, see <http://www.gnu.org/licenses/>.
+% for the documentation and details. 
 %
 
 % what to return if the key is not found

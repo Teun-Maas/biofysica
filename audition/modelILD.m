@@ -21,8 +21,10 @@ if nargin<2
 	[theta,freq] = meshgrid(theta,freq);
 end
 
+
 c			= keyval('c',varargin,343); % speed of sound (m/s)
 a			= keyval('a',varargin,0.0875); % radius of head (m)
+% a			= keyval('a',varargin,0.57/(2*pi*2)); % radius of head (m)
 minAlpha	= keyval('minAlpha',varargin,0.1); % minimum
 minTheta	= keyval('minTheta',varargin,150); % minimum head shadow at minTheta, typically not at 180 deg due to summation of sounds coming from both sides
 method		= keyval('method',varargin,'brown'); % use default Brown and Duda's filter approximation
@@ -33,6 +35,14 @@ graphFlag	= keyval('showPlot',varargin,false); % plot
 if nargin<1
 graphFlag = true;
 end
+
+if exist('cbrewer','file')
+cmap = cbrewer('div','RdYlBu',64,'pchip');
+cmap = flipud(cmap);
+else
+	cmap = parula;
+end
+
 %% Reparametrization
 o			= 2*pi*freq; % angular frequency (Hz)
 o0			= c/a;
@@ -61,6 +71,7 @@ if graphFlag
 	figure(1)
 	clf
 	subplot(121)
+	
 	semilogx(freq,ILD,'-',...
 		'MarkerFaceColor','w','LineWidth',2);
 	xi	= oct2bw(1000,-2:4);
@@ -73,8 +84,11 @@ if graphFlag
 	xlabel('frequency (Hz)');
 	
 	subplot(122)
-	plot(theta(1:100:end,:)',ILD(1:100:end,:)','o-',...
+% 	plot(theta(1:100:end,:)',ILD(1:100:end,:)','o-',...
+% 		'MarkerFaceColor','w','LineWidth',2);
+		plot(theta',ILD','o-',...
 		'MarkerFaceColor','w','LineWidth',2);
+
 	nicegraph;
 	ylim([-20 20]);
 	xlim([0 180]);
@@ -85,6 +99,7 @@ if graphFlag
 	
 	figure(2)
 	clf
+	colormap(cmap);
 	subplot(131)
 	contourf(freq,theta,HS_R,20);
 	nicegraph;
