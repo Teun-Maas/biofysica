@@ -86,11 +86,11 @@ if disp
 		% 		w = aweight(f);
 		% 		m = mx+w;
 		m = mx;
-		h = semilogx(f,m,'-');
+		h = plot(f,m,'-');
 		set(h,'Color',col);
 		hold on
-		set(gca,'XTick',[0.05 0.5 1 2 3 4 6 8 10 14]*1000,...
-			'XTickLabel',[0.05 0.5 1 2 3 4 6 8 10 14]);
+% 		set(gca,'XTick',[0.05 0.5 1 2 3 4 6 8 10 14]*1000,...
+% 			'XTickLabel',[0.05 0.5 1 2 3 4 6 8 10 14]);
 		title('Power Spectrum');
 		xlabel('Frequency (kHz)');
 		ylabel('Power (dB)');

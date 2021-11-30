@@ -267,8 +267,10 @@ for ii = 1:ns
 % 		n = y(sel,2);
 % 		ux = x(sel);
 % % but perhaps the experimenter did not 'assemble' the data correctly
-		[r,ux]	= assemble(y(sel,1),x(sel),'fun',@sum);
-		n		= assemble(y(sel,2),x(sel),'fun',@sum);		
+xs = x(sel);
+xs = round(xs/2.5)*2.5;
+		[r,ux]	= assemble(y(sel,1),xs,'fun',@sum);
+		n		= assemble(y(sel,2),xs,'fun',@sum);		
 	end
 	rprop			= r./n;
 	[lb, ub]		= binomialci(r, n, 0.05);	
