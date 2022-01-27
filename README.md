@@ -21,6 +21,7 @@ On Unix/Linux systems use your package manager to install it.
 
 **A working Python 3 environment.**
 
+**Windows.**
 You can get this from www.python.org and make sure you install a version that is
 compatible with your Matlab version. Google for "matlab python compatibility" to find out which one. Currently (2021-08) Matlab 2021a supports Python 3.7 and 3.8.
 
@@ -29,10 +30,43 @@ Install these python3 libraries:
 pip3 install  msgpack numpy scipy
 ```
 
-MacOS: install homebrew from brew.sh
+**MacOS (Intel).**
+Install homebrew from https://brew.sh
+
+**MacOS (M1/arm64).**
+Install homebrew from https://brew.sh but make sure it gets installed as an x86_64 package.
+In order to do this prepend the installation command with 'arch -x86_64
+So for example if the command for installing homebrew on the native CPU architecture is
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+you can force it to install as an x86_64 package by running
+```
+arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+This is important as long as there is no Matlab running natively on M1 Macs (at the time of this writing we have Matlab R2021b which runs as x86_64 under Rosetta2.
+
+add the following line to your .zshrc/.bashrc
+```
+eval "$(/usr/local/bin/brew shellenv)"
+```
+
+Install python 3.8
+```
+brew install python@3.8
+```
+Read the output of the command and modify your .zshrc/.bashrc as needed to get python and its libraries in your PATH and or LDFLAGS
+Check that the correct python is called by default:
+```
+$ type python3
+python3 is /usr/local/opt/python@3.8/bin/python3
+$ type pip3
+pip3 is /usr/local/opt/python@3.8/bin/pip3
+```
+
 The installation of the libraries is slightly different:
 ```
-brew install python3 numpy scipy
+brew install numpy scipy
 pip3 install msgpack
 ```
 
@@ -40,7 +74,7 @@ Find out where the currently installed python3 is located.
 Unix/MacOS: open a terminal window and run
 ```
 bash:~$ type -a python3
-python3 is /usr/local/bin/python3
+python3 is /usr/local/opt/python@3.8/bin/python3
 python3 is /usr/local/bin/python3
 python3 is /usr/bin/python3
 
@@ -60,7 +94,7 @@ If you don't have a startup.m in your Matlab [userpath folder](https://www.mathw
 Add the location of python you found above to the TOP of your startup.m, e.g.
 
 ```
-pyversion('C:\Program Files\Python38\python.exe');
+pyenv('Version','C:\Program Files\Python38\python.exe');
 ```
 
 ### Installing
