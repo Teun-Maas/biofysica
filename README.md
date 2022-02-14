@@ -53,7 +53,7 @@ eval "$(/usr/local/bin/brew shellenv)"
 
 Install python 3.8
 ```
-brew install python@3.8
+arch -x86_64 brew install python@3.8
 ```
 Read the output of the command and modify your .zshrc/.bashrc as needed to get python and its libraries in your PATH and or LDFLAGS
 Check that the correct python is called by default:
