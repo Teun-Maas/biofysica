@@ -58,7 +58,11 @@ brew install python@3.8
 or:
 arch -x86_64 brew install python@3.8
 ```
-Read the output of the command and modify your .zshrc/.bashrc as needed to get python and its libraries in your PATH and or LDFLAGS
+Read the output of the command and modify your .zshrc/.bashrc as needed to get python and its libraries in your PATH and or LDFLAGS. For instance:
+```
+export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+export LDFLAGS="-L/usr/local/opt/python@3.8/lib"
+```
 Check that the correct python is called by default:
 ```
 $ type python3
