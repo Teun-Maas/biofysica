@@ -19,20 +19,26 @@ if any(selled)
 % 	% 	nled = 2
 % 	n		= nled*2; % LEDs need to be turned on and off
 % 	s		= ledpattern(n);
-
     [patterns, pattern_times, pattern_events] = makeOrderedLedPatterns(stim,cfg);
-    nled = length(pattern_times);
+    nEvents = length(pattern_times);
 
-	%%
-    for ii = 1:nled
-        % TDT RA16
+    nEventsmax = 8; %% RA16 circuit can handle a maximum of 8 events
+
+    for ii = 1:nEventsmax
+        % write events and times to TDT RA16
         % Set timing information on LEDs
         % Note that in RA16 circuit, event 1 = start of experiment
         str1 = ['eventLED' num2str(ii)];
-        cfg.RA16_1.SetTagVal(str1,pattern_events(ii)+1);
-        str1 = ['delayLED' num2str(ii)];
-        cfg.RA16_1.SetTagVal(str1,pattern_times(ii)+1);  %% WHY +1?
+        str2 = ['delayLED' num2str(ii)];
+        if ii <= nEvents
+            cfg.RA16_1.SetTagVal(str1, events(ii) + 1); %% event numbers in RA16 circuit are 1:8 instead of 0:7
+            cfg.RA16_1.SetTagVal(str2, delays(ii) + 1); %% zero is not accepted by the RA16 circuit. All delay times are offset by 1 ms.
+        else
+            cfg.RA16_1.SetTagVal(str1, 0);              %% 0 is no event
+            cfg.RA16_1.SetTagVal(str2, 1);              %% 1 is no delay
+        end
     end
+
     ledbox = ledcontroller;
     ledbox.write(patterns);
 	stim(find(selled,1)).ledhandle = ledbox;
