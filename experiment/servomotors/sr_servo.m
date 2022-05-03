@@ -136,6 +136,7 @@ classdef sr_servo < panaservo
             main=this.plc.IEC_read(this.varmap.PV_Position_1A, 0, 2000);
             chair=this.plc.IEC_read(this.varmap.PV_Position_2A, 0, 2000);
             speaker=this.plc.IEC_read(this.varmap.PV_Position_3A, 0, 2000);
+            % GW FIXME
             main=double(main)/115;
             chair=double(chair)/115;
             speaker=double(speaker)/10;
