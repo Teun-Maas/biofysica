@@ -92,10 +92,10 @@ classdef sr_servo < panaservo
             % ??? pad with one leading zero before d/dt? to keep buffer length == 2000
             % padding is fine when running profile from only one buffer.
             
-            % GW: Workaround 2021-11-01
-            %             idata = diff(data);
-            %             idata = [0; idata];
-            idata=data;
+            % GW: Workaround 2021-11-01 / FIXED 2022-05-02
+                         idata = diff(data);
+                         idata = [0; idata];
+            %idata=data;
             %
             if nargin >= 3
                 r_vel = max(abs(range(idata)));  % r_vel in degrees/second
@@ -110,9 +110,7 @@ classdef sr_servo < panaservo
             p1 = this.convert_profile(main);
             p2 = this.convert_profile(chair);
             p3 = this.convert_profile(speaker);
-            %             p1=axis1;
-            %             p2=axis2;
-            %             p3=axis3;
+          
             this.plc.IEC_write(this.varmap.Profile_1A, p1);
             this.plc.IEC_write(this.varmap.Profile_2A, p2);
             this.plc.IEC_write(this.varmap.Profile_3A, p3);
@@ -123,13 +121,10 @@ classdef sr_servo < panaservo
             main=this.plc.IEC_read(this.varmap.Profile_1A, 0, 2000);
             chair=this.plc.IEC_read(this.varmap.Profile_2A, 0, 2000);
             speaker=this.plc.IEC_read(this.varmap.Profile_3A, 0, 2000);
-            % GW: workaround 2021-11-01
-            main=double(main)/10;
-            chair=double(chair)/10;
-            speaker=double(speaker)/10;
-            %        ax1=cumsum(double(ax1))/10.0;
-            %        ax2=cumsum(double(ax2))/10.0;
-            %        ax3=cumsum(double(ax3))/10.0;
+            % GW: workaround 2021-11-01 / FIXED 2022-05-02
+            main=cumsum(double(main))/10.0;
+            chair=cumsum(double(chair))/10.0;
+            speaker=cumsum(double(speaker))/10.0;
         end
         
         function [main, speaker, chair] = read_profile_pv(this)
@@ -137,8 +132,11 @@ classdef sr_servo < panaservo
             chair=this.plc.IEC_read(this.varmap.PV_Position_2A, 0, 2000);
             speaker=this.plc.IEC_read(this.varmap.PV_Position_3A, 0, 2000);
             % GW FIXME
-            main=double(main)/115;
-            chair=double(chair)/115;
+%             main=double(main)/115;
+%             chair=double(chair)/115;
+%             speaker=double(speaker)/10;
+            main=double(main)/10;
+            chair=double(chair)/10;
             speaker=double(speaker)/10;
         end
         
