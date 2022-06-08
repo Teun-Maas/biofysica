@@ -34,8 +34,8 @@ if any(selled)
             cfg.RA16_1.SetTagVal(str1, events(ii) + 1); %% event numbers in RA16 circuit are 1:8 instead of 0:7
             cfg.RA16_1.SetTagVal(str2, delays(ii) + 1); %% zero is not accepted by the RA16 circuit. All delay times are offset by 1 ms.
         else
-            cfg.RA16_1.SetTagVal(str1, 0);              %% 0 is no event
-            cfg.RA16_1.SetTagVal(str2, 1);              %% 1 is no delay
+            cfg.RA16_1.SetTagVal(str1, -1);             %% -1 is no event
+            cfg.RA16_1.SetTagVal(str2, 1);              %% 1 is no delay; zero or -1 is not accepted by the RA16 circuit. 
         end
     end
 
