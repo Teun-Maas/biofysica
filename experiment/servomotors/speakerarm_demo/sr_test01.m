@@ -6,7 +6,7 @@ Tsamp=0.1; %% FIXED, Cannot change!!!
 Tend=Nperiods*T;
 times=0:Tsamp:Tend;
 vert=sinetukey(A, T, times, Trisefall);
-horiz=sinetukey(A/2, T, times, Trisefall);
+horiz=sinetukey(A, T, times, Trisefall);
 chair=sinetukey(A, T, times, Trisefall);
 
 %horiz=zeros(size(times));
