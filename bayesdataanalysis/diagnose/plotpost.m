@@ -47,8 +47,8 @@ nbreaks		= keyval('nbreaks', varargin,18);
 % border		= keyval('border', varargin); if isempty(border), border='w'; end;
 
 %% Determine interesting parameters
-postSummary.mean	= mean(paramSampleVec);
-postSummary.median	= median(paramSampleVec);
+postSummary.mean	= nanmean(paramSampleVec);
+postSummary.median	= nanmedian(paramSampleVec);
 [mcmcDensity.y,mcmcDensity.x] = ksdensity(paramSampleVec);
 [~,indx]			= max(mcmcDensity.y);
 postSummary.mode	= mcmcDensity.x(indx);

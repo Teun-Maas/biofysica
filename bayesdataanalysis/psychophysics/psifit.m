@@ -33,7 +33,7 @@ function samples = psifit(x,y,s,varargin)
 % See also
 % Kuss, M., J?kel, F., & Wichmann, F. A. (2005). Bayesian inference for
 % psychometric functions. Journal of Vision, 5(5), 478?92.
-% doi:10.1167/5.5.8  
+% doi:10.1167/5.5.8
 %
 % Modified to Matlab code: Marc M. van Wanrooij
 %
@@ -176,7 +176,7 @@ if predFlag
 	if isnumeric(gamma),	samples.gamma	= repmat(gamma,size(samples.theta));	end
 	if isnumeric(lambda),	samples.lambda	= repmat(lambda,size(samples.theta));	end
 	figure(fig);
-
+	
 	% 	if any(strcmp(func2str(fun),{'weibullfun','revweibullfun'}))
 	% 		x = x-min(x)+0.001;
 	% 	end
@@ -262,36 +262,36 @@ for ii = 1:ns
 		[r,ux]	= assemble(y(sel),x(sel),'fun',@sum);
 		n		= assemble(ones(size(y(sel))),x(sel),'fun',@sum);
 	elseif size(y,2)==2 % y = [rate n]
-		 % % this should work
-% 		r = y(sel,1);
-% 		n = y(sel,2);
-% 		ux = x(sel);
-% % but perhaps the experimenter did not 'assemble' the data correctly
-xs = x(sel);
-xs = round(xs/2.5)*2.5;
+		% % this should work
+		% 		r = y(sel,1);
+		% 		n = y(sel,2);
+		% 		ux = x(sel);
+		% % but perhaps the experimenter did not 'assemble' the data correctly
+		xs = x(sel);
+		xs = round(xs/2.5)*2.5;
 		[r,ux]	= assemble(y(sel,1),xs,'fun',@sum);
-		n		= assemble(y(sel,2),xs,'fun',@sum);		
+		n		= assemble(y(sel,2),xs,'fun',@sum);
 	end
 	rprop			= r./n;
-	[lb, ub]		= binomialci(r, n, 0.05);	
+	[lb, ub]		= binomialci(r, n, 0.05);
 	%
-% 	for cIdx	= cVec
-% 		ypred	= psifun(ux,theta(cIdx,ii),omega(cIdx,ii),gamma(cIdx,ii),lambda(cIdx,ii),0.1,'function',fun);
-% 		whos n ypred
-% 		keyboard
-% 		R = binornd(n,ypred);
-% 	end
+	% 	for cIdx	= cVec
+	% 		ypred	= psifun(ux,theta(cIdx,ii),omega(cIdx,ii),gamma(cIdx,ii),lambda(cIdx,ii),0.1,'function',fun);
+	% 		whos n ypred
+	% 		keyboard
+	% 		R = binornd(n,ypred);
+	% 	end
 	
 	%% Posterior credible psychometric curves
 	halfway = ((1-clambda)+cgamma)/2;
 	for cIdx	= cVec
 		ypred	= psifun(xComb,theta(cIdx,ii),omega(cIdx,ii),gamma(cIdx,ii),lambda(cIdx,ii),0.1,'function',fun);
 		xInt	= theta(cIdx,ii);
-
+		
 		plot(xComb , ypred,'k-','LineWidth',1.5,'Color',[.7 .7 .7]);
 		plot( [xInt xInt],[halfway(ii) -0.1], 'k:','Color',[.7 .7 .7]);
 	end
-
+	
 	
 	%% Max Posterior Curve
 	ypred = psifun(xComb,ctheta(ii),comega(ii),cgamma(ii),clambda(ii),0.1,'function',fun);
@@ -307,34 +307,34 @@ xs = round(xs/2.5)*2.5;
 		['\gamma = ' num2str(round(100*cgamma(ii))) '% , \lambda = ' num2str(round(100*clambda(ii))) '%']};
 	text(mean(x),1.1,str,'HorizontalAlignment','center');
 	
-    
-% 	plot(ux,rprop,'ks','MarkerFaceColor','w','MarkerSize',5); % data
+	
+	% 	plot(ux,rprop,'ks','MarkerFaceColor','w','MarkerSize',5); % data
 	errorbar(ux,rprop,rprop-lb,ub-rprop,'ks','MarkerFaceColor','w','MarkerSize',10); % data
 	
-% 	%% Density
-% 	if size(y,2)==1
-% 		if any(strcmp(func2str(fun),{'weibullfun','revweibullfun'}))
-% 			supp = 'positive';
-% 			xi		= linspace(0.1,max(x),100);
-% 		else
-% 			supp = 'unbounded';
-% 			xi		= linspace(min(x),max(x),100);
-% 		end
-% 		% estimate rate from Bernouilli data via ksdensity
-% 		sel		= y==0;
-% 		f0		= ksdensity(x(sel),xi,'support',supp);
-% 		
-% 		sel		= y==1;
-% 		f1		= ksdensity(x(sel),xi,'support',supp);
-% 		
-% 		f = f1-f0;
-% 		f = f-min(f);
-% 		f = f./max(f);
-% 		f = (1-clambda(ii)-cgamma(ii))*f+cgamma(ii);
-% 		
-% 		plot(xi,f,'r-','LineWidth',2);
-% 		
-% 	end
+	% 	%% Density
+	% 	if size(y,2)==1
+	% 		if any(strcmp(func2str(fun),{'weibullfun','revweibullfun'}))
+	% 			supp = 'positive';
+	% 			xi		= linspace(0.1,max(x),100);
+	% 		else
+	% 			supp = 'unbounded';
+	% 			xi		= linspace(min(x),max(x),100);
+	% 		end
+	% 		% estimate rate from Bernouilli data via ksdensity
+	% 		sel		= y==0;
+	% 		f0		= ksdensity(x(sel),xi,'support',supp);
+	%
+	% 		sel		= y==1;
+	% 		f1		= ksdensity(x(sel),xi,'support',supp);
+	%
+	% 		f = f1-f0;
+	% 		f = f-min(f);
+	% 		f = f./max(f);
+	% 		f = (1-clambda(ii)-cgamma(ii))*f+cgamma(ii);
+	%
+	% 		plot(xi,f,'r-','LineWidth',2);
+	%
+	% 	end
 	%% Labels
 	title(us(ii))
 	set(gca,'TickDir','out');

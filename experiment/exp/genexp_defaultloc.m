@@ -29,10 +29,10 @@ maxsnd      = 200;
 showexp     = true;
 
 %% Desired azimuth and elevation
-% des_az		= -90:15:90;
-% des_el		= -90:15:90;
-des_az		= -90:30:90;
-des_el		= [-50 -30:30:90];
+des_az		= -90:15:90;
+des_el		= -90:15:90;
+% des_az		= -90:30:90;
+% des_el		= [-50 -30:30:90];
 [des_az,des_el] = meshgrid(des_az,des_el);
 des_az		= des_az(:);
 des_el		= des_el(:);
@@ -52,7 +52,8 @@ nloc		= numel(des_az);
 % The actual speaker positions are not perfectly aligned with 15 deg
 % Let's see what they are
 cfg			= spherelookup; % sphere positions
-channel		= cfg.interpolant(des_az',des_el');
+channel		= round(cfg.interpolant(des_az',des_el'));
+% channel+1
 X		= cfg.lookup(channel+1,5);
 Y		= cfg.lookup(channel+1,6);
 

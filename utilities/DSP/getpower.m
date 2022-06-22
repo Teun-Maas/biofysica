@@ -22,6 +22,9 @@ if nargin<2
 end
 % Optional display arguments
 disp		= keyval('display',varargin,false);
+if nargout<1
+	disp = true;
+end
 orient		= keyval('orientation',varargin,'x');
 col			= keyval('color',varargin,'k');
 
@@ -39,7 +42,7 @@ if nrep>1
 	x = x(1:idx);
 	
 	x		= reshape(x,nfft,nrep);
-	
+	whos x
 	%%
 	fftx = 0;
 	for ii = 1:nrep
@@ -86,12 +89,12 @@ if disp
 		% 		w = aweight(f);
 		% 		m = mx+w;
 		m = mx;
-		h = plot(f,m,'-');
+		h = plot(f,smooth(m,200),'-');
 		set(h,'Color',col);
 		hold on
 % 		set(gca,'XTick',[0.05 0.5 1 2 3 4 6 8 10 14]*1000,...
 % 			'XTickLabel',[0.05 0.5 1 2 3 4 6 8 10 14]);
-		title('Power Spectrum');
+% 		title('Power Spectrum');
 		xlabel('Frequency (kHz)');
 		ylabel('Power (dB)');
 		nicegraph;

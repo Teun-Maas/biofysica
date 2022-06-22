@@ -10,4 +10,8 @@ function phi = probit(x)
 
 phi    = sqrt(2)*erfinv(2*x - 1);
 
-
+% x
+% %% cdf
+% x = 1/2*(1+erf(phi/sqrt(2)));
+% 
+% x

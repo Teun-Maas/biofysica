@@ -373,14 +373,14 @@ if fro
 	hold on;
 	contour(adh,adv,Vsim,c);
 	
-	[c2,h2]     = contour (adh,adv,Vsim,cphi,'b-'); set(h2,'LineWidth',2); %#ok<*ASGLU>
-	[c2,h2]     = contour (adh,adv,Hsim,ctheta,'b-'); set(h2,'LineWidth',2);
-	[c2,h2]     = contour (adh,adv,Vsim,[-90 -90],'b-'); set(h2,'LineWidth',4);
-	[c2,h2]     = contour (adh,adv,Vsim,[90 90],'b-'); set(h2,'LineWidth',4);
-	[c2,h2]     = contour (adh,adv,Hsim,[-90 -90],'b-'); set(h2,'LineWidth',4);
-	[c2,h2]     = contour (adh,adv,Hsim,[90 90],'b-'); set(h2,'LineWidth',4);
-	[c3,h3]     = contour (adh,adv,Hsim,[0 0],'r-'); set(h3,'LineWidth',2);
-	[c4,h4]     = contour (adh,adv,Vsim,[0 0],'r-'); set(h4,'LineWidth',2);
+	[c2,h2]     = contour(adh,adv,Vsim,cphi,'b-'); set(h2,'LineWidth',2); %#ok<*ASGLU>
+	[c2,h2]     = contour(adh,adv,Hsim,ctheta,'b-'); set(h2,'LineWidth',2);
+	[c2,h2]     = contour(adh,adv,Vsim,[-90 -90],'b-'); set(h2,'LineWidth',4);
+	[c2,h2]     = contour(adh,adv,Vsim,[90 90],'b-'); set(h2,'LineWidth',4);
+	[c2,h2]     = contour(adh,adv,Hsim,[-90 -90],'b-'); set(h2,'LineWidth',4);
+	[c2,h2]     = contour(adh,adv,Hsim,[90 90],'b-'); set(h2,'LineWidth',4);
+	[c3,h3]     = contour(adh,adv,Hsim,[0 0],'r-'); set(h3,'LineWidth',2);
+	[c4,h4]     = contour(adh,adv,Vsim,[0 0],'r-'); set(h4,'LineWidth',2);
 	plot(H,V,'k.','MarkerSize', 15);
 	xlabel ('X');
 	ylabel ('Y');

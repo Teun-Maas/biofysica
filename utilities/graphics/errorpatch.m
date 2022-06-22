@@ -1,4 +1,4 @@
-function [hpatch,hline] = errorpatch(X,Y,E,col)
+function [hpatch,hline] = errorpatch(X,Y,E,col,opacity)
 % ERRORPATCH(X,Y,E)
 %
 % plots the graph of vector X vs. vector Y with error patch specified by
@@ -43,7 +43,9 @@ end
 if nargin<4
 	col = 'k';
 end
-
+if nargin<5
+	opacity = 0.4;
+end
 %% remove nans
 if size(E,1)>1
 	sel		= isnan(X) | isnan(Y) | isnan(E(1,:)) | isnan(E(2,:));
@@ -64,7 +66,7 @@ else
 end
 %% Graph
 hpatch           = patch(x,y,col);
-alpha(hpatch,0.4);
+alpha(hpatch,opacity);
 set(hpatch,'EdgeColor','none');
 hold on;
 hline = plot(X,Y,'k-'); set(hline,'LineWidth',2,'Color',col);

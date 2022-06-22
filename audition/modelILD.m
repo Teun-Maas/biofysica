@@ -18,6 +18,7 @@ function ILD = modelILD(theta,freq,varargin)
 if nargin<2
 	theta		= 0:15:180; % horizontal angle (deg)
 	freq		= linspace(0,16000,1000); % frequency (Hz)
+% 	freq = [750 2000 4000 6000]
 	[theta,freq] = meshgrid(theta,freq);
 end
 
@@ -29,8 +30,8 @@ minAlpha	= keyval('minAlpha',varargin,0.1); % minimum
 minTheta	= keyval('minTheta',varargin,150); % minimum head shadow at minTheta, typically not at 180 deg due to summation of sounds coming from both sides
 method		= keyval('method',varargin,'brown'); % use default Brown and Duda's filter approximation
 % method		= keyval('method',varargin,'opstal'); % use default Brown and Duda's filter approximation
-method		= keyval('method',varargin,'cipic'); % use default Brown and Duda's filter approximation
-method		= keyval('method',varargin,'duda'); % use default Brown and Duda's filter approximation
+% method		= keyval('method',varargin,'cipic'); % use default Brown and Duda's filter approximation
+% method		= keyval('method',varargin,'duda'); % use default Brown and Duda's filter approximation
 graphFlag	= keyval('showPlot',varargin,false); % plot
 if nargin<1
 graphFlag = true;
