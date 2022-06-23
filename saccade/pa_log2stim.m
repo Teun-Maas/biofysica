@@ -1,4 +1,4 @@
-function Stim = pa_log2stim(Log)
+function Stim = pa_log2stim(Log,varargin)
 % Convert log-matrix to Stim-matrix
 %
 % Stim = LOG2Stim(LOG)
@@ -53,6 +53,10 @@ else
 	disp('PA_LOG2STIM assumes you have recorded from the HOOP lab');
 end
 
+setup = keyval('setup',varargin,setup);
+setup	= 'sphere'; % WATCH OUT
+	disp('BEWARE! PA_LOG2STIM assumes you have recorded from the SPHERE lab');
+
 %% Get speaker location
 switch setup
 	case 'hoop'
@@ -73,7 +77,7 @@ switch setup
 		[AZ(sel),EL(sel)]   = pa_sky2azel(Y(sel),X(sel));
 		
 		% Exception: TDT2.0 set-up
-		if Log(1,12)==1000; % Bit is set to 1000 for TDT2 set-up in PA_LOGCAL2CSVCAL
+		if Log(1,12)==1000 % Bit is set to 1000 for TDT2 set-up in PA_LOGCAL2CSVCAL
 			AZ = X;
 			EL = Y;
 		end

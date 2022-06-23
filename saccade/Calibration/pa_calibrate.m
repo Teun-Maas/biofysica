@@ -149,7 +149,8 @@ TarEl                               = handles.TarEl(C);
 Az                                  = handles.H;
 El                                  = handles.V;
 Tar                                 = unique([round(TarAz) round(TarEl)],'rows');
-Res                                 = ones(size(Tar));
+Res                                 = NaN(size(Tar));
+
 for i                               = 1:length(Tar)
 	sel                             = round(TarAz) == Tar(i,1) & round(TarEl) == Tar(i,2);
 	Res(i,:)                        = [mean(Az(sel)) mean(El(sel))];
