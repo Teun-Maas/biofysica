@@ -67,7 +67,7 @@ X = t;
 Y = gielen;
 E = [colonius; ulrich];
 whos X Y E
-pa_errorpatch(X,Y,E,'r');
+errorpatch(X,Y,E,'r');
 
 xlim([0 500]);
 axis square;

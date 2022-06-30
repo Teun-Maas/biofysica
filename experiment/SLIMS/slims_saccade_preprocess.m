@@ -26,42 +26,110 @@ dsp = keyval('display',varargin,true);
 load(fname,'parameters');
 
 pldata			= parameters.pupildata; % what parameters are in here?
-evdata			 = parameters.eventdata;
+evdata			= parameters.eventdata;
 
 tar				= parameters.tar;
 
 %% get time stamps and align
 tpl				= lsl_correct_lsl_timestamps(pldata);
 tev				= lsl_correct_lsl_timestamps(evdata);
+
+% tpl = pldata.Timestamps;
+% tev = evdata.Timestamps;
+
 ntrials			= length(tev)/2;
 fs				= 200;
 
 %% at the moment the stamps for the fixation and the target are all in one vector
-events			= tev - tev(1);
-tpl				= tpl - tev(1);
-tareve			= events(2:2:end);
-fixeve			= events(1:2:end);
+% remove the time offset (1st sample)
+% t0				= tpl(1);
+t0				= tev(1);
 
+
+tpl				= tpl - t0;
+events			= tev - t0;
+tareve			= events(2:2:end); % event start for the 2nd dot = target in saccade paradigm
+fixeve			= events(1:2:end); % event start for the 1st dot = central fixation in saccade paradigm
+
+% What is each column???
 HVF				= pldata.Data(13:15,:)'; % horizontal, vertical and frontal?
 pl_confidence	= pldata.Data(1,:); % confidence levels
 
-% if dsp
-% 	figure(1)
-% 	clf
-% 	plot(tpl,HVF,'linewidth',2);
-% 	hold on
-%
-% 	plot(tpl,pl_confidence,'.','linewidth',2);
-% 	ylim([-1.1 1.1]);
-% 	verline(tareve,'k--');
-% 	verline(fixeve,'g--');
-% 	title('subject 002, session 005, 17-06-2022,');
-% 	legend('horizontal','vertical','frontal','confidence','fixation_{onset}', 'target_{onset}');
-% 	xlabel('time (s)')
-% 	ylabel('normalized position')
-% 	nicegraph;
-% end
+if dsp
+	figure(42)
+	clf
+	plot(tpl,HVF,'linewidth',2);
+	hold on
 
+	plot(tpl,pl_confidence,'.','linewidth',2);
+	ylim([-1.1 1.1]);
+	verline(tareve,'k--');
+	verline(fixeve,'g--');
+	title('subject 002, session 005, 17-06-2022,');
+	legend('horizontal','vertical','frontal','confidence','fixation_{onset}', 'target_{onset}');
+	xlabel('time (s)')
+	ylabel('normalized position')
+	nicegraph;
+end
+
+p = sqrt(HVF(:,1).^2+HVF(:,2).^2);
+v = gradient(p,1/200);
+
+sel = pl_confidence>0.8;
+v(~sel) = NaN;
+figure(43)
+clf
+ax(1) = subplot(311);
+plot(tpl,p)
+ax(2) = subplot(312);
+plot(tpl,v)
+linkaxes(ax,'x');
+
+
+crit = 3*nanstd(v);
+sel = v>crit;
+selon                                       = [0;diff(sel)]; % onsets (+1)
+onset = find(selon==1);
+subplot(313)
+plot(tpl,selon);
+hold on
+plot(tpl,sel);
+
+% keyboard
+subplot(312)
+% idx = find(sel);
+verline(tpl(onset));
+horline(crit);
+
+subplot(311)
+verline(tpl(onset));
+hold on
+plot(tpl,pl_confidence);
+
+%%
+ntar = numel(tareve);
+
+RT = NaN(ntar,1);
+for ii = 1:ntar
+	sel = tpl>tareve(ii) & tpl<(tareve(ii)+1);
+% 	sum(sel)
+	idx = find(sel);
+	sel = onset>idx(1) & onset<idx(end);
+	if sum(sel)
+		rt = onset(sel)-idx(1);
+		rt = rt/fs*1000; % ms
+		RT(ii) = rt(1);
+	end
+end
+sel = isnan(RT);
+RT = RT(~sel);
+figure(44)
+clf
+plotpost(RT);
+%%
+keyboard
+
+return
 %% Resample to fixed 200 Hz
 [HVF,t]				= resample(HVF,tpl,fs);
 pl_confidence		= resample(pl_confidence,tpl,fs);
@@ -83,16 +151,17 @@ if dsp
 	nicegraph;
 end
 
-
 %% Experimental block
-idx			= repmat(-0.3*fs:fs,ntrials,1);
-idx			= round(idx+tareve'*fs);
+idx			= repmat((-0.4*fs):(1*fs),ntrials,1); % which data per trial
+idx			= round(idx+tareve'*fs); % index per time re target onset (note: events are not resampled)
 
+% convert HVF to matrix NTRIALS x NSAMPLES
 [H,V,F]		= deal(HVF(:,1),HVF(:,2),HVF(:,3));
 H			= H(idx);
 V			= V(idx);
 F			= F(idx);
-ti			= 1000*linspace(-0.3,1,length(H));
+
+ti			= 1000*linspace(-0.4,1,length(H));
 if dsp
 	lH = lowpass(H','Fc',80,'Fs',fs,'order',20)';
 	lV = lowpass(V','Fc',80,'Fs',fs,'order',20)';
@@ -139,6 +208,8 @@ if dsp
 	end
 end
 
+
+% keyboard
 
 %% Convert to dat and csv file
 % create trial structure

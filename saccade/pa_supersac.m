@@ -53,7 +53,7 @@ Sac = Sac(sel,:);
 %% Correct Saccade Latency
 if ~isempty(sfreq)
 %     Sac(:,5)    = 1000*Sac(:,3)/sfreq-Sac(:,27);
-    Sac(:,5)    = 1000*Sac(:,3)/sfreq-Sac(:,27)/sfreq;
+    Sac(:,5)    = 1000*Sac(:,3)/sfreq-Sac(:,27);
 end
 
 %% And call it SupSac
