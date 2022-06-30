@@ -1,0 +1,25 @@
+
+  # Specify the model for standardized data:
+  model {
+    for ( i in 1:Ntotal ) {
+      y[i] ~ dcat( pr[i,1:nYlevels]+0.001 )
+      pr[i,1] <- pnorm( thresh[1] , mu[i] , 1/sigma^2 )
+      for ( k in 2:(nYlevels-1) ) {
+        pr[i,k] <- max( 0 ,  pnorm( thresh[ k ] , mu[i] , 1/sigma^2 )
+                           - pnorm( thresh[k-1] , mu[i] , 1/sigma^2 ) )
+      }
+      pr[i,nYlevels] <- 1 - pnorm( thresh[nYlevels-1] , mu[i] , 1/sigma^2 )
+	  mu[i] <- alpha*exp((-1.0/2.0) * ((x[i]-theta)^2) / (omega^2) )
+
+    }
+		# Priors vague on standardized scale:
+		theta	~ dnorm( 0.0 , 1/10^2 )
+		omega	~ dgamma(1.0,0.1) 
+		alpha	~ dgamma(1.0,0.1) 
+		sigma	~ dgamma(1.0,0.1)
+
+
+    for ( k in 2:(nYlevels-2) ) {  # 1 and nYlevels-1 are fixed
+      thresh[k] ~ dnorm( k+0.5 , 10^2 )
+    }
+  }

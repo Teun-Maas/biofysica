@@ -1,0 +1,46 @@
+# Specify the model for standardized data:
+model {
+  for ( i in 1:Ntotal ) {
+    y[i] ~ dcat( pr[i,1:nYlevels]+0.001 )
+    pr[i,1] <- pnorm( thresh[1] , mu[i] , 1/sigma[s[i]]^2 )
+    for ( k in 2:(nYlevels-1) ) {
+      pr[i,k] <- max( 0 ,  pnorm( thresh[ k ] , mu[i] , 1/sigma[s[i]]^2 )
+                         - pnorm( thresh[k-1] , mu[i] , 1/sigma[s[i]]^2 ) )
+    }
+    pr[i,nYlevels] <- 1 - pnorm( thresh[nYlevels-1] , mu[i] , 1/sigma[s[i]]^2 )
+	mu[i] <- alpha[s[i]]*exp((-1.0/2.0) * ((x[i]-theta[s[i]])^2) / (omega[s[i]]^2) )
+  }
+
+
+	# Hierarchical priors
+	for ( j in 1:Nsubj ) {
+		theta[j]	~ dnorm(mutheta,sigmatheta)
+		omega[j]	~ dgamma(somega,romega) 
+		alpha[j]	~ dgamma(salpha,ralpha) 
+		sigma[j]	~ dgamma(ssigma,rsigma) 
+	}
+	# threshold/theta hyperprior 
+	 mutheta		~ dnorm(0,1/(10)^2)
+	 sigmatheta		~ dgamma(1.0,0.1)
+
+	# gamma hyperpriors
+	somega			<- pow(muomega,2)/pow(sigmaomega,2) # shape 
+	romega			<- muomega/pow(sigmaomega,2) # rate 
+	muomega			~ dgamma(1,0.1)
+	sigmaomega		~ dgamma(1,0.1) 
+
+	salpha			<- pow(mualpha,2)/pow(sigmaalpha,2) # shape 
+	ralpha			<- mualpha/pow(sigmaalpha,2) # rate 
+	mualpha			~ dgamma(1,0.1) 
+	sigmaalpha		~ dgamma(1,0.1)
+
+	ssigma			<- pow(musigma,2)/pow(sigmasigma,2) # shape 
+	rsigma			<- musigma/pow(sigmasigma,2) # rate 
+	musigma			~ dgamma(1,0.1) T(0.01,)
+	sigmasigma		~ dgamma(1,0.1) T(0.01,)
+
+	# thresholds priors
+    for ( k in 2:(nYlevels-2) ) {  # 1 and nYlevels-1 are fixed
+      thresh[k] ~ dnorm( k+0.5 , 10^2 )
+    }
+  }
