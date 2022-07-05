@@ -4,7 +4,8 @@
 %rc = pupil_remote_control('pupil-desktop.local');
 rc = pupil_remote_control('localhost');
 
-r=rc.time_sync(0.0);
+%% DON'T DO THIS WHEN USING LSL 
+%% r=rc.time_sync(0.0);
 
 disp('press a key to start recording');
 pause;
