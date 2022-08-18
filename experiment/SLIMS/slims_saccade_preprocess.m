@@ -12,23 +12,23 @@ function slims_saccade_preprocess(fname,varargin)
 
 %% Initialization
 if nargin<1
-	cd('//Users/marcw/Dropbox/Manuscript/stage/2122/Jesse Janssen/data/Testprojectsaccade/matlab_datafiles/new_data');
+	cd('/Users/marcw/Dropbox/Manuscript/stage/2122/Jesse Janssen/data/SLIMSmaster/new_lightdiode/s001');
 	% 	fname = 'JJ-001-004-06-17-22.mat';
 	% 	fname = 'JJ-001-005-06-17-22.mat';
 	% 	fname = 'JJ-001-006-06-17-22.mat';
-	fname = 'JJ-002-001-06-17-22.mat';
+	fname = 'JJ-001-22-08-03-000.mat';
 end
 
 dsp = keyval('display',varargin,true);
 
 %% Load
 % load(fname,'stimuli','configuration','data');
-load(fname,'parameters');
+load(fname,'data','configuration','stimuli');
 
-pldata			= parameters.pupildata; % what parameters are in here?
-evdata			= parameters.eventdata;
+pldata			= data.pupildata; % what parameters are in here?
+evdata			= data.eventdata;
 
-tar				= parameters.tar;
+tar				= stimuli.target;
 
 %% get time stamps and align
 tpl				= lsl_correct_lsl_timestamps(pldata);
@@ -127,9 +127,8 @@ figure(44)
 clf
 plotpost(RT);
 %%
-keyboard
 
-return
+
 %% Resample to fixed 200 Hz
 [HVF,t]				= resample(HVF,tpl,fs);
 pl_confidence		= resample(pl_confidence,tpl,fs);

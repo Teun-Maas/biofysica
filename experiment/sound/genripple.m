@@ -64,7 +64,8 @@ Oct		= FreqNr/20;                   % octaves above the ground frequency
 Phi		= pi - 2*pi*rand(1,nFreq); % random phase
 Phi(1)	= pi/2; % set first to 0.5*pi
 % Phi = zeros(1,nFreq);
-
+Freq
+keyboard
 %% Sounds
 switch meth
 	case 'time'
