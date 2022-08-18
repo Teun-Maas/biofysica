@@ -30,7 +30,7 @@ function pa_calfiles(DatFiles,CalFile)
 
 %% Initialization
 if nargin<1
-    d                        = dir('*.*at');
+    d                        = dir('*.dat'); % Changes dir('*.*at') to dir('*.dat') on 18 aug 2022 MW
     DatFiles                = char(d.name);
 end
 if nargin<2
@@ -39,13 +39,22 @@ if nargin<2
     CalFile                 = pa_fcheckexist(CalFile,'*.net');
 end
 
-Hchan                       = 3;
-Vchan                       = 1;
-Fchan                       = 2;
+%
+warning('MATLAB:pa_calfiles:channeldimension','Is your calibration correct? Check pa_calfiles');
+% Original dimensions (for sphere??)
+% Hchan                       = 3;
+% Vchan                       = 1;
+% Fchan                       = 2;
+
+Hchan                       = 1;
+Vchan                       = 2;
+Fchan                       = 3;
 S                           = load(CalFile,'-mat');
 
+
+
 %% Calibrate all DATfiles
-for i                       = 2:size(DatFiles,1),
+for i                       = 2:size(DatFiles,1)
     % Loading file
     fname                   = pa_fcheckext(DatFiles(i,:),'.dat');
 %     fname                   = pa_fcheckexist(DatFiles(i,:),'*.*at');
@@ -61,6 +70,7 @@ for i                       = 2:size(DatFiles,1),
     F                       = squeeze(DAT(:,:,Fchan));
     F                       = F(:);
     DAT                     = [H V F]';
+	
     [AZ,EL]                 = pa_calib(DAT,S);
 
     % Saving calibrated data

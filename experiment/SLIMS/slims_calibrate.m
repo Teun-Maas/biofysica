@@ -258,7 +258,7 @@ plot(TarAz,FixF,'k.','Color',[.7 .7 .7]);
 xlabel('\alpha_T (deg)');
 ylabel('H and F Field (V)');
 box on;
-xlim([-90 90]);
+% xlim([-90 90]);
 
 axes(handles.axes_phi);
 cla; hold on;
@@ -270,7 +270,7 @@ xlabel('\epsilon_T (deg)');
 ylabel('V and F Field (V)');
 set(gca,'YAxisLocation','right');
 box on;
-xlim([-90 90]);
+% xlim([-90 90]);
 
 %% NETWORK GRAPHICS
 function handles    = plottrain(handles)
@@ -309,7 +309,7 @@ x			= round(A/15)*15;
 [x,~,subs]	= unique(x);
 a			= accumarray(subs,val,[],@mean);
 plot(x,a,'bo-','MarkerFaceColor','w');
-axis([-100 100 -11 11]);
+% axis([-100 100 -11 11]);
 set(gca,'TickDir','out','XTick',-90:30:90,'YTick',-10:5:10);
 
 axes(handles.axes_phi);
@@ -318,7 +318,7 @@ x			= round(E/15)*15;
 [x,~,subs]	= unique(x);
 a			= accumarray(subs,val,[],@mean);
 plot(x,a,'ro-','MarkerFaceColor','w');
-axis([-100 100 -11 11]);
+% axis([-100 100 -11 11]);
 set(gca,'TickDir','out','XTick',-90:30:90,'YTick',-10:5:10);
 
 mfixa           = mean(A-TarAz);
