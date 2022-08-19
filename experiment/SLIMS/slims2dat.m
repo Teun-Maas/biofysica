@@ -1,7 +1,8 @@
-function slims_saccade_preprocess(fname,varargin)
-% SLIMS_SACCADE_PREPROCESS(FNAME)
+function slims2dat(dname,varargin)
+% SLIMS2DAT(FNAME)
 %
-% Resamples and reshapes PupilLabs structure data to a matrix.
+% Resamples and reshapes PupilLabs structure data to a matrix. Does this
+% for all mat-files in the current folder.
 %
 % See also: SLIMS_SACCADE_PARADIGM, RESHAPE, RESAMPLE, SACDET
 
@@ -12,14 +13,35 @@ function slims_saccade_preprocess(fname,varargin)
 
 %% Initialization
 if nargin<1
-	cd('/Users/marcw/Dropbox/Manuscript/stage/2122/Jesse Janssen/data/001-22-08-03');
-	% 	fname = 'JJ-001-004-06-17-22.mat';
-	% 	fname = 'JJ-001-005-06-17-22.mat';
-	% 	fname = 'JJ-001-006-06-17-22.mat';
-	fname = 'JJ-001-22-08-03-000.mat';
+	dname = '/Users/marcw/Dropbox/Manuscript/stage/2122/Jesse Janssen/data/001-22-08-03'; % change this
+	cd(dname);
+
 end
 
-dsp = keyval('display',varargin,true);
+
+exp = [1 1 1 1 1 2 2 2 2 2]; % 1 - saccade, 2- doublestep, change this
+
+%% Filenames 
+d		= dir('*.mat');
+fnames	= {d.name}
+char(fnames)
+
+nfiles	= numel(fnames);
+for ii = 1:nfiles
+	fname = fnames{ii};
+	switch exp(ii)
+		case 1
+			preprocess1(fname)
+			preprocess0(fname)
+		case 2
+			preprocess2(fname)
+	end
+	
+end
+
+end
+
+function preprocess1(fname)
 
 %% Load
 % load(fname,'stimuli','configuration','data');
@@ -27,15 +49,14 @@ load(fname,'data','configuration','stimuli');
 
 pldata			= data.pupildata; % what parameters are in here?
 evdata			= data.eventdata;
-
 tar				= stimuli.target;
 
 %% get time stamps and align
 tpl				= lsl_correct_lsl_timestamps(pldata);
 tev				= lsl_correct_lsl_timestamps(evdata);
 
-% tpl = pldata.Timestamps;
-% tev = evdata.Timestamps;
+% tpl			= pldata.Timestamps;
+% tev			= evdata.Timestamps;
 
 ntrials			= length(tev)/2;
 fs				= 200;
@@ -44,8 +65,6 @@ fs				= 200;
 % remove the time offset (1st sample)
 % t0				= tpl(1);
 t0				= tev(1);
-
-
 tpl				= tpl - t0;
 events			= tev - t0;
 tareve			= events(2:2:end); % event start for the 2nd dot = target in saccade paradigm
@@ -55,56 +74,21 @@ fixeve			= events(1:2:end); % event start for the 1st dot = central fixation in 
 HVF				= pldata.Data(13:15,:)'; % horizontal, vertical and frontal?
 pl_confidence	= pldata.Data(1,:); % confidence levels
 
-if dsp
-	figure(42)
-	clf
-	plot(tpl,HVF,'linewidth',2);
-	hold on
 
-	plot(tpl,pl_confidence,'.','linewidth',2);
-	ylim([-1.1 1.1]);
-	verline(tareve,'k--');
-	verline(fixeve,'g--');
-	title('subject 002, session 005, 17-06-2022,');
-	legend('horizontal','vertical','frontal','confidence','fixation_{onset}', 'target_{onset}');
-	xlabel('time (s)')
-	ylabel('normalized position')
-	nicegraph;
-end
 
 p = sqrt(HVF(:,1).^2+HVF(:,2).^2);
 v = gradient(p,1/200);
 
 sel = pl_confidence>0.8;
 v(~sel) = NaN;
-figure(43)
-clf
-ax(1) = subplot(311);
-plot(tpl,p)
-ax(2) = subplot(312);
-plot(tpl,v)
-linkaxes(ax,'x');
 
 
 crit = 3*nanstd(v);
 sel = v>crit;
 selon                                       = [0;diff(sel)]; % onsets (+1)
 onset = find(selon==1);
-subplot(313)
-plot(tpl,selon);
-hold on
-plot(tpl,sel);
 
-% keyboard
-subplot(312)
-% idx = find(sel);
-verline(tpl(onset));
-horline(crit);
 
-subplot(311)
-verline(tpl(onset));
-hold on
-plot(tpl,pl_confidence);
 
 %%
 ntar = numel(tareve);
@@ -123,9 +107,7 @@ for ii = 1:ntar
 end
 sel = isnan(RT);
 RT = RT(~sel);
-figure(44)
-clf
-plotpost(RT);
+
 %%
 
 
@@ -133,25 +115,9 @@ plotpost(RT);
 [HVF,t]				= resample(HVF,tpl,fs);
 pl_confidence		= resample(pl_confidence,tpl,fs);
 
-if dsp
-	figure(1)
-	clf
-	plot(t,HVF,'linewidth',2);
-	hold on
-	
-	plot(t,pl_confidence,'.','linewidth',2);
-	ylim([-1.1 1.1]);
-	verline(tareve,'k--');
-	verline(fixeve,'g--');
-	title('subject 002, session 005, 17-06-2022,');
-	legend('horizontal','vertical','frontal','confidence','fixation_{onset}', 'target_{onset}');
-	xlabel('time (s)')
-	ylabel('normalized position')
-	nicegraph;
-end
 
 %% Experimental block
-idx			= repmat((-0.4*fs):(1*fs),ntrials,1); % which data per trial
+idx			= repmat((-0.4*fs):(1.5*fs),ntrials,1); % which data per trial
 idx			= round(idx+tareve'*fs); % index per time re target onset (note: events are not resampled)
 
 % convert HVF to matrix NTRIALS x NSAMPLES
@@ -161,54 +127,8 @@ V			= V(idx);
 F			= F(idx);
 
 ti			= 1000*linspace(-0.4,1,length(H));
-if dsp
-	lH = lowpass(H','Fc',80,'Fs',fs,'order',20)';
-	lV = lowpass(V','Fc',80,'Fs',fs,'order',20)';
-	lF = lowpass(F','Fc',80,'Fs',fs,'order',20)';
-	
-	figure(2)
-	clf
-	
-	subplot(231)
-	plot(ti,H);
-	hold on
-	whos lH
-	plot(ti,lH,'k-');
-	subplot(232)
-	plot(ti,V);
-	
-	subplot(233)
-	plot(ti,F);
-	
-	
-	subplot(234)
-	plot(ti,gradient(lH,fs));
-	
-	subplot(235)
-	plot(ti,gradient(lV,fs));
-	
-	subplot(236)
-	plot(ti,gradient(lF,fs));
-	
-	str = {'horizontal','vertical','frontal'};
-	for ii = 1:3
-		subplot(2,3,ii)
-		axis([min(ti) max(ti) -1 1]);
-		nicegraph;
-		xlabel('time (ms)');
-		ylabel('normalized position');
-		title(str{ii});
-		
-		subplot(2,3,ii+3)
-		xlim([min(ti) max(ti)]);
-		nicegraph;
-		xlabel('time (ms)');
-		ylabel('normalized velocity');
-	end
-end
 
 
-% keyboard
 
 %% Convert to dat and csv file
 % create trial structure
@@ -226,28 +146,236 @@ for ii = 1:ntrials
 				trial(ii).stim(jj).azimuth		= 0;%  6) azimuth location
 				trial(ii).stim(jj).elevation	= 0;%  6) azimuth location
 				trial(ii).stim(jj).ondelay		= 0;%  6) azimuth location
-				trial(ii).stim(jj).offdelay		= 300;%  6) azimuth location
+				trial(ii).stim(jj).offdelay		= 200;%  6) azimuth location
 				trial(ii).stim(jj).intensity	= 100;%  6) azimuth location
 			case 2
 				trial(ii).stim(jj).modality		= 'LED';
 				trial(ii).stim(jj).azimuth		= tar(ii,1);%  6) azimuth location
 				trial(ii).stim(jj).elevation	= tar(ii,2);%  6) azimuth location
-				trial(ii).stim(jj).ondelay		= 300;%  6) azimuth location
-				trial(ii).stim(jj).offdelay		= 1300;%  6) azimuth location
+				trial(ii).stim(jj).ondelay		= 400;%  6) azimuth location
+				trial(ii).stim(jj).offdelay		= 1900;%  6) azimuth location
 				trial(ii).stim(jj).intensity	= 100;%  6) azimuth location
 			case 3
 				trial(ii).stim(jj).modality		= 'data acquisition';
 				trial(ii).stim(jj).azimuth		= [];%  6) azimuth location
 				trial(ii).stim(jj).elevation	= [];%  6) azimuth location
 				trial(ii).stim(jj).ondelay		= 0;%  6) azimuth location
-				trial(ii).stim(jj).offdelay		= 300;%  6) azimuth location
+				trial(ii).stim(jj).offdelay		= 1900;%  6) azimuth location
 				trial(ii).stim(jj).intensity	= [];%  6) azimuth location
 		end
 	end
 end
 
 % conversion
-slims2hoop(H,V,F,fname,'001',trial);
+slims2hoop(H,V,F,fname,fname(8:10),trial);
+
+end
+
+function preprocess2(fname)
+
+%% Load
+% load(fname,'stimuli','configuration','data');
+load(fname,'data','configuration','stimuli');
+
+pldata			= data.pupildata; % what parameters are in here?
+evdata			= data.eventdata;
+
+tar1				= stimuli.target;
+tar2				= stimuli.norm_2target;
+
+%%
+x				= (tar2(:,1) - configuration.screenpix(:,1)/2)/configuration.screenpix(:,1);
+y				= (tar2(:,2) - configuration.screenpix(:,2)/2)/configuration.screenpix(:,2);
+z				= configuration.distoscreen;
+tar2(:,1)		= atand(x./z); % degrees
+tar2(:,2)		= atand(y./sqrt(x.^2+z.^2));
+
+
+%% get time stamps and align
+tpl				= lsl_correct_lsl_timestamps(pldata);
+tev				= lsl_correct_lsl_timestamps(evdata);
+
+% tpl			= pldata.Timestamps;
+% tev			= evdata.Timestamps;
+
+ntrials			= length(tev)/3;
+fs				= 200;
+
+%% at the moment the stamps for the fixation and the target are all in one vector
+% remove the time offset (1st sample)
+% t0				= tpl(1);
+t0				= tev(1);
+tpl				= tpl - t0;
+events			= tev - t0;
+fixeve			= events(1:3:end); % event start for the 1st dot = central fixation in doublestep paradigm
+tar1eve			= events(2:3:end); % event start for the 2nd dot = target in doublestep paradigm
+tar2eve         = events(3:3:end); % event start for the 2nd dot = target in doublestep paradigm
+
+% What is each column???
+HVF				= pldata.Data(13:15,:)'; % horizontal, vertical and frontal?
+pl_confidence	= pldata.Data(1,:); % confidence levels
+
+
+p = sqrt(HVF(:,1).^2+HVF(:,2).^2);
+v = gradient(p,1/200);
+
+sel = pl_confidence>0.8;
+v(~sel) = NaN;
+
+
+crit = 3*nanstd(v);
+sel = v>crit;
+selon                                       = [0;diff(sel)]; % onsets (+1)
+onset = find(selon==1);
+
+
+
+
+
+%%
+
+
+%% Resample to fixed 200 Hz
+[HVF,t]				= resample(HVF,tpl,fs);
+pl_confidence		= resample(pl_confidence,tpl,fs);
+
+
+%% Experimental block
+ntrials
+idx			= repmat((-0.4*fs):(1.6*fs),ntrials,1); % which data per trial
+idx			= round(idx+tar1eve'*fs); % index per time re target onset (note: events are not resampled)
+
+% convert HVF to matrix NTRIALS x NSAMPLES
+[H,V,F]		= deal(HVF(:,1),HVF(:,2),HVF(:,3));
+H			= H(idx);
+V			= V(idx);
+F			= F(idx);
+
+ti			= 1000*linspace(-0.4,1,length(H));
+
+
+
+%% Convert to dat and csv file
+% create trial structure
+[ntrials,nsamples]		= size(H);
+nstim					= 4;
+
+trial(ntrials).nstim	= nstim;
+
+for ii = 1:ntrials
+	trial(ii).nstim = nstim;
+	for jj = 1:nstim
+		switch jj
+			case 1
+				trial(ii).stim(jj).modality		= 'LED';
+				trial(ii).stim(jj).azimuth		= 0;%  6) azimuth location
+				trial(ii).stim(jj).elevation	= 0;%  6) azimuth location
+				trial(ii).stim(jj).ondelay		= 0;%  6) azimuth location
+				trial(ii).stim(jj).offdelay		= 200;%  6) azimuth location
+				trial(ii).stim(jj).intensity	= 100;%  6) azimuth location
+			case 2
+				trial(ii).stim(jj).modality		= 'LED';
+				trial(ii).stim(jj).azimuth		= tar1(ii,1);%  6) azimuth location
+				trial(ii).stim(jj).elevation	= tar1(ii,2);%  6) azimuth location
+				trial(ii).stim(jj).ondelay		= 400;%  6) azimuth location
+				trial(ii).stim(jj).offdelay		= 450;%  6) azimuth location
+				trial(ii).stim(jj).intensity	= 100;%  6) azimuth location
+			case 3
+				trial(ii).stim(jj).modality		= 'LED';
+				trial(ii).stim(jj).azimuth		= tar2(ii,1);%  6) azimuth location
+				trial(ii).stim(jj).elevation	= tar2(ii,2);%  6) azimuth location
+				trial(ii).stim(jj).ondelay		= 500;%  6) azimuth location
+				trial(ii).stim(jj).offdelay		= 550;%  6) azimuth location
+				trial(ii).stim(jj).intensity	= 100;%  6) azimuth location			
+			case 4
+				trial(ii).stim(jj).modality		= 'data acquisition';
+				trial(ii).stim(jj).azimuth		= [];%  6) azimuth location
+				trial(ii).stim(jj).elevation	= [];%  6) azimuth location
+				trial(ii).stim(jj).ondelay		= 0;%  6) azimuth location
+				trial(ii).stim(jj).offdelay		= 2000;%  6) azimuth location
+				trial(ii).stim(jj).intensity	= [];%  6) azimuth location
+		end
+	end
+end
+
+% conversion
+slims2hoop(H,V,F,fname,fname(8:10),trial);
+
+end
+
+function preprocess0(fname)
+
+%% Load
+% load(fname,'stimuli','configuration','data');
+load(fname,'data','configuration','stimuli');
+
+pldata			= data.pupildata; % what parameters are in here?
+evdata			= data.eventdata;
+tar				= stimuli.target;
+
+%% get time stamps and align
+tpl				= lsl_correct_lsl_timestamps(pldata);
+tev				= lsl_correct_lsl_timestamps(evdata);
+
+% tpl			= pldata.Timestamps;
+% tev			= evdata.Timestamps;
+
+ntrials			= length(tev)/2;
+fs				= 200;
+
+%% at the moment the stamps for the fixation and the target are all in one vector
+% remove the time offset (1st sample)
+% t0				= tpl(1);
+t0				= tev(1);
+tpl				= tpl - t0;
+events			= tev - t0;
+tareve			= events(2:2:end); % event start for the 2nd dot = target in saccade paradigm
+fixeve			= events(1:2:end); % event start for the 1st dot = central fixation in saccade paradigm
+
+% What is each column???
+HVF				= pldata.Data(13:15,:)'; % horizontal, vertical and frontal?
+pl_confidence	= pldata.Data(1,:); % confidence levels
+
+
+
+p = sqrt(HVF(:,1).^2+HVF(:,2).^2);
+v = gradient(p,1/200);
+
+sel = pl_confidence>0.8;
+v(~sel) = NaN;
+
+
+crit = 3*nanstd(v);
+sel = v>crit;
+selon                                       = [0;diff(sel)]; % onsets (+1)
+onset = find(selon==1);
+
+
+
+%%
+ntar = numel(tareve);
+
+RT = NaN(ntar,1);
+for ii = 1:ntar
+	sel = tpl>tareve(ii) & tpl<(tareve(ii)+1);
+% 	sum(sel)
+	idx = find(sel);
+	sel = onset>idx(1) & onset<idx(end);
+	if sum(sel)
+		rt = onset(sel)-idx(1);
+		rt = rt/fs*1000; % ms
+		RT(ii) = rt(1);
+	end
+end
+sel = isnan(RT);
+RT = RT(~sel);
+
+%%
+
+
+%% Resample to fixed 200 Hz
+[HVF,t]				= resample(HVF,tpl,fs);
+pl_confidence		= resample(pl_confidence,tpl,fs);
 
 
 
@@ -262,51 +390,7 @@ H			= H(idx);
 V			= V(idx);
 F			= F(idx);
 ti			= 1000*linspace(-0.3,0,length(H));
-if dsp
-	lH = lowpass(H','Fc',80,'Fs',fs,'order',20)';
-	lV = lowpass(V','Fc',80,'Fs',fs,'order',20)';
-	lF = lowpass(F','Fc',80,'Fs',fs,'order',20)';
-	
-	figure(3)
-	clf
-	
-	subplot(231)
-	plot(ti,H);
-	hold on
-	whos lH
-	plot(ti,lH,'k-');
-	subplot(232)
-	plot(ti,V);
-	
-	subplot(233)
-	plot(ti,F);
-	
-	
-	subplot(234)
-	plot(ti,gradient(lH,fs));
-	
-	subplot(235)
-	plot(ti,gradient(lV,fs));
-	
-	subplot(236)
-	plot(ti,gradient(lF,fs));
-	
-	str = {'horizontal','vertical','frontal'};
-	for ii = 1:3
-		subplot(2,3,ii)
-		axis([min(ti) max(ti) -1 1]);
-		nicegraph;
-		xlabel('time (ms)');
-		ylabel('normalized position');
-		title(str{ii});
-		
-		subplot(2,3,ii+3)
-		xlim([min(ti) max(ti)]);
-		nicegraph;
-		xlabel('time (ms)');
-		ylabel('normalized velocity');
-	end
-end
+
 
 
 %% Convert to dat and csv file
@@ -340,7 +424,7 @@ for ii = 1:ntrials
 end
 
 % conversion
-slims2hoop(H,V,F,fname,'000',trial);
+slims2hoop(H,V,F,fname,[fname(8:10) '-cal'],trial);
 
 end
 
